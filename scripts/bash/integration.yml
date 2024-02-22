@@ -1,0 +1,249 @@
+
+################################################################################################################################################################################################
+#### BACKUP 1
+################################################################################################################################################################################################
+
+#!/bin/bash
+
+# Define variables
+BACKUP_DIR="/backup"
+SOURCE_DIR="/home/user/important-files"
+DESTINATION="user@remote-server:/backups"
+
+# Create backup directory if it doesn't exist
+if [ ! -d "$BACKUP_DIR" ]; then
+  mkdir $BACKUP_DIR
+fi
+
+# Create backup file name with timestamp
+FILENAME=$(date +"%Y-%m-%d_%H-%M-%S").tar.gz
+
+# Backup important files to backup directory
+tar -zcvf $BACKUP_DIR/$FILENAME $SOURCE_DIR
+
+# Transfer backup file to remote server
+scp $BACKUP_DIR/$FILENAME $DESTINATION
+
+# Remove backup file after transfer
+rm $BACKUP_DIR/$FILENAME
+
+
+
+
+################################################################################################################################################################################################
+#### BACKUP  2
+################################################################################################################################################################################################
+
+#!/bin/bash
+ 
+# Set up variables for the source directory, backup directory, and file name
+src_dir="/home/myuser"
+backup_dir="/mnt/backups"
+backup_file="mybackup_$(date +%Y%m%d_%H%M%S).tar.gz"
+ 
+# Create the backup archive using tar
+tar -czvf "$backup_dir/$backup_file" "$src_dir"
+ 
+# Verify the integrity of the backup archive
+tar -tzvf "$backup_dir/$backup_file"
+ 
+# Copy the backup archive to a remote server using scp
+scp "$backup_dir/$backup_file" user@remotehost:/backup/location/
+
+
+
+################################################################################################################################################################################################
+#### DATA MIGRATION 
+################################################################################################################################################################################################
+
+
+
+#!/bin/bash
+ 
+# Set up variables for source and destination databases
+source_db="old_database"
+destination_db="new_database"
+ 
+# Export data from the source database to a CSV file
+mysql -u username -p password -e "SELECT * FROM table_name" $source_db | sed 's/\t/","/g;s/^/"/;s/$/"/;s/\n//g' > data.csv
+ 
+# Import the CSV file into the destination database
+mysqlimport --fields-terminated-by=',' --lines-terminated-by='\n' -u username -p password $destination_db data.csv
+
+# Remove the exported CSV file
+rm data.csv
+
+
+
+
+
+
+
+################################################################################################################################################################################################
+#### DEPLOYMENT 
+################################################################################################################################################################################################
+
+
+
+#!/bin/bash
+
+# Define variables
+APP_NAME="my-app"
+PACKAGE_FILE="my-app-1.0.tar.gz"
+SERVER_LIST=("server1.example.com" "server2.example.com" "server3.example.com")
+
+# Iterate over server list and deploy package
+for SERVER in "${SERVER_LIST[@]}"
+do
+  echo "Deploying $APP_NAME to $SERVER..."
+  
+  # Copy package file to server
+  scp $PACKAGE_FILE $SERVER:/tmp
+  
+  # Extract package on server
+  ssh $SERVER "cd /opt && tar -zxvf /tmp/$PACKAGE_FILE"
+  
+  # Restart application service
+  ssh $SERVER "systemctl restart $APP_NAME.service"
+done
+
+
+
+
+
+
+################################################################################################################################################################################################
+####  MONITORING  
+################################################################################################################################################################################################
+
+
+
+#!/bin/bash
+
+# Define variables
+THRESHOLD=80
+
+# Continuously monitor CPU usage
+while true
+do
+  # Get current CPU usage percentage
+  CPU_USAGE=$(top -b -n 1 | grep "Cpu(s)" | awk '{print $2}')
+  
+  # Check if CPU usage exceeds threshold
+  if (( $(echo "$CPU_USAGE > $THRESHOLD" | bc -l) )); then
+    # Send alert email
+    echo "CPU usage exceeded threshold on $(hostname). Current usage: $CPU_USAGE" | mail -s "Alert: High CPU Usage" admin@example.com
+  fi
+  
+  # Wait 5 minutes and check again
+  sleep 300
+done
+
+
+
+
+
+################################################################################################################################################################################################
+####  CONFIGURATION  
+################################################################################################################################################################################################
+
+
+ 
+ #!/bin/bash
+
+# Install required packages
+yum install -y httpd php mysql
+
+# Configure Apache web server
+echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+
+# Start Apache service
+systemctl start httpd.service
+
+# Configure PHP
+sed -i 's/^;date.timezone =/date.timezone = America\/New_York/g' /etc/php.ini
+
+# Configure MySQL
+mysql_secure_installation <<EOF
+y
+password
+password
+y
+y
+y
+y
+EOF
+
+
+
+
+################################################################################################################################################################################################
+####  MAINTENANCE  
+################################################################################################################################################################################################
+
+  
+#!/bin/bash
+
+# Delete old log files
+find /var/log -type f -mtime +7 -delete
+
+# Clear temporary files
+rm -rf /tmp/*
+
+# Optimize system resources
+sync && echo 3 > /proc/sys/vm/drop_caches
+
+
+
+
+
+
+
+################################################################################################################################################################################################
+####  SECURITY  1
+################################################################################################################################################################################################
+
+ 
+ #!/bin/bash
+
+# Update system packages
+yum update -y
+
+# Install security packages
+yum install -y fail2ban iptables
+
+# Configure firewall rules
+iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -j DROP
+
+# Configure Fail2ban
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sed -i 's/^#ignoreip = 127.0.0.1/ignoreip = 127.0.0.1 my-trusted-ip/g' /etc/fail2ban/jail.local
+systemctl start fail2ban.service
+
+
+################################################################################################################################################################################################
+####  SECURITY  2
+################################################################################################################################################################################################
+
+import os
+import subprocess
+ 
+# Set up variables for IP address and port range to scan
+ip_address = "192.168.0.1"
+port_range = "1-65535"
+ 
+# Run nmap to scan for open ports and vulnerabilities
+output = subprocess.check_output(["nmap", "-p", port_range, "--script", "vuln", ip_address])
+ 
+# Write output to a text file
+with open("security_scan.txt", "w") as file:
+    file.write(str(output))
+ 
+# Send an alert email if vulnerabilities are found
+if "VULNERABLE" in str(output):
+    os.system("echo 'Security Alert: Vulnerabilities found on server' | mail -s 'Security Alert' admin@example.com")
+
+
+

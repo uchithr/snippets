@@ -1,0 +1,44 @@
+## LOGIN
+
+## SHORTCUTS
+> CTRL+ALT+T  #TERMINAL
+> CTRL+ALT+F1 #TERMINAL
+> CTRL+M      #MENU
+
+
+## SET CHROMIUM AS THE DEFAULT BROWSER
+$ sudo raspi-config > System Options > Browser > Chromium
+
+
+## GO TO BELOW LOCATION THERE WILL BE A FILE NAMED "autostart" FIRST 3 LINES ARE DEFAULTS
+
+$ cd /etc/xdg/lxsession/LXDE-pi
+$ sudo nano autostart
+ 
+    @lxpanel --profile LXDE-pi                  # Launch LXDE panel with LXDE-pi profile
+    @pcmanfm --desktop --profile LXDE-pi        # Launch desktop file manager with LXDE-pi profile
+    @xscreensaver -no-splash                    # Start screensaver without splash screen
+
+
+    @xset s off                                  # Disable screensaver temporarily
+    @xset -dpms                                  # Disable power saving features       
+    @xset s noblank                              # Prevent screen from blanking
+    @chromium-browser --kiosk  DASHBOARD_URL     # Launch Chromium browser in kiosk mode with the dashboard URL
+
+## TO SAVE
+$ CTRL + O  & Press ENTER
+
+## TO EXIT
+$ CTRL + X 
+
+## REBOOT 
+$ reboot
+
+/////////////////////////////////////////////
+<NEW> /home/pi/.config/lxsession/LXDE-pi ## MECHANIC
+<OLD> /etc/xdg/lxsession/LXDE-pi
+
+PREVIOUSLY INCLUDED in autostart "@point-rpi"
+
+## SUPPORT DOCS
+https://forums.raspberrypi.com/viewtopic.php?t=294014

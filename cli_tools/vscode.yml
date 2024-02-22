@@ -1,0 +1,11 @@
+File Path : C:\Users\SLVR\.ssh
+
+Host awslab
+  HostName 13.232.33.242
+  User ec2-user
+  IdentityFile "C:\Users\SLVR\Downloads\[oci]\aws\awslab.pem"
+
+Host it-test
+  HostName 127.0.0.1
+  User sam
+  Port 1000

@@ -1,0 +1,34 @@
+
+
+
+I set up Remotely for myself a few months ago and deployed a few systems, only to find later that for whatever reason my Docker container had lost its mind and the database was basically empty, so Remotely wasn't working. I ended up rebuilding the container, but of course in the process I lost the old organization ID I had setup, which was not fun.
+
+Luckily, I discovered that one of the hosts on which I had installed the Remotely agent previously was still reporting back to my server, and the logs showed a message like this:
+
+2023-06-23 00:36:51.708 +00:00 [INF] Unable to add device MYCLIENT because organization {my old Organization ID}does not exist.
+
+The message has been edited to protect the innocent but the key thing here is that the message reported the old organization ID.
+
+First, I added a new user in the Remotely web UI under a second email address. Don't worry about any other settings but you may want to set up the password to save yourself some headaches later.
+
+Next, off to the docker shell I went!
+
+docker exec -it {remotely container name} /bin/bash
+
+This opens a command prompt within the Remotely container. From there:
+
+apt install sqlite3
+
+This installs the sqlite3 command line client where you can access and modify the database.
+
+Find the location of your Remotely.db file in the container; in my case it was at /remotely-data, so:
+
+cd /remotely-data sqlite3 Remotely.db
+
+Now at the sqlite> prompt you can access and modify the database itself. At this point what needs to be done is to add the old organization ID into the Organizations table, then update the user that was just created to be assigned to that OrganizationID:
+
+INSERT INTO Organizations ("ID","IsDefaultOrganization","OrganizationName") VALUES ("{my old Organization ID}",0,"{my old Organization name}") UPDATE RemotelyUsers SET OrganizationID="{my old Organization ID}" WHERE UserName="{new username just created above}";
+
+That should be it! Now log out of Remotely and try to log in as the new user; you should see {my old Organization name} instead of the name you assigned to the primary organization.
+
+Note that you'll want to make sure "Default organization for server" is UNCHECKED, probably for both organizations just to be safe.

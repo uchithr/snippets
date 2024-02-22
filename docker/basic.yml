@@ -1,0 +1,198 @@
+
+# ADDING DOCKER REPOSITORY
+$ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+
+# INSTALL DOCKER & DEPENDENCIES  ## https://docs.docker.com/engine/install/rhel/#prerequisites
+$ sudo dnf install -y docker-ce docker-ce-cli containerd.io
+$ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+
+# DOCKER COMPOSE MANUAL INSTALL  ## https://github.com/docker/compose/releases
+$ dnf install -y curl
+$ curl -L "https://github.com/docker/compose/releases/download/2.17.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ chmod +x /usr/local/bin/docker-compose
+$ docker-compose --version
+
+# SYSTEM STARTUP
+$ systemctl enable docker
+$ systemctl start docker
+$ systemctl status docker
+
+# CREATING A DOCKER GROUP
+$ groupadd docker_users
+
+# ASSINGN USER FOR DOCKER GROUP
+$ sudo usermod -aG docker samf
+
+# CHECK AVAILABE OR NOT
+$ id samf
+
+#LOG
+docker logs --tail 50 --follow --timestamps id
+
+# TEST DOCKER AVALABILITY
+$ docker run hello-world
+
+##########################
+# PACKAGE UPDATE (optional)
+$ sudo dnf update
+
+# PORTAINER
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+docker run -d -p 9092:8000 -v --restart=unless-stopped  /var/run/docker.sock:/var/run/docker.sock -v yacht:/config selfhostedpro/yacht
+
+# RANCHER
+docker run -d --restart=unless-stopped -p 80:80 -p  custom:default --privileged rancher/rancher:latest
+
+# PULL UBUNTU DOCKER IMAGE
+$ docker pull ubuntu
+
+# ACCESS TO UBUNTU CONTAINER
+$ docker run -it ubuntu
+
+# ISSUE COMMAND TO A CONTAINER
+$ docker exec -it <container_name_or_id> npm init <install npm>
+docker exec -it <container_name_or_id> /bin/bash
+
+# COPY LOCAL FILES INTO A CONTAINER ("." MEANS COPY EVERYTHING)
+$ docker cp send_d/. e91425f38618:/recieve_d
+
+# COPY FROM A CONTAINER TO LOCAL ("." MEANS COPY EVERYTHING)
+$ docker cp  e91425f38618:/recieve_d send_d
+
+
+# STOP & START  CONTAINER
+$ docker stop or start id
+
+# ATTACH DETACH
+$ docker run  -p 8000:80 -d e91425f38618
+$ docker run  -p 8000:80 -a e91425f38618
+
+# CURRENT RUNING CONTAINERS
+$ dokcer ps
+$ docer ps -a (-a for list previously usedones)
+
+# RENAMING CONTAINER
+$ docker run -p 3000:80  -d --rm --name apache_http ad17c88403e2
+
+# RUN RENAMED CONTAINER WITH SPECIFIED NAME
+$ docker run -p 3000:80 -d --rm --name goalsapp goals:latest
+
+# REMOVE DOCKER CONTAINER
+$ docker rm -f e91425f38618
+
+# AUTOMATICALLY REMOVE CONTAINER AFTER STOPEED
+$ docker run -p 3000:80 -d --rm e91425f38618
+
+# REMOVE UNUSED DOCKER CONTAINERS
+
+
+
+
+# LIST DOCKER IAMGES
+$ docker images
+
+# SEARCH FOR IAMGES
+$ docker search apache
+
+# RENAMING IMAGES
+$ docker tag node-demo:latest hello-node:latest
+
+# DOCKER IMAGE INFORMATION
+$ docker image inspect 0451vs5ag5
+
+# REMOVE DOCKER IAMGE
+$ docker rmi -f e91425f38618
+$ docker image prune <id>
+$ docker image prune -a
+
+
+# FULL ID
+docker inspect --format="{{.Id}}" evil_swartz
+
+
+# BUILD DOCKER IMAGE WITH CUSTOM NAME  <use with .dockerignore file in the working directory to exclude files>
+$ docker build -t myapp1:v1 .   # "." indicates we're working on that directory "-t" name_tag
+
+# DOCKER LOGIN
+$ docker login
+
+# PUSH DOCKER IAMGE
+$ docker push samf/myapp1:v1
+
+## anonymous & named VOLUMES MANAGE BY DOCKER. [flag "-v"]
+
+  # "ANONYMOUS" VOLUME____________________________<data will stay until the container removed / can't share with other containers and no data location shared>
+  $ -v /data portainer/portainer-ce 
+
+  # "NAMED" VOLUME________________________________<data will stay even the container removed / can share with other containers and NO data location shared>
+  $ -v portainer_data:/data_portainer-ce          <host_location:container_location>
+
+
+## BIND MOUNT MANAGE BY USER _______________<data will stay even the container removed / can share with other containers and track data location>
+  $ -v /var/run/portainer:/var/run/portainer-ce    <host_location:container_location> < absolute path "<-:" >   <adding ":ro" makes the container read-only>  <add anonymous mount to avoid overwritten>
+
+
+## VOLUME LOCATION
+$ docker volume ls
+$ docker volume inspect <id>
+
+## RW FROM DOCKER CONTAINER TO HOST
+$ mongodb://host.docker.internal:27017/swfavourites
+
+
+## RW FROM CONTAINER TO CONTAINER <must create a network>
+$ mongodb://192.168.58.119:27017/swfavourites
+$ mongodb://mongo:27017/swfavourites  <in a custom created network>
+
+## CREATE NETWORK
+$ docker network create custom-net1
+
+## LSIT DOCKER NETWORKS
+$ docker network ls
+$ docker network rm
+
+
+
+## BASED on "dockerfile" CREATING A DOCKER IMAGE 
+ 
+  FROM node               # use node base image
+  WORKDIR /app            # create app directory in image when container spinup
+  COPY package.json .     # will copy json to workdirectory
+  RUN npm install         # install dependendcies
+  COPY . .                # copy * to creating directory </app> from local directory
+  EXPOSE 80               # port
+  CMD ["node", "app.js"]  # command that shold be start when container excuted based on creating image
+
+
+$ docker build -t app1_image . # app1 image will be created
+
+## ALPINE LINUX IMAGE BUILD
+
+  FROM alpine
+  MAINTAINER sam
+  ADD ./sam.repo /etc/yum.repos.d/  # ADDING A FILE
+  RUN apk add procps # INSTALL PS COMMAND
+  CMD ["ps", "aux"]  # CONTAINER RUNS GIVEN COMMAND WHEN STARTED
+  
+ 
+## PORT EXPOSE FORM CONTAINER TO LOCAL
+$ docker run --name app1_container -d -p 80:80 app1_image <docker:outside>
+
+
+## RUN MULTIPLE CONTAINERS IN SAME NETWORK <no need to publish the port when in same network>
+$ docker run -d --name mongodb1_container --network custom-net1 mongo_image               # data_connector <'mongodb://mongodb1_container:27017/app1'>
+$ docker run -d --name app1_container --network custom-net1 app1_image # data_connector   # data_connector <'http://app1_container/app1'>
+
+
+
+-------------------------------
+
+# RUN CUSTOM CREATED YML 
+docker-compose  up -d
+docker-compose -f your-file.yml up
+
+"sudo curl -L ""https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-$(uname -s)-$(uname -m)"" -o /usr/local/bin/docker-compose
+"
+

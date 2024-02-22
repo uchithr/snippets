@@ -1,0 +1,71 @@
+##########################################################################################################################################################
+
+#!/bin/bash
+
+echo What is your first name?
+read FISRT_NAME
+echo What is your last name?
+read LAST_NAME
+
+echo Hello $FIRST_NAME $LAST_NAME
+____________________
+
+##########################################################################################################################################################
+vim usage_script.sh
+
+#!/bin/bash
+
+echo ""
+echo "MEMORY USAGE"
+/usr/bin/free -h -l -t
+echo ""
+
+
+echo "MEMORY STATS"
+/usr/bin/vmstat
+echo ""
+
+
+echo "HDD SPACE"
+/usr/bin/df -h
+echo ""
+
+chmod +x usage_script.sh
+./usage_script.sh
+
+##################################################################################################################################################################
+
+which yum
+/bin/yum
+
+which systemctl
+/bin/systemctl
+
+which firewall-cmd
+/bin/firewall-cmd
+
+vim apache_deploy.sh
+
+#!/bin/bash
+
+echo ""
+echo "APACHE INSTALLING"
+/bin/yum install httpd httpd-manual -y
+echo ""
+
+
+echo ""
+echo "APACHE SERVICE STARTING"
+/bin/systemctl enable httpd.service
+/bin/systemctl start httpd.service
+echo ""
+
+echo ""
+echo "FIREWALL RULES APPLYING"
+/bin/firewall-cmd --permanent --add-service=http
+/bin/firewall-cmd --reload
+echo ""
+
+
+chmod +x apache_deploy.sh
+./apache_deploy.sh

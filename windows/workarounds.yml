@@ -1,0 +1,50 @@
+
+## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
+$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
+DRIVERS TAB
+
+
+## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
+$ run > printmanagement.msc > All Printers
+
+## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
+$ Create a System Restore point.
+$ regedit 
+ > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
+ > HKEY_CURRENT_USER\Printers\Connections
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
+
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
+
+
+ ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
+$ C:\Windows\System32\DriverStore\FileRepository 
+
+
+## PING LOG
+$ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
+
+## CLER CREDENTIALS
+$  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
+$  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
+
+## OST BYPASS
+HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Outlook\PST
+
+CREATE DWORD 32BIT RECORD
+WarnLargeFileSize  4090445042 (decimal) or f3cf3cf2 (hexadecimal) 110000 97280 
+MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400 
+
+
+## 365 TPM FIX
+"Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
+
+## DISABLE THE DELIVERY OPTIMIZATION SERVICE
+DO
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
+start - 4
+
+
+

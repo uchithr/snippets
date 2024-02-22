@@ -1,0 +1,5 @@
+
+  371  python3 -m pip show mutagen
+  372  sudo yum install epel-release
+  373  sudo yum install python-pip
+  374  sudo pip3 install mutagen

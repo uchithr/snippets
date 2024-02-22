@@ -1,0 +1,729 @@
+disable root & create new user in vmware when ssh from windows ||| add nat port forwarding
+sudo systemctl status sshd
+sudo firewall-cmd --zone=public --permanent --add-service=ssh
+firewall-cmd --permanent --add-port=6000/tcp
+sudo firewall-cmd --reload
+
+nmcli connection add con-name NIC type Ethernet ifname eth0
+nmcli connection modify NIC ipv4.addresses "172.25.8.11/24 172.25.0.254" ipv4.dns 172.25.254.254 ipv4.method static connection.autoconnect yes
+nmcli connection down "System eth0" ; nmcli connection up NIC
+
+init 0 : Shutdown 
+init 1 : Single user mode or emergency mode no network no multitasking is present in this mode only root has access in this runlevel
+init 2 : No network but multitasking support is present .
+init 3 : Network is present multitasking is present but with out GUI .
+init 4 : It is similar to runlevel 3; It is reserved for other purposes in research.
+init 5 : Network is present multitasking and GUI is present with sound etc.
+init 6 : This runlevel is defined to system restart.
+init s : Tells the init command to enter the maintenance mode. (S/M)
+
+############################################################
+#### GRUB ####
+############################################################
+
+##PASSWORD RESET
+
+Press "e" for edit  kernel
+Use "Esc" for UEFI enabled systems. (interrupt boot process)
+
+linux 16 line and end of UTF-8 type > rd.break > Press Ctrl+X
+
+# mount -o remount,rw /sysroot
+# chroot /sysroot
+# passwd root
+# touch /.autorelabel
+
+exit
+exit
+
+------------------------------------------------
+
+## RESCUING A NONBOOTING SYSTEM FROM THE  [grub> Prompt]
+grub> ls
+grub> ls (hd0,2)/boot
+grub> set root=(hd0,2)
+grub> linux /boot/vmlinuz-5.3.18-lp152.57-default root=/dev/sda2
+grub> initrd /boot/initrd-5.3.18-lp152.57-default
+grub> boot
+
+## RESCUING A NONBOOTING SYSTEM FROM THE [grub rescue> Prompt]
+grub rescue> ls (hd0,2)/boot
+grub rescue> set prefix=(hd0,2)/boot/grub
+grub rescue> set root=(hd0,2)
+grub rescue> insmod normal
+grub rescue> insmod linux
+
+rub> linux /boot/vmlinuz-5.3.18-lp152.57-default root=/dev/sda2
+grub> initrd /boot/initrd-5.3.18-lp152.57-default
+grub> boot
+
+
+## REINSTALLING YOUR GRUB CONFIGURATION {permanent repair}
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+$ sudo grub-install /dev/sda
+
+############################################################
+#### USER CONFIGURATION ####
+############################################################
+
+## USER ADD & ELEVATE
+useradd sam -c "sam fisher"
+passwd sam
+
+usermod -aG wheel sam
+su - sam
+sudo vim /etc/passwd > make [root:x:0:0:root:/root:/sbin/nologin]
+id sam
+uid=1001(sam) gid=1001(sam) groups=1001(sam),10(wheel)
+
+sudo chage -l sam
+sudo chage -E +1month sam
+sudo chage -l sam
+
+sudo usermod -s /sbin/nologin student
+cat /etc/passwd | grep student
+student:x:1000:1000:student:/home/student:/sbin/nologin
+
+## TO TEMPORARILY DEACTIVATE AN ACCOUNT
+$ sudo passwd -l stash
+passwd: password expiry information changed.
+
+
+## TO ACTIVATE AN ACCOUNT
+$ sudo passwd -u stash
+passwd: password expiry information changed
+
+
+## TO COMPLETELY DISABLE A USER ACCOUNT (WHEN USING SSH KEYS)
+$ sudo usermod --expiredate 1 stash
+
+
+## TO ACTIVATE AN ACCOUNT
+$ sudo usermod --expiredate -1 stash
+
+
+
+## FILE AUTH TO OTHERS
+touch myfile
+
+ll
+-rw-rw-r--. 1 sam sam 0 Jan 28 06:28 myfile
+
+chmod o+w myfile
+
+ll
+-rw-rw-rw-. 1 sam sam 0 Jan 28 06:28 myfile
+
+
+
+################################################################################################################################################################################################
+#### FILE PERMISSIONS ####
+################################################################################################################################################################################################
+
+sudo mkdir /Finance
+
+sudo ls -ald /Finance/
+drwxr-xr-x. 2 root root 6 Jan 28 12:36 /Finance/
+
+sudo groupadd HR
+sudo chgrp HR /Finance/
+
+
+ id sam
+uid=1001(sam) gid=1001(sam) groups=1001(sam),10(wheel)
+
+sudo usermod -aG HR sam
+
+id sam
+uid=1001(sam) gid=1001(sam) groups=1001(sam),10(wheel),1002(HR)
+---
+
+sudo ls -ald /Finance/
+drwxr-xr-x. 2 root HR 6 Jun 9 12:19 /Finance/
+
+
+sudo chown sam myfile
+sudo chown sam.HR myfile
+
+ll
+-rw-rw-rw-. 1 sam HR 0 Jan 28 06:28 myfile
+
+sudo chgrp HR myfile
+sudo chgrp hrgrp /HRDATA ## change root grop to hrgrp
+sudo chmod g+w,o-wr /HRDATA ## remove other access
+
+
+getfacl /HRDATA
+# file: HRDATA
+# owner: root
+# group: hrgrp
+user::rwx
+group::rwx
+other::--x
+
+sudo setfacl -R -m u:sam:rwx /HRDATA ## SAM can access all files
+sudo setfacl -x u:sam:rwx /HRDATA ## Remove execute feature from SAM
+
+getfacl /HRDATA
+# file: HRDATA
+# owner: root
+# group: hrgrp
+user::rwx
+user:sam:rwx
+group::rwx
+mask::rwx
+other::--x
+
+sudo setfacl -m g:itgrp:rwx /HRDATA ## itgrp can access all files
+
+getfacl /HRDATA
+# file: HRDATA
+# owner: root
+# group: hrgrp
+user::rwx
+user:sam:rwx
+group::rwx
+group:itgrp:rwx
+mask::rwx
+other::--x
+
+
+sudo setfacl -R -m g:hrgrp:rwx /HRDATA ## For existing files
+sudo setfacl -m g:hrgrp:rwx /HRDATA ## For new files
+
+
+
+
+
+
+################################################################################################################################################################################################
+#### FILE COMPRESSION
+################################################################################################################################################################################################
+
+## 7-ZIP
+sudo dnf install p7zip p7zip-plugins
+
+# EXTRACT 7z.001 FILE
+sudo 7z x 'test.7z.001'
+
+# ZIP SINGLE FILE	
+zip -r -s 500m myzip myfile.mkv
+
+# ZIP FOLDER	
+zip -r -s 500m output/myzip source/
+
+# UZIP FILE	unzip file.zip
+cat cloud_dump.zip.* > cloud_dump.zip
+unzip cloud_dump.zip
+
+# RAR FILE	
+
+# URAR FILE	
+unrar e 'REV.part01.rar' rev-fgr
+
+## MAKE TAR FILE	
+tar cvf /home/sam/hrdata_bkp.tar /HRDATA 
+
+## UNTAR  FILE	
+tar xvf hrdata_bkp.tar
+
+## LIST FILE INFORMATION
+unzip -l zip_file1.zip
+unrar l rar_file1.rar
+
+
+####___________
+
+<>p4txz!p
+
+tar cvzf - test | split --bytes=15MB - name.tar.gz. [work]
+
+tar xz name.tar.gz.
+
+# ENCRYPT
+tar -czf - test | split --bytes=15MB | openssl enc -e -aes256 -out tarball.tar.gz.
+
+# DECRYPT
+openssl enc -d -aes256 -in tarball.tar.gz.* | tar xz -C /root/Desktop/out/
+-------------
+# TO tar + gpg + split
+$ tar -cJvpf - test | gpg --symmetric --cipher-algo aes256 | split -d -b 10MB - name.tar.xz.gpg. 
+
+# TO DECRYPT:
+$ cat outputfile.tar.xz.gpg.* | gpg -d | tar -xJvpf -
+
+cat filelist.txt | xargs -I % cp /path/to/source/folder/% /path/to/destination/folder/
+for /f "delims=" %i in (filelist.txt) do copy "C:\path\to\source\folder\%i" "C:\path\to\destination\folder\"
+
+#_#_____
+
+The best way to compress a folder in Linux server with splitting and password protection would be to use the tar command along with the gzip compression algorithm. Here's an example command that you can use:
+
+$ tar -czvf - /path/to/folder | split -b 100M -d -a 4 - file.tar.gz.part_ && openssl enc -aes-256-cbc -salt -in file.tar.gz.part_* -out archive.tar.gz.enc
+
+-c: create a new archive |*| -z: use gzip compression |*| -v: verbose while creating |*| -f: specifies the filename of the archive.
+split: split a large file into smaller ones.
+-b: size of each split file.
+-d: split to use numeric suffixes for the split files.
+-a: length of the suffixes (4)
+
+
+################################################################################################################################################################################################
+#### APACHE
+################################################################################################################################################################################################
+
+sudo mkdir /web/site_1 -p
+
+sudo touch index.html
+sudo vim index.html
+
+
+ls -lZd /var/www/html
+
+man semanage fcontext
+sudo semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+sudo restorecon -R -v /web
+
+
+sudo yum install httpd httpd-manual -y
+
+sudo systemctl enable httpd.service
+sudo systemctl start httpd.service
+
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
+
+
+sudo vim /etc/httpd/conf.d/v_hosting.conf
+
+###
+<VirtualHost *:80>
+DocumentRoot /web/site_1
+ServerName server.example.com
+ErrorLog logs/server-error_log
+TransferLog logs/server-access_log
+</VirtualHost>
+
+
+<Directory /web/site_1>
+Require all granted
+</Directory>
+###
+
+httpd -t > Syntax OK
+
+
+sudo vim /etc/httpd/conf/httpd.conf ## LINE 119
+
+
+###
+DocumentRoot "/web"
+
+#
+# Relax access to content within /var/www.
+
+<Directory "/web">
+AllowOverride None
+# Allow open access:
+Require all granted
+</Directory>
+
+# Further relax access to the default document root:
+<Directory "/web">
+###
+
+
+sudo systemctl reload httpd.service
+curl server.example.com
+
+
+(Redirect 301 / http://slvr.lk)
+
+
+
+
+
+################################################################################################################################################################################################
+#### CRONTAB
+###############################################################################################################################################################################################
+
+## SHUT DOWN IN 10 MINUTES WITH NOTIFICATIONS
+$ shutdown -h +10
+$ shutdown -h 22:15
+
+## CREATING SCHEDULED SHUTDOWNS WITH CRON
+$ sudo nano /etc/crontab
+m  h  dom mon dow user command
+10 22 *   *    *  root /sbin/shutdown -h +20
+
+Table of crontab values
+minute         0-59
+hour           0-23
+day of month   1-31
+month          1-12
+day of week    0-7
+
+
+crontab -l
+timedatectl
+
+date
+Thu Jan 28 08:47:39 EST 2021
+
+pwd
+/home/sam
+
+ls
+Desktop HRDATA hrdata_bkp.tar usage_script.sh
+
+cp usage_script.sh /home/sam/HRDATA/
+
+crontab -e
+crontab -l
+00 09 * * * cp /home/sam/usage_script.sh /home/sam/HRDATA/
+
+
+################################################################################################################################################################################################
+#### LVM
+################################################################################################################################################################################################
+
+sudo fdisk /dev/vdb
+
+
+Command (m for help): n #####
+Partition type:
+p primary (0 primary, 0 extended, 4 free)
+e extended
+Select (default p): p ####
+Partition number (1-4, default 1): 1 ####
+First sector (2048-10485759, default 2048): ####
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-10485759, default 10485759): +1G ####
+Partition 1 of type Linux and of size 1 GiB is set
+
+Command (m for help): t ####
+Selected partition 1
+Hex code (type L to list all codes): 8e ####
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): w ####
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+sudo fdisk /dev/vdb
+
+
+Command (m for help): p ####
+
+Disk /dev/vdb: 5368 MB, 5368709120 bytes, 10485760 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0xe5ae08db
+
+Device Boot Start End Blocks Id System
+/dev/vdb1 2048 2099199 1048576 8e Linux LVM
+
+Command (m for help): ^C
+
+sudo pvcreate /dev/vdb1
+Physical volume "/dev/vdb1" successfully created.
+
+
+sudo pvs
+PV VG Fmt Attr PSize PFree
+/dev/vda2 centos lvm2 a-- <9.00g 0
+/dev/vdb1 lvm2 --- 1.00g 1.00g
+
+
+sudo vgcreate myvg1 /dev/vdb1
+Volume group "myvg_1" successfully created
+
+
+sudo lvcreate -n mylv_1 -L 256M myvg1
+Logical volume "mylv_1" created.
+
+
+sudo lvs
+LV VG Attr LSize Pool Origin Data% Meta% Move Log Cpy%Sync Convert
+root centos -wi-ao---- <8.00g
+swap centos -wi-ao---- 1.00g
+mylv_1 myvg_1 -wi-a----- 256.00m
+
+
+ ll /dev/mapper/myvg_1-mylv_1
+lrwxrwxrwx. 1 root root 7 Jan 28 21:06 /dev/mapper/myvg_1-mylv_1 -> ../dm-2
+
+ll /dev/myvg_1/mylv_1
+lrwxrwxrwx. 1 root root 7 Jan 28 21:06 /dev/myvg_1/mylv_1 -> ../dm-2
+
+
+mkdir mkdir /lv_data
+
+lsblk
+ mkfs.xfs /dev/myvg_1/mylv_1
+
+blkid
+
+vim /etc/fstab
+
+/dev/myvg_1/mylv_1 /lv_data xfs defaults 0 0
+or
+UUID="6fa210d8-f319-466a-863a-12356f133090" /lv_data xfs defaults 0 0
+
+vgs
+lvextend -r -L +100M /dev/myvg_1/mylv_1
+df -h
+
+
+
+
+LVM
+pvcreate /dev/vdb1
+vgcreate myvg1 /dev/vdb1
+lvcreate -n mylv1 –L 265M myvg1
+mkfs.ext4 /dev/vdb1/myvg1-mylv1
+fstab
+
+vgextend –L +600M /dev/vdb1/myvg1
+lvextend –L +200M /dev/vdb1/myvg1-mylv1
+
+
+
+################################################################################################################################################################################################
+#### GNU PARTED - fdisk  sfdisk 
+################################################################################################################################################################################################
+
+$ sudo parted
+$ (parted) select /dev/sdb
+# (parted) print
+(parted) print all
+
+
+$ sudo umount /dev/sdc
+$ sudo parted /dev/sdc
+(parted) mklabel gpt
+(parted) p
+(parted) mkpart "images" ext4 1MB 2004MB
+(parted) mkpart "audio files" xfs 2005MB 100%
+(parted) print
+Number Start End Size File system Name Flags
+1 1049kB 2005MB 2004MB ext4 images
+2 2006MB 4009MB 2003MB xfs audio files
+
+################################################################################################################################################################################################
+#### LDAP
+################################################################################################################################################################################################
+sssd krb5-workstation authconfig-gtk 🡪 logout 🡪 ssh root server –X
+LDAP BASE DN : dc=example,dc=com || LDAP Server : classroom.example.com
+
+Realm : Example.com | KDC : classroom.example.com 🡪 Admin Servers : same
+
+authconfig-gtk ssh ldapuser7@localhost
+
+
+
+
+
+################################################################################################################################################################################################
+#### iSCSI
+################################################################################################################################################################################################
+
+🡪 LVM 🡪 targetcli pack 🡪 service 🡪 firewall port 3260/tcp 🡪 targetcli configs 🡪 initiator
+Client fstab /mount xfs _netdev 🡪 iscsiadm 🡪 logout
+
+
+################################################################################################################################################################################################
+#### NFS
+################################################################################################################################################################################################
+
+service🡪 chown nfsnobody /my_nfs 🡪 vim /etc/exports [my_nfs x.x.x.x/24](rw sync)
+Client mkdir /mnt/nfs_docs 🡪fstab server7:/ mnt/nfs_docs nfs defaults 🡪 mount
+
+
+
+
+
+################################################################################################################################################################################################
+#### MARIA DB
+################################################################################################################################################################################################
+mariadb mariadb-client 🡪 service+firewall 🡪 mysql_secure_installation
+mysql -u root –p
+
+help contents;
+Client mariadb-client 🡪 service+firewall
+show databases;
+
+
+################################################################################################################################################################################################
+#### SAMBA
+################################################################################################################################################################################################
+
+samba samba-client 🡪 service+firewall 🡪 mkdir /smb_sahre context type 🡪configs
+Client cifs-utils samba-client [income ]fstab cifs credentials=mysec
+
+
+# SAMBA UTILS
+$ dnf install samba samba-common samba-client
+
+# SAMBA SHARE FOLDER
+$ mkdir -p /shares/smb/data1
+
+# SAMABA PERMISSIONS
+$ chmod -R 755 /shares/smb/data1
+$ chown -R  nobody:nobody /shares/smb/data1
+$ chcon -t samba_share_t /shares/smb/data1
+
+# BACKUP SAMBA CONF
+$ mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
+
+# CREATING A NEW SAMBA CONFIG
+$ vim /etc/samba/smb.conf
+
+[global]
+workgroup = WORKGROUP
+server string = Samba Server %v
+netbios name = rocky-8
+security = user
+map to guest = bad user
+dns proxy = no
+ntlm auth = true
+
+
+[Public]
+path =  /shares/smb/data1
+browsable =yes
+writable = yes
+guest ok = yes
+read only = no
+
+# Verify the configurations
+$ testparm
+
+# ENABLE AND START SERVICES
+$ systemctl start smb
+$ systemctl enable smb
+$ systemctl start nmb
+$ systemctl enable nmb
+
+# STATUS
+$ systemctl status smb
+$ systemctl status nmb
+
+
+# Open Firewall Port
+$ firewall-cmd --add-service=samba
+$ firewall-cmd --add-service=samba --permanent
+
+# VERIFY FIREWALL
+$ firewall-cmd --list-services
+
+# TEST SHARE
+$ cd /shares/smb/data1 | touch file{1..3}.txt
+
+
+# SECURE SAMBA SHARE
+
+# SAMBA USER CREATE
+$ useradd smbuser
+$ smbpasswd -a smbuser
+
+# SAMBA GROUP CREATE
+$ groupadd smb_group
+$ usermod -g smb_group smbuser
+
+# secure samba share directory for accessing files securely by samba users
+$ mkdir -p /shares/smb/data2
+$ chmod -R 770 /shares/smb/data2
+$ chcon -t samba_share_t /shares/smb/data2
+$ chown -R root:smb_group /shares/smb/data2
+
+# ADD SECURE DIRECTORY2
+$ vi /etc/samba/smb.conf
+
+[Private]
+path = /srv/tecmint/private
+valid users = @smb_group
+guest ok = no
+writable = no
+browsable = yes
+
+# RESTART SAMBA SERVICE
+$ systemctl restart smb
+$ systemctl restart nmb
+
+
+# access the samba share from a Linux machine
+$ dnf install samba-client
+$ smbclient ‘192.168.58.102\private’ -U smbuser
+
+
+################################################################################################################################################################################################
+#### WEBMIN | https://localhost:10000
+################################################################################################################################################################################################
+
+
+# DEPENDENCIES
+sudo yum -y install perl perl-Net-SSLeay openssl perl-IO-Tty perl-Encode-Detect
+
+# GET LATEST RPM
+http://download.webmin.com/download/yum/?C=M;O=D
+sudo dnf install -y http://download.webmin.com/download/yum/webmin-2.013-1.noarch.rpm
+
+# FIREWALL 
+sudo firewall-cmd --add-port=10000/tcp
+"sudo firewall-cmd --runtime-to-permanent
+"
+
+# FOR LOCACALLY  OR EXTERNALLY 
+sudo vim /etc/webmin/miniserv.conf      |||||| allow=127.0.0.1 OR YOUR ACCESS IP
+
+# CHECK LOG
+sudo cat /var/webmin/miniserv.error
+
+# CREATE USER
+sudo echo weminuser:yourpassword >> /etc/webmin/miniserv.users
+echo "weminuser: bla bla  >> /etc/webmin/webmin.acl
+sudo webmin passwd weminuser
+
+#RESTART WEBMIN
+sudo /etc/webmin/restart OR  sudo systemctl restart webmin
+
+
+###############################################################################################################################################################################
+
+#### FOOBAR WINE ####
+sudo dnf install epel-release
+sudo yum install snapd
+sudo systemctl enable --now snapd.socket
+sudo snap install foobar2000
+
+
+# dnf clean all
+# dnf check
+# dnf check-update
+# dnf update
+
+
+
+#### XFCE DESKTOP ####
+dnf --enablerepo=epel group -y install "Xfce" "base-x"
+
+
+#### CHECK X11 STATUS
+sudo cat /etc/ssh/sshd_config |grep -i X11Forwarding
+
+
+#### FFMPEG
+sudo dnf -y install https://download.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf config-manager --set-enabled powertools
+
+
+sudo dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
+sudo dnf install -y https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
+
+
+sudo dnf -y install ffmpeg  ffmpeg-devel
