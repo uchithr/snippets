@@ -48,6 +48,6 @@ start - 4
 
 
 ## EXTRACT INTEL RST DRIVERS FORM EXE FILE
-$ SetupRST.exe -extractdrivers "C:\Users\SLVR\Desktop\x"
+$ SetupRST.exe -extractdrivers "C:\Users\SLVR\Desktop\rst"
 
 
