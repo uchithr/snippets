@@ -47,4 +47,7 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
 start - 4
 
 
+## EXTRACT INTEL RST DRIVERS FORM EXE FILE
+$ SetupRST.exe -extractdrivers "C:\Users\SLVR\Desktop\x"
+
 
