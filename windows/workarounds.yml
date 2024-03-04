@@ -68,6 +68,6 @@ D:\windows\systems32>wpeutil reboot
 
 
 $ net User
-$ net user "username" 
+$ net user "username" *
 
 
