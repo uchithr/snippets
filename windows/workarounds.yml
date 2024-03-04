@@ -52,3 +52,22 @@ $ SetupRST.exe -extractdrivers "C:\Users\SLVR\Desktop\rst"
 $ ./SetupRST.exe -extractdrivers SetupRST_extracted
 
 
+## PASSWORD RESET
+
+SHIFT + F10 - CMD
+
+X:\Sources>diskpart
+DISKPART> list Volume
+DISKPART> exit
+
+X:\Sources>d:  # OS FILES PARTITION
+D:\> cd windows\systems32
+D:\windows\systems32> move utilman.exe utiman.exe.bak
+D:\windows\systems32>copy cmd.exe utilman.exe
+D:\windows\systems32>wpeutil reboot
+
+
+$ net User
+$ net user "username" 
+
+
