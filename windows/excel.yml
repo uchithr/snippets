@@ -1,0 +1,28 @@
+To highlight every number that exceeds 100 in the "time=101ms" column in Excel, you can use Conditional Formatting. Here are the steps:
+
+Open your Excel file.
+
+Select the column where the ping results are located (e.g., the column containing "time=101ms").
+
+Go to the "Home" tab on the Excel ribbon.
+
+Click on "Conditional Formatting" in the toolbar.
+
+Choose "New Rule" from the dropdown menu.
+
+In the "New Formatting Rule" dialog box, select "Use a formula to determine which cells to format."
+
+Enter the following formula:
+
+less
+Copy code
+=VALUE(MID(A1,FIND("time=",A1)+5,3))>100
+Make sure to adjust the cell reference (A1) to the top-left cell of your selected range.
+
+Click on the "Format" button to set the formatting options for the cells that meet the condition. You can choose a different font color, fill color, or any other formatting style.
+
+After setting the formatting options, click "OK" to close the Format Cells dialog box.
+
+Click "OK" again in the New Formatting Rule dialog box.
+
+Now, the cells in the selected column that contain numbers exceeding 100 in the "time=101ms" format will be highlighted based on your chosen formatting style.
