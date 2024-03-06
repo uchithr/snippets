@@ -130,6 +130,31 @@ find . -name \*.flac -type f -delete
 smbclient --user=sl/uchithr%apr@187*#  //slktweb/IT-Software
 
 
+## CONVERT WIFI PASSWORD TO HASH ##
+$ wpa_passphrase <SSID> <password>  ## wpa_passphrase MyWiFiNetwork mySecretPassword
+
+# /etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf
+network={
+    ssid="MyWiFiNetwork"
+    psk=04b8fgrdfgd3fe269045fvvvcvdgfdcvc1d6c583aa1bedb22d2cfa0f17
+}
+
+
+## LOGIN TO WIFI
+$ sudo iwlist wlan0 scan
+$ sudo nmcli device wifi connect <SSID> password <password>
+$ sudo nmcli device disconnect wlan0
+$ nmcli device status
+
+## WLAN CONFIG LOCATION
+$ cat /etc/wpa_supplicant/wpa_supplicant.conf
+
+network={
+        ssid="SLT-ADSL-835EB"
+        psk=04b855d13fe2690411c1482d04166455c7ebc0c1d6c583aa1bedb22d2cfa0f17
+}
+
+
 ## WAKE ON LAN
 $ sudo ethtool ens160 | grep -i wake-on
  if pumg doesnt shows use below to enable
