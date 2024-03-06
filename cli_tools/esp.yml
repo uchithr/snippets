@@ -23,18 +23,27 @@ init s : Tells the init command to enter the maintenance mode. (S/M)
 #### WI-FI ####
 ############################################################
 
+# WLAN CONFIGS LOCATION
+/etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf
+
 ## WLAN SCAN
 $ sudo iwlist wlan0 scan
 
-## CONVERT WIFI PASSWORD TO HASH ##
+## CONVERT WIFI PASSWORD TO HASH ## WPA2
 $ wpa_passphrase <SSID> <password>     # wpa_passphrase MyWiFiNetwork mySecretPassword
-
-# WLAN CONFIGS LOCATION
-/etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf
 
 network={
     ssid="MyWiFiNetwork"
     psk=04b8fgrdfgd3fe269045fvvvcvdgfdcvc1d6c583aa1bedb22d2cfa0f17
+}
+
+## CONVERT WIFI PASSWORD TO HASH ## WPA3
+wpa_passphrase <SSID> <password> | grep "sae_password=" | sed 's/\tsae_password=//'
+
+network={
+    ssid="YourNetworkSSID"
+    key_mgmt=SAE
+    psk="<SAE password generated from the previous step>"
 }
 
 
