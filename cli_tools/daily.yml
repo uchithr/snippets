@@ -97,8 +97,7 @@ touch myfile{1..5}
 # VIEW PERMISSIONS	
 ls-l myfile
 
-## GENERATE  WI-FI QR
-qrencode "WIFI:S:<SSID>;T:WPA;P:<PASSWORD>;;" -d=150 -s 30 -o file1.png
+
 
 ## MAKE ISO	
 genisoimage -o output_image.iso directory_name du -sh ~/up/ - directory size
@@ -128,37 +127,6 @@ find . -name \*.flac -type f -delete
 
 ## ACCESS WINDOWS PATH FROM LINUX	
 smbclient --user=sl/uchithr%apr@187*#  //slktweb/IT-Software
-
-
-## CONVERT WIFI PASSWORD TO HASH ##
-$ wpa_passphrase <SSID> <password>  ## wpa_passphrase MyWiFiNetwork mySecretPassword
-
-# /etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf
-network={
-    ssid="MyWiFiNetwork"
-    psk=04b8fgrdfgd3fe269045fvvvcvdgfdcvc1d6c583aa1bedb22d2cfa0f17
-}
-
-
-## LOGIN TO WIFI
-$ sudo iwlist wlan0 scan
-$ sudo nmcli device wifi connect <SSID> password <password>
-$ sudo nmcli device disconnect wlan0
-$ nmcli device status
-
-## WLAN CONFIG LOCATION
-$ cat /etc/wpa_supplicant/wpa_supplicant.conf
-
-network={
-        ssid="SLT-ADSL-835EB"
-        psk=04b855d13fe2690411c1482d04166455c7ebc0c1d6c583aa1bedb22d2cfa0f17
-}
-
-
-## WAKE ON LAN
-$ sudo ethtool ens160 | grep -i wake-on
- if pumg doesnt shows use below to enable
-$ sudo ethtool -s enp0s25 wol g
 
 
 ## COCKPIT	
