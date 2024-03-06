@@ -17,6 +17,43 @@ init 5 : Network is present multitasking and GUI is present with sound etc.
 init 6 : This runlevel is defined to system restart.
 init s : Tells the init command to enter the maintenance mode. (S/M)
 
+
+
+############################################################
+#### WI-FI ####
+############################################################
+
+## WLAN SCAN
+$ sudo iwlist wlan0 scan
+
+## CONVERT WIFI PASSWORD TO HASH ##
+$ wpa_passphrase <SSID> <password>     # wpa_passphrase MyWiFiNetwork mySecretPassword
+
+# WLAN CONFIGS LOCATION
+/etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf
+
+network={
+    ssid="MyWiFiNetwork"
+    psk=04b8fgrdfgd3fe269045fvvvcvdgfdcvc1d6c583aa1bedb22d2cfa0f17
+}
+
+
+## LOGIN TO WIFI
+$ sudo iwlist wlan0 scan
+$ sudo nmcli device wifi connect <SSID> password <password>
+$ sudo nmcli device disconnect wlan0
+$ nmcli device status
+
+
+## GENERATE  WI-FI QR
+$ qrencode "WIFI:S:<SSID>;T:WPA;P:<PASSWORD>;;" -d=150 -s 30 -o file1.png
+
+## WAKE ON LAN
+$ sudo ethtool ens160 | grep -i wake-on
+ if pumg doesnt shows use below to enable
+$ sudo ethtool -s enp0s25 wol g
+
+
 ############################################################
 #### GRUB ####
 ############################################################
