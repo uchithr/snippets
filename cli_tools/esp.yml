@@ -30,7 +30,7 @@ init s : Tells the init command to enter the maintenance mode. (S/M)
 $ sudo iwlist wlan0 scan
 
 ## CONVERT WIFI PASSWORD TO HASH ## WPA2
-$ wpa_passphrase <SSID> <password>     # wpa_passphrase MyWiFiNetwork mySecretPassword
+$ wpa_passphrase <SSID> <password>     # wpa_passphrase MyWiFiNetwork 'mySecretPassword'
 
 network={
     ssid="MyWiFiNetwork"
