@@ -1,11 +1,12 @@
 
+## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
+$ run > printmanagement.msc > All Printers
+
+
 ## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
 $ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
 DRIVERS TAB
 
-
-## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
-$ run > printmanagement.msc > All Printers
 
 ## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
 $ Create a System Restore point.
