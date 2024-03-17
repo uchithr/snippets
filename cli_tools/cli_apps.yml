@@ -1,6 +1,9 @@
 https://chatbot.theb.ai/#/chat/1685035371112
 
+# FOLDER HIERARCHY
 tree /a /f > list.txt
+tree -h | grep "G"
+
 chrome://system/
 
 ############
