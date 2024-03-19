@@ -1,1 +1,57 @@
+### OFFICE DEPLOYMENT TOOL (ODT) ####
+
+# DOWNLOAD FROM A CONFIGURATION XML
+$ setup.exe /download configuration.xml
+
+
+# INSTALL EXE WITH XML CONFIG
+$ setup.exe /configure configuration.xml
+
+#######################################################################################
+## DOWNLOAD TEMPLATE ##################################################################
+
+
+<Configuration>
+
+  <Add OfficeClientEdition="64" Channel="PerpetualVL2019">
+    <Product ID="Standard2019Volume">
+      <Language ID="en-us" />
+    </Product>
+  </Add>
+
+  <!--  <RemoveMSI All="True" /> -->
+
+  <!--  <Display Level="None" AcceptEULA="TRUE" />  -->
+
+  <!--  <Property Name="AUTOACTIVATE" Value="1" />  -->
+
+</Configuration>
+
+
+#####################################################################################
+## EXCLUDE INSTALL ##################################################################
+
+
+<Configuration>
+
+  <Add OfficeClientEdition="64" Channel="Current">
+    <Product ID="O365ProPlusRetail">
+      <Language ID="en-us" />
+	   <ExcludeApp ID="Lync" />
+    </Product>
+  </Add>
+
+  <!--  <Updates Enabled="TRUE" Channel="Current" /> -->
+
+  <!--  <Display Level="None" AcceptEULA="TRUE" />  -->
+
+  <!--  <Property Name="AUTOACTIVATE" Value="1" />  -->
+
+</Configuration>
+
+#######################################################################################
+#######################################################################################
+
+
+
 
