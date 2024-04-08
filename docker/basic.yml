@@ -88,6 +88,14 @@ $ docker run -p 3000:80 -d --rm e91425f38618
 # REMOVE UNUSED DOCKER CONTAINERS
 
 
+# DOWNLOAD THE DOCKER IMAGE
+$ docker pull <image_name>:<tag>
+
+# SAVE THE DOCKER IMAGE TO A FILE (OPTIONAL):
+$ docker save dc55c4221223 > ispy_2024-04-08.tar
+
+# LOAD THE DOCKER IMAGE ON THE NEW SERVER
+$ docker load -i <path_to_image_file>.tar
 
 
 # LIST DOCKER IAMGES
