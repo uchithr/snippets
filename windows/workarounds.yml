@@ -31,6 +31,11 @@ $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (s
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+
+## MAILBOX FULL
+$ create a pst and set a rule for a date range and move mail to a custom created pst file
+
+
 ## OST BYPASS
 HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Outlook\PST
 
@@ -77,4 +82,6 @@ $ taskkill /f /im explorer.exe
 $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
 $ start explorer.exe
+
+
 
