@@ -94,8 +94,15 @@ $  yt-dlp.exe -F --cookies-from-browser chrome
 $ -f 244+140  -r 500k --merge-output-format mkv https://www.youtube.com/watch?v=0zhHLYOB7-c (480p webm+m4a)
 
 # DATEAFTER
-$ -f 140 --embed-thumbnail --add-metadata --dateafter 20211111 --playlist-end 90 https://www.youtube.com/c/GethsemaneSriLanka/videos (WRK 2022-06-03) (correct dates in gpc)
-$ -f 140 --embed-thumbnail --add-metadata --playlist-end 90  https://www.youtube.com/c/GethsemaneSriLanka/videos  (manual date count & set "--playlist-end" days) (WRK)
+$ -f 251 --embed-thumbnail --add-metadata --extract-audio --dateafter 20231222 --audio-format opus  https://www.youtube.com/abccc
+$ yt-dlp -f 251 --playlist-index --embed-thumbnail --add-metadata --extract-audio --audio-format opus  https://www.youtube.com/abccc
+
+-f 140 --embed-thumbnail --add-metadata --dateafter 20211111 --playlist-end 90 https://www.youtube.com/c/GethsemaneSriLanka/videos (WRK 2022-06-03) (correct dates in gpc)
+-f 140 --embed-thumbnail --add-metadata --playlist-end 90  https://www.youtube.com/c/GethsemaneSriLanka/videos  (manual date count & set "--playlist-end" days) (WRK)
+
+# PLAYLIST NUBMER
+$ yt-dlp -f 251 "%(playlist_index)s-%(title)s.%(ext)s --embed-thumbnail --add-metadata --extract-audio  --audio-format opus https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK
+$ yt-dlp.exe -f 251 "%(playlist_index)s-%(title)s.%(ext)s" --embed-thumbnail --add-metadata --extract-audio --audio-format opus "https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK"
 
 # DOWNLOAD MANUALLY CREATED PALYLIST WITH NUMBERING
 $ -f 251 --embed-thumbnail --add-metadata --extract-audio --audio-format opus -o "%(autonumber)s - %(title)s.%(ext)s" --batch-file=C:\Users\Ezio\Desktop\test\42.txt
