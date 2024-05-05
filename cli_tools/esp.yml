@@ -266,8 +266,8 @@ sudo 7z x 'test.7z.001'
 # ZIP SINGLE FILE	
 zip -r -s 500m myzip myfile.mkv
 
-# ZIP FOLDER	
-zip -r -s 500m output/myzip source/
+# ZIP FOLDER WITH ZERO COMPRESSION	
+zip -0 -r -s 500m output/myzip source/
 
 # UZIP FILE	unzip file.zip
 cat cloud_dump.zip.* > cloud_dump.zip
