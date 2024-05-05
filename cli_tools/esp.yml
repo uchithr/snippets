@@ -284,10 +284,13 @@ tar cvf /home/sam/hrdata_bkp.tar /HRDATA
 ## UNTAR  FILE	
 tar xvf hrdata_bkp.tar
 
-## LIST FILE INFORMATION
+## LIST OR VIEW FILE INFORMATION WITHOUT EXTRACT
 unzip -l zip_file1.zip
 unrar l rar_file1.rar
 
+## TEST FILE INTEGRITY
+$ unzip -t your_file.zip
+$ unrar t your_file.rar
 
 ####___________
 
