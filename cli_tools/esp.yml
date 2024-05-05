@@ -17,6 +17,17 @@ init 5 : Network is present multitasking and GUI is present with sound etc.
 init 6 : This runlevel is defined to system restart.
 init s : Tells the init command to enter the maintenance mode. (S/M)
 
+##  HARDWARE INFOMATION 
+$ lshw #memory configuration, firmware versions, mainboard configuration,CPU version and speed, cache configuration, bus speed, hardware paths, attached devices, partitions, and filesystems.
+$ hwinfo #monitor information, RAID arrays, memory configuration, CPU information, firmware, mainboard configuration, caches, bus speeds, attached devices, partitions, and filesystems.
+$ lsusb #probes USB buses and the devices attached to them.
+$ lspci #probes PCI buses and the devices attached to them.
+$ lsblk #lists physical drives, partitions, and filesystems.
+$ lscpu #lists information about your CPU
+$ hwinfo --monitor
+
+$ lspci -v | awk '/USB/,/^$/'
+$ lspci -v | awk '/Audio/,/^$/'
 
 
 ############################################################
