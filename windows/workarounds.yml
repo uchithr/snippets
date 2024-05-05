@@ -83,5 +83,11 @@ $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
 $ start explorer.exe
 
+## DRIVER INSTALLATION
+Dell: Command Update
+HP: HP Support Assistant
+Asus: MyASUS ASUS Live Update
+Acer: Acer Care Center
+Lenovo: Lenovo Vantage 
 
 
