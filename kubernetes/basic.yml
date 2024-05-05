@@ -1,0 +1,211 @@
+https://github.com/sandervanvugt/kubernetes/tree/master
+
+
+POD < WORKER NODE < MASTER NODE < CLUSTER ----< kubectl
+
+
+LOCAL MACHINE
+ - kubectl # send instrutions to cluster
+ - minikube # test environment setup
+
+WORKER NODE 
+ - kubelet / docker
+
+ 
+MATER NODE 
+ - API      # connect kubelet
+ - Sheduler # pod watcher
+ - Kube-Controller-Manager # worker node conttrol
+ - Cloud-Controller-Manager # interact with aws azure
+
+
+PODS
+ - CONTAINERS
+ - VOLUMES
+ - CONTROLEED BY MASTER NODE
+
+SERVICES
+ - GROUP OF PODS
+ - HANDLES NETWORK
+
+OBJECTS
+ - Pods
+ - Deployments
+ - Services
+ - Volumes
+
+
+# INGRESS ONLY SUPPORT HTTPS & HTTPS
+## kubectl INSTALL in LOCAL
+
+# crictl used for adavanced kubernetes troubleshoot.
+# kubeadm for build and manage clusters & cluster nodes
+
+# This overwrites any existing configuration in /etc/yum.repos.d/kubernetes.repo
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+EOF
+
+
+$ sudo yum install -y kubectl
+$ kubectl version
+
+
+# minikube INSTALL
+$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+$ sudo rpm -Uvh minikube-latest.x86_64.rpm
+
+
+
+# minikube INSTALL LINUX
+$ minikube start --vm-driver=docker --cni=calico  # calico network plugin
+
+
+# kubectl AUTOCOMPLETION
+$ kubectl autocompletion -h
+$ source <(kubectl completion bash)
+
+
+# CHECK minikube status
+$ minikube status
+
+
+# CHECK kubectl status
+$ kubectl get install
+$ kubectl get all
+
+
+
+# CREATE NGINX APP WITH 3 REPLICAS  # DEPLOYMENT (POD)
+$ kubectl create deploy myapp1 --iamge=nginx --replicas=3
+
+
+# GEN YAML
+$ kubectl create deploy myapp1 --iamge=nginx --replicas=3 --dry-run=client -o yaml > myapp1.yaml
+$ kubectl apply -f myapp1.yaml
+$ kubectl create -f myapp1.yaml
+
+
+# GET YAML OF A DEPLOYMENT
+$ kubectl get deploy lab4 -o yaml | less 
+
+
+# INFOMATION 
+$ kubectl explain deploy.spec | less 
+
+
+# API CHECK
+$ kubectl api-resources | less
+
+
+# SHOW CURRENT RUNNIG PODS & CUSTOM CREATED NAMESPACE PODS
+$ kubectl get pods 
+$ kubectl get pods -A
+$ kubectl get pods -n mynamespace1
+
+
+# CREATE A DEPLOYMENT (POD)
+$ kubectl create deployment myapp1 --image=nginx # ALIAS "deploy"
+
+
+# DELETE POD | TARGETS INDIVIDUAL (SPECIFIC ) PODS
+$ kubectl delete pods mypod1  # DELETES THE POD NAMED "MYPOD1"
+
+
+# DELETE DEPLOYMENT # DELETING A DEPLOYMENT WILL DELETE ALL PODS ASSOCIATED WITH IT,
+$ kubectl delete deployments.apps myapp1  # DELETES THE DEPLOYMENT NAMED "MYAPP1"
+$ kubectl delete deploy mydep1  # DELETES THE DEPLOYMENT NAMED "MYDEP1" (EQUIVALENT TO ABOVE)
+
+
+# FORCE DELETE POD (NOT RECOMMENDED FOR MOST CASES)
+$ kubectl delete pods mypod1 --grace-period=0  # IMMEDIATELY TERMINATES THE POD WITHOUT WAITING FOR GRACEFUL SHUTDOWN (USE WITH CAUTION)
+
+
+# SHOW DETAIL OF A POD & TROUBLESHOOT
+$ kubectl describe pod myapp1
+
+
+# CREATE NAMESPACE
+$ kubectl create ns mynamespace1
+
+
+# CHECK NAMESPSCES
+$ kubectl get ns
+
+# GET INFO OF NAMESPACE
+$ kubectl get -n mynamespace1
+
+
+# SWICH TO A NAMESPACE
+$ kubectl config set-context --current --namespace=mynamespace1
+
+
+# RUN A DEPLOYMENT IN A CUSTOM CREATED NAMESPACE "-n"
+$ kubectl create deploy myapp1 --image=nginx -n mynamespace1
+
+
+# CHANGE DEPLOY MANUALLY
+$ kubectl edit deploy myapp1
+
+
+# REMOVE DEPLOYMENT WHILE KEEPING CONFIGURATION IN CLUSTER
+$ kubectl scale deploy myapp1 --replicas=0
+
+
+#  UNDO A CHANGE
+$ kubectl rollout undo
+
+
+# UPDATE AND ROLLBACK
+$ kubectl create deploy app1-version --iamge=nginx
+$ kubectl get deploy
+
+
+# CHECK version-app1 HISTROY
+$ kubectl rollout history deployment app1-version
+
+
+# CHECK version-app1 VERSIONS
+$ kubectl rollout history deployment app1-version -revison=1
+
+
+# LABEL
+$ kubectl label deploy app1-version type-static
+$ kubectl label -n myapp1 deploy myapp2 type=secret
+
+# REMOVE LABEL
+$ kubectl label deploy app1-version- 
+
+# SHOW LABELS
+$ kubectl get all --show-labels
+
+
+
+# NETWORKING USING SERVICES
+$ kubectl create deploy myapp1 --image=nginx --replicas=3
+$ kubectl get all -o wide --selector  app=myapp1  # "-o wide"  shows pods ips
+
+
+$ kubectl expose deploy myapp1 --port=80
+
+
+# CHANGE SERVICE TYPE (SVC) LABEL
+$ kubectl edit svc nginx
+
+
+# FIDING KUBERNETES INTERNAL DNS 
+$ kubectl run -it busybox --image=busybox --sh # sh enabless the shell
+/# cat /etc/resolc.conf 
+nameserver 10.96.0.10
+.....
+
+
+#####
+6.1 Understanding Kubernetes Networking
+\\\L6.3///
+####
