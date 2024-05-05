@@ -83,6 +83,10 @@ $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
 $ start explorer.exe
 
+## XP SUPPORTED BROWSERS
+supermium
+mypal
+
 ## DRIVER INSTALLATION
 Dell: Command Update
 HP: HP Support Assistant
