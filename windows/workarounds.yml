@@ -94,4 +94,7 @@ Asus: MyASUS ASUS Live Update
 Acer: Acer Care Center
 Lenovo: Lenovo Vantage 
 
+## OLD HOSTNAME
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SchedulingAgent
+
 
