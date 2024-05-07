@@ -194,6 +194,24 @@ $ docker run -d --name mongodb1_container --network custom-net1 mongo_image     
 $ docker run -d --name app1_container --network custom-net1 app1_image # data_connector   # data_connector <'http://app1_container/app1'>
 
 
+# IDENTIFY THE CONTAINER TO BACKUP
+$ docker ps
+
+# BACKUP THE CONTAINER & CREATES A NEW IMAGE 
+$ docker commit <container_id> <backup_image_name>:<tag>
+
+# EXPORTS THE CONTAINER'S FILESYSTEM AS A TARBALL
+$ docker export -o <backup_tarball_name>.tar <container_id>
+
+# RESTORE FROM BACKUP
+$ docker run -d --name <restored_container_name> <backup_image_name>:<tag>
+
+# IDENTIFY VOLUMES USED BY THE CONTAINER
+$ docker inspect --format='{{range .Mounts}}{{.Source}}{{end}}' <container_id>
+
+# COPY VOLUME DATA FROM THE HOST FILESYSTEM
+$ cp -r /var/www/remotely  remotely_data
+
 
 -------------------------------
 
