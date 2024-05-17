@@ -1,1 +1,45 @@
 
+apple - 1234
+centos - redhat
+ubuntu - 1234
+2012 - redhat@123
+98 - 1234
+10 - 1234
+
+7000 net adapt
+
+
+2020 linux 
+
+redhat@123ansible
+apple - 1234
+centos - redhat
+ubuntu - 1234
+2012 - redhat@123
+98 - 1234
+10 - 1234
+
+7000 net adapt
+
+
+2020 linux 
+
+redhat@123ansible
+
+#WHEN NOT RUNNIG
+[14.5] macOS High Sierra  
+[20G]  Windows Server 2012
+[11G]  Windows 10 Pro 2020 (fresh state)
+[13.6G]  Windows 10 Pro 2020
+[17G]  Windows 10 Pro 2020
+[19.5G]  Windows 10 Pro 2020
+
+
+
+-----------------------------------
+
+#WHEN RUNNIG
+[14G]  Windows 10 Pro 2020
+[16.5G]  Windows 10 Pro 2020
+[20G]  Windows 10 Pro 2020
+[22.4G]  Windows 10 Pro 2020
