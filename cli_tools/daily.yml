@@ -172,3 +172,15 @@ sudo mount /dev/sr0 /media/dvd-r
 tree --du -h | grep G]	
 
 
+## TERMINAL RECORD
+script
+exit
+script my_terminal_session.txt
+~/.bash_history
+
+
+## DISABLE BASH HISTORY
+nano ~/.bashrc
+unset HISTFILE #Add the following line at the end of the file to disable history:
+source ~/.bashrc #to apply
+
