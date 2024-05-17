@@ -29,6 +29,19 @@ $ hwinfo --monitor
 $ lspci -v | awk '/USB/,/^$/'
 $ lspci -v | awk '/Audio/,/^$/'
 
+############################################################
+#### VIM ####
+############################################################
+
+# DELETE ENTIRE LINE (must be in non-insert mode)
+$ dd
+
+# MULTIPLE LINES DELETION (deletes the current line and the next two lines)
+$ 3dd  
+
+# LINEWISE SELECTION
+$ Shit + V 
+
 
 ############################################################
 #### WI-FI ####
