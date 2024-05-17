@@ -317,6 +317,9 @@ $ rclone move -v desmond_TD:/SLTD_FRMAL/"*.mp4"  desmond_TD:/SLTD_FRMAL/dESt
 # REMOVE
 $ rclone rmdir -v desmond_TDBKP:/SLTD_FRMAL
 
+# EXCLUDE FOLDERS & FILES
+$ rclone copy -P cmsl_ict:/ C:\Users\samr\Downloads\bkp_sl_ict --exclude "/trainings/**" --exclude "/General/release.zip" 
+
 # SIZE TREE
 $ rclone ncdu desmond_TD:/gmz/
 
