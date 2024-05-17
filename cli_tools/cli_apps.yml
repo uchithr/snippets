@@ -476,7 +476,23 @@ $ wget "https://x.dogemirrorbot.workers.dev/0:/Home.Alone.2.Lost.in.New.York.199
 
 
 ####################################################################################################
-///// iperf3
+JDOWNLOADER HEADLESS\_______________________________________________________________________________
+#https://support.jdownloader.org/en/knowledgebase/article/install-jdownloader-on-nas-and-embedded-devices
+#https://support.jdownloader.org/en/knowledgebase/article/headless-systemd-autostart-script
+
+# CREATE A FOLDER TO INSTALL JDOWNLOADER FILES
+$ mkdir /path/JDownloader
+$ cd /path/JDownloader
+$ wget https://installer.jdownloader.org/JDownloader.jar
+
+
+# START JDOWNLOADER INSTALLATION
+$ java -Djava.awt.headless=true -jar JDownloader.jar -norestart
+$ java -jar JDownloader.jar 
+
+
+####################################################################################################
+iperf3\_____________________________________________________________________________________________
 
 # START SERVER
 $ iperf3 -s
@@ -495,6 +511,26 @@ $ iperf3 -c server_ip -t 15 -b 30M -V -u port
 
 # OUTSIDE
 $ iperf3 -c iperf.biznetnetworks.com -p 5201
+
+####################################################################################################
+NVIDIA\_____________________________________________________________________________________________
+
+$ nvidia-smi
+$ nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv
+
+## FILTER PROCESS USED BY GPU
+$ nvidia-smi --query-compute-apps=pid --format=csv,noheader
+
+# NVITOP
+$ pip3 install --upgrade nvitop
+$ nvitop -m
+
+## WINDOWS PID KILL
+$ taskkill /F /PID pid_number
+
+
+
+
 
 #####################SORT############
 
