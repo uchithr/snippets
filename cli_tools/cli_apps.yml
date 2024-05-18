@@ -477,8 +477,8 @@ $ wget "https://x.dogemirrorbot.workers.dev/0:/Home.Alone.2.Lost.in.New.York.199
 
 ####################################################################################################
 JDOWNLOADER HEADLESS\_______________________________________________________________________________
-#https://support.jdownloader.org/en/knowledgebase/article/install-jdownloader-on-nas-and-embedded-devices
-#https://support.jdownloader.org/en/knowledgebase/article/headless-systemd-autostart-script
+# https://support.jdownloader.org/en/knowledgebase/article/install-jdownloader-on-nas-and-embedded-devices
+# https://support.jdownloader.org/en/knowledgebase/article/headless-systemd-autostart-script
 
 # CREATE A FOLDER TO INSTALL JDOWNLOADER FILES
 $ mkdir /path/JDownloader
@@ -490,6 +490,33 @@ $ wget https://installer.jdownloader.org/JDownloader.jar
 $ java -Djava.awt.headless=true -jar JDownloader.jar -norestart
 $ java -jar JDownloader.jar 
 
+# CHECK THE JDOWNLOADER LOGS:
+sudo journalctl -u jdownloader.service
+
+# AUTOSTART A HEADLESS JD INSTALLATION
+[sam@infra-remote jd]$ cat /etc/systemd/system/jdownloader.service
+[Unit]
+Description=JDownloader
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/java -jar /home/sam/jd/JDownloader.jar
+PIDFile=/home/sam/bin/jdownloader/JDownloader.pid
+User=sam
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
+# ENABLE AND RESTART THE SERVICE
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable jdownloader.service
+$ sudo systemctl restart jdownloader.service
+
+# INSPECT THE JDOWNLOADER JAR
+$ /usr/bin/java -jar /home/sam/jd/JDownloader.jar
 
 ####################################################################################################
 iperf3\_____________________________________________________________________________________________
