@@ -4,34 +4,6 @@ $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (s
 ## METADATA SLOWNESS
 Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
 
-####################################
-### PRINTERS ######################
-####################################
-
-## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
-$ run > printmanagement.msc > All Printers
-
-
-## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
-$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
-DRIVERS TAB
-
-
-## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
-$ Create a System Restore point.
-$ regedit 
- > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
- > HKEY_CURRENT_USER\Printers\Connections
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
-
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
-
-
- ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
-$ C:\Windows\System32\DriverStore\FileRepository 
-
 
 ## CLEAR CREDENTIALS
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
@@ -65,7 +37,6 @@ $ ./SetupRST.exe -extractdrivers SetupRST_extracted
 
 
 ## PASSWORD RESET
-
 SHIFT + F10 - CMD
 
 X:\Sources>diskpart
@@ -78,12 +49,11 @@ D:\windows\systems32> move utilman.exe utiman.exe.bak
 D:\windows\systems32>copy cmd.exe utilman.exe
 D:\windows\systems32>wpeutil reboot
 
-
 $ net User
 $ net user "username" *
 
-## Thumbnail Cache Clear
 
+## Thumbnail Cache Clear
 $ taskkill /f /im explorer.exe
 $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
@@ -104,3 +74,29 @@ Lenovo: Lenovo Vantage
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SchedulingAgent
 
 
+### PRINTERS #############################################################################################################################################################
+
+
+## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
+$ run > printmanagement.msc > All Printers
+
+
+## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
+$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
+DRIVERS TAB
+
+
+## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
+$ Create a System Restore point.
+$ regedit 
+ > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
+ > HKEY_CURRENT_USER\Printers\Connections
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
+
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
+
+
+ ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
+$ C:\Windows\System32\DriverStore\FileRepository 
