@@ -1,0 +1,106 @@
+## VMWARE WORKSATION ############
+
+# WORKSATION CONFIG LOCATION
+C:\ProgramData\VMware\vmnetnat.conf
+
+### SSH FORM HOST TO GUEST IN NAT CONFIGURED VM ####
+
+disable root and create new user in vm when ssh from windows.
+as admin navigate to the "virtaul netwrok editor"  > select "vmnet8" > nat settings > add
+
+  HOST_PORT:<myport>
+  TYPE:TCP
+  VMIP:192.168.1.*
+  VMPORT:00
+  DESCRIPTION:SSH
+
+# OPEN HOST ALLOWED PORT IN THE GUEST OS 
+firewall-cmd --permanent --add-port=<myport>/tcp
+sudo firewall-cmd --reload
+
+#FROM SUTABLE TERMINAL CONNECT TO THE VM
+$ ssh sam@localhost -p <myport>
+
+# BRIDGED PERFORMS SLOWLY ON VM
+
+
+#######################
+## ESXi 
+#######################
+vSphere Hypervisor (ESXi) - Install to a Phyisical Server
+vSphere Client - Manageable Web Based Dashboard
+vCenter -  Manage 2 or more Hypervisors
+
+> CLUSTER > EXSI HOSTS > VM
+
+
+# CHAGNE HOSTNAME
+$ console > F2 > Configure Management Network > DNS Configuration 
+
+
+# POWER-ON SEQUENCE 
+  NFS Server
+  vCenter runnig ESXi Server
+  Other ESXi
+  vCenter VM
+
+
+# POWER-DOWN SEQUENCE
+  vCenter VM
+  vCenter runnig ESXi Server
+  Other ESXi
+  NFS Server
+
+
+# PROCESS
+$ esxtop
+
+#SHUTDOWN
+$ halt
+
+
+
+
+
+########################
+## VSCODE 
+########################
+
+# HOST DEFINED PATH
+$ C:\Users\SLVR\.ssh
+
+#########################################################################
+Host it-test
+  HostName 127.0.0.1
+  User bob
+  Port <myport>
+########################################################################
+Host bob
+    HostName 1.1.1.1
+    User bob
+    IdentityFile "C:\bob\keystore\ssh.key"
+########################################################################
+Host awslab
+  HostName 8.8.8.8
+  User ec2-user
+  IdentityFile "C:\Users\bob\key\awslab.pem"
+
+
+
+
+
+# NAVIGATE TO THE  DIRECTORIES OF LINUX VM USING THE VS CODE FILE EXPLORER UI.
+$ File > Open Folder > 
+
+
+
+## EXTENSIONS
+Remote - SSH
+Remote - Explorer
+Dev Containers
+Docker
+PowerShell
+Pylance
+Python
+Python Debugger
+
