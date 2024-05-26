@@ -1,8 +1,4 @@
-disable root & create new user in vmware when ssh from windows ||| add nat port forwarding
-sudo systemctl status sshd
-sudo firewall-cmd --zone=public --permanent --add-service=ssh
-firewall-cmd --permanent --add-port=6000/tcp
-sudo firewall-cmd --reload
+
 
 nmcli connection add con-name NIC type Ethernet ifname eth0
 nmcli connection modify NIC ipv4.addresses "172.25.8.11/24 172.25.0.254" ipv4.dns 172.25.254.254 ipv4.method static connection.autoconnect yes
@@ -616,8 +612,78 @@ Client fstab /mount xfs _netdev 🡪 iscsiadm 🡪 logout
 service🡪 chown nfsnobody /my_nfs 🡪 vim /etc/exports [my_nfs x.x.x.x/24](rw sync)
 Client mkdir /mnt/nfs_docs 🡪fstab server7:/ mnt/nfs_docs nfs defaults 🡪 mount
 
+####SERVER CONFIG ###
+100G & 5G nfs_share
+
+# INSTALL NFS
+$ yum install nfs-utils libnfsidmap -y 
+
+# ENABLE NFS ON START
+$ systemctl enable rpcbind
+$ systemctl enable nfs-server
+$ systemctl start rpcbind
+$ systemctl start rpc-statd
+$ systemctl start nfs-idmapd 
+
+# firewall-cmd --permanent --add-service=nfs
+# firewall-cmd --reload
+# sudo systemctl stop firewalld.service
+
+# CREATE XFS PARTITIONS
+$ fdisk -l
+$ fdisk /dev/sdb
+ $ n #new partition
+ $ p #primary partition
+ $ 1 #partition number default
+ $ x2 enter keys # first and last sector default
+ $ w #write the changes
+
+# MAKE THE FILE SYSTEM
+$ mkfs.xfs /dev/sdbl
+
+# CREATE NFS SHAREPOINTS
+$ mkdir /nfs_shared
+$ mkdir /private
+
+# PERMISSIONS
+$ ls -ald /nfs_shared
+$ chown nfsnobody /nfs_shared
+
+# MOUNT 
+$ mount /dev/sdbl /nfs_shared
+$ mount /dev/sdcl /private
+
+# ADD NFS MOUNTS TO /ETC/FSTAB FOR AUTO-MOUNT
+$ /dev/sdbl /nfs_shared xfs defaults 0 0
+$ /dev/sdcl /private xfs defaults 0 0
+
+# ADDING NFS_SHARE PATH ENTRIES TO /ETC/EXPORTS
+/nfs_shared *(rw,sync,no_root_squash)
+/private *(rw,sync,no_root_squash)
+
+# EXPORT THE NFS NFS_SHARE
+$ exportfs -rv
+
+# LIST MOUNTS BY CURRENT HOST
+$ showmount -e <hostname>
 
 
+
+###CLIENT CONFIG ###
+# CREATE MOUNT DIRECTORY
+$ mkdir /mnt/server_nfs_link
+
+# MOUNT SERVER SHARE
+$ mount hostname:/nfs_share /mnt/server_nfs_link
+$ df -h
+
+# PERMENT ADDING vim /etc/fstab for auto-mount
+$ <histname>:/nfs_share /mnt/nsf_link    nfs    defaults    0 0
+
+
+## SECURING NFS
+systemctl enable nfs-secure-server.service 
+ystemctl start nfs-secure-server.service 
 
 
 ################################################################################################################################################################################################
