@@ -4,6 +4,8 @@ nmcli connection add con-name NIC type Ethernet ifname eth0
 nmcli connection modify NIC ipv4.addresses "172.25.8.11/24 172.25.0.254" ipv4.dns 172.25.254.254 ipv4.method static connection.autoconnect yes
 nmcli connection down "System eth0" ; nmcli connection up NIC
 
+nmtui
+
 init 0 : Shutdown 
 init 1 : Single user mode or emergency mode no network no multitasking is present in this mode only root has access in this runlevel
 init 2 : No network but multitasking support is present .
