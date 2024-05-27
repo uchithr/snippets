@@ -14,12 +14,12 @@ as admin navigate to the "virtaul netwrok editor"  > select "vmnet8" > nat setti
   VMPORT:00
   DESCRIPTION:SSH
 
-# OPEN HOST ALLOWED PORT IN THE GUEST OS 
+# FROM SUTABLE  REMOTE COMPUTING TOOL CONNECT TO THE VM
+$ ssh sam@localhost -p <myport>
+
+# IF CONNECTING FAILED, OPEN HOST ALLOWED PORT > IN THE GUEST OS 
 firewall-cmd --permanent --add-port=<myport>/tcp
 sudo firewall-cmd --reload
-
-#FROM SUTABLE TERMINAL CONNECT TO THE VM
-$ ssh sam@localhost -p <myport>
 
 # BRIDGED PERFORMS SLOWLY ON VM
 
