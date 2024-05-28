@@ -193,24 +193,36 @@ $ docker run --name app1_container -d -p 80:80 app1_image <docker:outside>
 $ docker run -d --name mongodb1_container --network custom-net1 mongo_image               # data_connector <'mongodb://mongodb1_container:27017/app1'>
 $ docker run -d --name app1_container --network custom-net1 app1_image # data_connector   # data_connector <'http://app1_container/app1'>
 
-
-# IDENTIFY THE CONTAINER TO BACKUP
-$ docker ps
-
-# BACKUP THE CONTAINER & CREATES A NEW IMAGE 
-$ docker commit <container_id> <backup_image_name>:<tag>
-
-# EXPORTS THE CONTAINER'S FILESYSTEM AS A TARBALL
-$ docker export -o <backup_tarball_name>.tar <container_id>
-
-# RESTORE FROM BACKUP
-$ docker run -d --name <restored_container_name> <backup_image_name>:<tag>
-
 # IDENTIFY VOLUMES USED BY THE CONTAINER
 $ docker inspect --format='{{range .Mounts}}{{.Source}}{{end}}' <container_id>
-
-# COPY VOLUME DATA FROM THE HOST FILESYSTEM
 $ cp -r /var/www/remotely  remotely_data
+
+# CREATING A BACKUP FORM DEPLOYED > MANUALLY STOPPED CONTAINER
+$ docker commit bab19950f1a4 remotely:88                          #<container_id> <backup_image_name>:<tag>
+$ docker save -o deploy_bkp_remotely.tar remotely:88              #save to a tarball
+$ tar -tf deploy_bkp_remotely.tar                                 #tar -tf deploy_bkp_remotely.tar
+$ scp my_busybox_image.tar user@destination_server:/path/to/save  #ransfer the image file to the destination server
+$ docker load -i my_busybox_image.tar                             #load the docker image on the destination server
+
+
+# SAVING A PULLED DOCKER IMAGE (INCLUDING ALL LAYERS AND METADATA) TO A TARBALL.
+$ docker save -o bkp_image.tar <container_id> <backup_image_name>:<tag>
+
+# TRANSFER THE IMAGE FILE TO THE DESTINATION SERVER
+$ scp my_busybox_image.tar user@destination_server:/path/to/save
+
+# LOAD THE DOCKER IMAGE ON THE DESTINATION SERVER
+$ docker load -i my_busybox_image.tar
+$ docker load -i /path/to/save/my_busybox_image.tar
+
+#  EXPORTS A FILESYSTEM SNAPSHOT OF A RUNNING OR STOPPED CONTAINER (OPTINAL)
+$ docker export -o <backup_tarball_name>.tar <container_id>
+
+# IMAGE TAG UPDATE
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+<none>        <none>    1a2b3c4d5e6f   2 days ago     123MB
+$ docker tag <image_id> <repository_name>:<tag>
+$ docker tag b48280f1866d  remotely:89
 
 
 -------------------------------
@@ -219,6 +231,5 @@ $ cp -r /var/www/remotely  remotely_data
 docker-compose  up -d
 docker-compose -f your-file.yml up
 
-"sudo curl -L ""https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-$(uname -s)-$(uname -m)"" -o /usr/local/bin/docker-compose
-"
+"sudo curl -L ""https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-$(uname -s)-$(uname -m)"" -o /usr/local/bin/docker-compose"
 
