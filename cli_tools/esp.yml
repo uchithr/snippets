@@ -259,7 +259,55 @@ other::--x
 sudo setfacl -R -m g:hrgrp:rwx /HRDATA ## For existing files
 sudo setfacl -m g:hrgrp:rwx /HRDATA ## For new files
 
+################################################################################################################################################################################################
+### SSH KEYGEN
+################################################################################################################################################################################################
 
+
+# GENERATE THE SSH KEY PAIR (on your local machine)
+$ ssh-keygen -t rsa -b 4096 -C "bob@gmail.com"
+
+# CHECK THE GENERATED KEY FILES (on your local machine)
+$ ls -l ~/.ssh/   # id_rsa (private key) and id_rsa.pub (public key)
+
+# COPY THE PUBLIC KEY TO THE SERVER (from your local machine)
+$ ssh-copy-id username@server_ip
+
+# OR MANUALLY TRANSFER THE PUBLIC KEY (from your local machine)
+$ scp ~/.ssh/my_id_rsa.pub username@server_ip:/home/username/.ssh/authorized_keys
+
+# LOG INTO THE SERVER
+$ ssh username@server_ip
+
+# ON THE SERVER: CREATE THE .ssh DIRECTORY AND AUTHORIZED_KEYS FILE (if not already done by ssh-copy-id)
+$ mkdir -p ~/.ssh
+$ chmod 700 ~/.ssh
+$ cd .ssh/
+$ cat my_id_rsa.pub >> ~/.ssh/authorized_keys
+$ chmod 600 ~/.ssh/authorized_keys
+
+# ENSURE CORRECT OWNERSHIP
+$ chown -R username:username ~/.ssh
+
+# DISABLE PASSWORD AUTHENTICATION (on the server)
+$ sudo nano /etc/ssh/sshd_config
+
+# Update or add the following lines:
+  PubkeyAuthentication yes                # Enable public key authentication #45
+  AuthorizedKeysFile .ssh/authorized_keys # Specify the file with public keys #49
+  PasswordAuthentication no               # Disable password authentication #65
+
+$ Ctrl + O #writeout
+$ Ctrl + X #exit
+
+# RESTART THE SSH SERVICE (on the server)
+$ sudo systemctl restart sshd
+
+# IMPROVE SECURITY WITH FAIL2BAN (OPTIONAL)
+$ sudo dnf install epel-release -y 
+$ sudo dnf install fail2ban -y
+$ sudo systemctl enable fail2ban
+$ sudo systemctl start fail2ban
 
 
 
