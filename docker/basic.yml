@@ -206,7 +206,7 @@ $ docker load -i my_busybox_image.tar                             #load the dock
 
 
 # SAVING A PULLED DOCKER IMAGE (INCLUDING ALL LAYERS AND METADATA) TO A TARBALL.
-$ docker save -o bkp_image.tar <container_id> <backup_image_name>:<tag>
+$ docker save -o bkp_image.tar <image_id> <backup_image_name>:<tag>
 
 # TRANSFER THE IMAGE FILE TO THE DESTINATION SERVER
 $ scp my_busybox_image.tar user@destination_server:/path/to/save
