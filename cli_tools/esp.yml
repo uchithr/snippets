@@ -265,7 +265,7 @@ sudo setfacl -m g:hrgrp:rwx /HRDATA ## For new files
 
 
 # GENERATE THE SSH KEY PAIR (on your local machine)
-$ ssh-keygen -t rsa -b 4096 -C "bob@gmail.com"
+$ ssh-keygen -t rsa -b 4096 -C "bob@gmail.com" # OR any comment
 
 # CHECK THE GENERATED KEY FILES (on your local machine)
 $ ls -l ~/.ssh/   # id_rsa (private key) and id_rsa.pub (public key)
