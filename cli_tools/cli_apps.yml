@@ -331,18 +331,22 @@ $ ddrescue -v -d -r 3 -c 32 -b 2048 /dev/cdrom dvd.iso rescue.log
 source1 destinatin2
 
 
-#####################################################################################################
+###################################################### REMOVE SESSION FILE IF LOGIN ERROR OCCURED ####
 INSTALODER\_______________________________________________________________________________________________
 
 # PROFILE SAVED
-$ instaloader --login=uchith_rasanjana
-$ instaloader --login=uchith_rasanjana :saved --no-video-thumbnails --no-metadata-json --no-compress-json
+$ instaloader --login=sam_fisher
+$ instaloader --login=sam_fisher :saved --no-video-thumbnails --no-metadata-json --no-compress-json
 
+# SESSION LOCATION
+Saved session to C:\Users\SLVR\AppData\Local\Instaloader\session-sam_fisher
 
 # ONE POST
 $ instaloader -- -CO-LoHfnO01 --no-metadata-json --no-compress-json
 
-REMOVE SESSION FILE IN GETTING LOGIN ERROR
+
+# DOWNLOAD ALL PICTURES AND VIDEOS OF A PROFILE
+$ instaloader sam_fisher
 
 ####################################################################################################
 mp3tag\_____________________________________________________________________________________________
