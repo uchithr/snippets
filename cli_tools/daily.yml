@@ -11,11 +11,18 @@ top
 htop
 pkill -KILL -U samf
 
-## GATEWAY
- ip route show default
+# GATEWAY
+ip route show default
 
-##DNS
- cat /etc/resolv.conf
+#DNS
+cat /etc/resolv.conf
+
+# CHECK CACHE FILE USAGE IN LINUX:
+free -h
+vmstat -s
+cat /proc/meminfo
+top or htop
+slabtop
 
 
 fdisk -l
