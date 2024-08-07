@@ -11,6 +11,12 @@ top
 htop
 pkill -KILL -U samf
 
+## GATEWAY
+ ip route show default
+
+##DNS
+ cat /etc/resolv.conf
+
 
 fdisk -l
 lsblk -f
