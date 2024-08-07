@@ -2,31 +2,12 @@
 tree /a /f > list.txt
 tree -h | grep "G"
 
+
+### CHROME CACHE CLEAR
+chrome://settings/content/all
+
+### CHROME INFO
 chrome://system/
-
-############
-COMMON SETUP
-INSTALL GIT FOR WINDOWS LINUX  - C:\Program Files\Git\usr\bin
-
-## MARIADB
-C:\Windows\System32\cmd.exe /k " "C:\Program Files\MariaDB 10.11\bin\mysql.exe" "--defaults-file=C:\Program Files\MariaDB 10.11\data\my.ini" -uroot -p"
-
-## CMDER BASH
-/icon "c:\Program Files\Git\mingw64\share\git\git-for-windows.ico"   
-"C:\Program Files\Git\bin\sh.exe" --login -i
-
-Click the “+” button to add a new task and fill in the fields as follow:
-Name: zsh
-Task Parameters: /icon %USERPROFILE%\AppData\Local\lxss\bash.ico
-Commands: cmd /c "C:\Program Files\Git\git-bash.exe" ~ -new_console:p:%USERPROFILE%
-
-"C:\Program Files\Git\git-bash.exe" /usr/bin/zsh --login -i -new_console:d:%USERPROFILE%
-
-
-## WINDOWS  CLI .EXE  PATH DEFINE (if showing old version move variable path to start.)
-Advanced System Settings > Environment Variables
-01- User Variables > New   |   Variable Name  - cmds   |   Variable Value - C:\Users\Ezio\cmd_prg\
-02 - System Variables > Path >  Variable Value - ;C:\Users\Ezio\cmd_prg;
 
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
@@ -130,3 +111,30 @@ $ regedit
 
  ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
 $ C:\Windows\System32\DriverStore\FileRepository 
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+
+############
+COMMON SETUP
+INSTALL GIT FOR WINDOWS LINUX  - C:\Program Files\Git\usr\bin
+
+## MARIADB
+C:\Windows\System32\cmd.exe /k " "C:\Program Files\MariaDB 10.11\bin\mysql.exe" "--defaults-file=C:\Program Files\MariaDB 10.11\data\my.ini" -uroot -p"
+
+## CMDER BASH
+/icon "c:\Program Files\Git\mingw64\share\git\git-for-windows.ico"   
+"C:\Program Files\Git\bin\sh.exe" --login -i
+
+Click the “+” button to add a new task and fill in the fields as follow:
+Name: zsh
+Task Parameters: /icon %USERPROFILE%\AppData\Local\lxss\bash.ico
+Commands: cmd /c "C:\Program Files\Git\git-bash.exe" ~ -new_console:p:%USERPROFILE%
+
+"C:\Program Files\Git\git-bash.exe" /usr/bin/zsh --login -i -new_console:d:%USERPROFILE%
+
+
+## WINDOWS  CLI .EXE  PATH DEFINE (if showing old version move variable path to start.)
+Advanced System Settings > Environment Variables
+01- User Variables > New   |   Variable Name  - cmds   |   Variable Value - C:\Users\Ezio\cmd_prg\
+02 - System Variables > Path >  Variable Value - ;C:\Users\Ezio\cmd_prg;
