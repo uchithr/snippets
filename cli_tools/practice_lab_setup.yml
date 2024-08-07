@@ -432,4 +432,40 @@ $ reboot
 
 
 
+
+
+###### FOR MORE ###########
+https://www.server-world.info/en/note?os=Fedora_21&p=iscsi&f=2
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=iscsi&f=1
+
+# Initial Settings : Network Settings
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=initial_conf&f=3
+
+# BIND : Configure for Internal Network
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=dns&f=1
+
+
+# NFS : NFS 4 ACL Tool
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=nfs&f=3
+
+
+# Ceph Reef : Configure   Cluster #1
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=ceph18&f=1
+
+
+#OpenLDAP : Configure LDAP Server
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=openldap&f=1
+
+
+#Configure Network Teaming
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=teaming
+
+
+#FreeIPA : Configure Server
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=freeipa&f=1
+
+
+
+
+
 $ ssh-copy-id root@192.168.58.102
