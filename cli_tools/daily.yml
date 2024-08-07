@@ -67,6 +67,10 @@ ls -ult
 # QUICK ONFO ABOUNT COMMANDS	
 whatis ls scp
 
+# FILE INFORAMTION
+file rclone
+stat rclone
+
 ## FILE SIZE	
 du -h /var/lib/deluge/Downloads/
 
