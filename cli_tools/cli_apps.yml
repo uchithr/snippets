@@ -223,8 +223,14 @@ tesseract --list-langs
 RCLONE\_______________________________________________________________________________________________
 #############################################################################################################################################################################
 
-FOR TEAM DRIVE --  /content/drive/Shareddrives/*TD/MA2GD
-FOR LOCAL      --  /content/drive/MyDrive/*imported
+PRECOMPILED BINARY
+$ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+$ unzip rclone-current-linux-amd64.zip
+$ cd rclone-*-linux-amd64
+
+$ sudo cp rclone /usr/bin/
+$ sudo chown root:root /usr/bin/rclone
+$ sudo chmod 755 /usr/bin/rclone
 
 ./rclone (when no root)
 
