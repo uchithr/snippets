@@ -435,6 +435,8 @@ $ reboot
 
 
 ###### FOR MORE ###########
+
+# Configure iSCSI Initiator
 https://www.server-world.info/en/note?os=Fedora_21&p=iscsi&f=2
 https://www.server-world.info/en/note?os=CentOS_Stream_9&p=iscsi&f=1
 
