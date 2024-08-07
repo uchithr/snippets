@@ -41,6 +41,34 @@ $ 3dd
 $ Shit + V 
 
 
+
+############################################################
+#### FIND ####
+############################################################
+
+# FOLDER FIND	
+find ~ -type d -name "Documents"
+
+# FIND  FILE TYPE	
+find . -type f -name "*.txt"
+
+# FIND AND COPY	
+find -name  myfile.mp3 -exec cp  {}  /home/sam  \;
+
+## FIND AND COPY BELOW 200M FILES	
+find -type f -size -200M -exec cp {} /mnt/sdf2/1/X_pks \;
+find /etc/ -name "passwd"
+
+# SEARCH FOR FILES NAMED 'RCLONE' STARTING FROM THE /USR/BIN DIRECTORY
+find /usr/bin -name rclone 2>/dev/null
+
+## FIND
+find / -name rclone 2>/dev/null
+
+# SEARCH FOR FILES NAMED 'RCLONE' STARTING FROM THE /USR/BIN DIRECTORY
+find /usr/bin -name rclone 2>/dev/null
+
+
 ############################################################
 #### WI-FI ####
 ############################################################
