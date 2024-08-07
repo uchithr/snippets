@@ -20,18 +20,6 @@ tree --du -h | grep G]
 # SSH WITH KEYFILE	
 ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 
-# FOLDER FIND	
-find ~ -type d -name "Documents"
-
-# FIND  FILE TYPE	
-find . -type f -name "*.txt"
-
-# FIND AND COPY	
-find -name  myfile.mp3 -exec cp  {}  /home/sam  \;
-
-## FIND AND COPY BELOW 200M FILES	
-find -type f -size -200M -exec cp {} /mnt/sdf2/1/X_pks \;
-find /etc/ -name "passwd"
 
 # VIEW LOGEED IN USERS	
 w
