@@ -5,12 +5,10 @@ $ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/do
 
 # INSTALL DOCKER & DEPENDENCIES  ## https://docs.docker.com/engine/install/rhel/#prerequisites
 $ sudo dnf install -y docker-ce docker-ce-cli containerd.io
-$ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-
-# DOCKER COMPOSE MANUAL INSTALL  ## https://github.com/docker/compose/releases  # in not woking replace "v2.27.1" since some guides are misleads
+# DOCKER COMPOSE MANUAL INSTALL  ## https://github.com/docker/compose/releases   # if failed remove "v" 
 $ dnf install -y curl
-$ curl -L "https://github.com/docker/compose/releases/download/2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 $ chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version
 
