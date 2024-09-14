@@ -11,37 +11,68 @@ $ docker compose -f my-file.yml up -d
 
 
 services:
-  mongodb:        # DEFAULT CONTAINER NAME
-    image:'mongo' # REPOSITORY
-    volumes:      # DATA STORE LOCATION
-     - data:/data/db
-    container_name: mongodb1 # CUSTOM CONTAINER NAME
-    environmanet:   # VARIABLES
+  mongodb:                                  # DEFAULT CONTAINER NAME
+    image:'mongo'                           # DOCKER HUB REPOSITORY PUBLISHED TAG NAME
+    container_name: mongodb1                # CUSTOM CONTAINER NAME
+    volumes:                                # DATA STORE LOCATION
+     - data:/data/db                        # MAPPING PATHS  
+    environmanet:                           # VARIABLES
      - MONGO_INITDB_ROOT_USERNAME:admin
      - MONGO_INITDB_ROOT_PASSWORD:admin
-    env_file: # ALTERNATIVE SOLUTION FOR environmanet
-     - ./env/mongo.env  # SAME DIRECTORY CURRENTLY IN IN MENTION A PASSWORFD FILE
+    env_file:                               # ALTERNATIVE SOLUTION FOR ENVIRONMENT VARIABLES
+     - ./env/mongo.env                      # SAME DIRECTORY CURRENTLY IN IN MENTION A PASSWORFD FILE
      netwroks:
-     - custom-net1  # CREATE NATWORK
+     - custom-net1                          # CREATES A NATWORK
+  
   backend:      
-    build: ./backend    # SAME DIRECTORY CURRENTLY IN WITH THIS FILE LOCATED
-     dockerfile: Dokerfile # DOCKER FILE NAME
+    build: ./backend                        # SAME DIRECTORY CURRENTLY IN WITH THIS FILE LOCATED
+     dockerfile: Dokerfile                  # DOCKER FILE NAME
     ports:
-     - '3000:80'  # host_port:container_port
+     - '3000:80'                            # host_port:container_port
     volumes:
      - logs:/app/logs
-     - ./backend:/app  # SAME DIRECTORY CURRENTLY IN - USED RELATIVE PATH
-    env_file: # ALTERNATIVE SOLUTION WITHOUT LISTING CREDS
-     - ./env/backend.env  # SAME DIR
+     - ./backend:/app                       # SAME DIRECTORY CURRENTLY IN - USED RELATIVE PATH
+    env_file:                               # ALTERNATIVE SOLUTION WITHOUT LISTING CREDS
+     - ./env/backend.env                    # SAME DIR
      depends_on:
-     - mongodb # WHICH SERVICES <containers> CONNECTED TO 
+     - mongodb                              # WHICH SERVICES <containers> CONNECTED TO 'DEPENDENCIES'
+
   frontend:     
-    build: ./frontend  # SAME DIRECTORY CURRENTLY IN used frontend
-    ports: 3000:3000  ### <hostport:containerport> ## <windows:linux>
+    build: ./frontend                       # SAME DIRECTORY CURRENTLY IN used frontend
+    ports: 3000:3000                        ### <hostport:containerport> ## <windows:linux>
     volumes:
     - ./frontend/src/:/app/src
-    stdin_open: true # docker run -it PARAMETER
-    tty: true # docker run -it PARAMETER
+    stdin_open: true                        # docker run -it PARAMETER
+    tty: true                               # docker run -it PARAMETER
+
+networks:
+  custom-net1:
+    driver: bridge
+    
+volumes:
+  data:
+  logs:
+
+############################################################################################################################################################
+## PORTAINER ################################################################################################################################################
+############################################################################################################################################################
+
+services:
+  portainer-ce:
+    image: portainer/portainer-ce:2.21.1
+    container_name: portainer2
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
+    external: true
+    name: portainer_data
 
 ############################################################################################################################################################
 ## heimdall ################################################################################################################################################
