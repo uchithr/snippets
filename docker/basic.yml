@@ -46,9 +46,11 @@ $ docker pull ubuntu
 # ACCESS TO UBUNTU CONTAINER
 $ docker run -it ubuntu
 
-# ISSUE COMMAND TO A CONTAINER
+# LOGIN IN TO A CONTAINER OR ISSUE COMMAND TO A CONTAINER 
 $ docker exec -it <container_name_or_id> npm init <install npm>
-docker exec -it <container_name_or_id> /bin/bash
+$ docker exec -it <container_name_or_id> /bin/bash
+$ docker exec -it b138b7b34636 bash
+$ mysql -u root -p
 
 # COPY LOCAL FILES INTO A CONTAINER ("." MEANS COPY EVERYTHING)
 $ docker cp send_d/. e91425f38618:/recieve_d

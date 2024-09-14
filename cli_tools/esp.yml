@@ -15,17 +15,37 @@ init 5 : Network is present multitasking and GUI is present with sound etc.
 init 6 : This runlevel is defined to system restart.
 init s : Tells the init command to enter the maintenance mode. (S/M)
 
-##  HARDWARE INFOMATION 
-$ lshw #memory configuration, firmware versions, mainboard configuration,CPU version and speed, cache configuration, bus speed, hardware paths, attached devices, partitions, and filesystems.
-$ hwinfo #monitor information, RAID arrays, memory configuration, CPU information, firmware, mainboard configuration, caches, bus speeds, attached devices, partitions, and filesystems.
-$ lsusb #probes USB buses and the devices attached to them.
-$ lspci #probes PCI buses and the devices attached to them.
-$ lsblk #lists physical drives, partitions, and filesystems.
-$ lscpu #lists information about your CPU
-$ hwinfo --monitor
+##################################################################################################################
+## DNS ###########################################################################################################
+##################################################################################################################
+#  CHECK DNS FORM CMD
+whois slvr.com
 
-$ lspci -v | awk '/USB/,/^$/'
-$ lspci -v | awk '/Audio/,/^$/'
+#DNS
+cat /etc/resolv.conf
+sudo vim /etc/hosts >> 10.0.0.198 slvr.site dns
+
+# BIND DNS SERVER
+sudo yum install bind bind-utils -y
+
+sudo vim /etc/named.conf
+
+
+# ADD DNS NAME WITH IP
+sudo vim /etc/hosts >> 10.0.0.198 slvr.site dns
+
+
+############################################################
+#### CENTOS REPOSITROY UPDATE ####
+############################################################
+
+The mirror system uses the connecting IP address of the client and the update status of each mirror to pick mirrors that are updated to and
+geographically close to the client.  You should use this for CentOS updates unless you are manually picking other mirrors.
+If the mirrorlist= does not work for you, as a fall back you can try the remarked out baseurl= line instead.
+
+sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
 ############################################################
 #### VIM ####
@@ -157,6 +177,18 @@ grub> boot
 ## REINSTALLING YOUR GRUB CONFIGURATION {permanent repair}
 $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 $ sudo grub-install /dev/sda
+
+
+# RECOVERING AN OEM WINDOWS 8 OR 10 PRODUCT KEY
+$ sudo cat /sys/firmware/acpi/tables/MSDM
+MSDMU
+DELL CBX3
+AMI
+FAKEP-RODUC-TKEY1-22222-33333
+
+C:\Users\Duchess> wmic path softwarelicensingservice get OA3xOriginalProductKey
+OA3xOriginalProductKey
+FAKEP-RODUC-TKEY1-22222-33333
 
 ############################################################
 #### USER CONFIGURATION ####
@@ -909,6 +941,68 @@ sudo webmin passwd weminuser
 #RESTART WEBMIN
 sudo /etc/webmin/restart OR  sudo systemctl restart webmin
 
+################################################################################################################################################################################################
+#### X11 ###  enable X11 forwarding rom Amazon EC2 emma white  ## https://shorturl.at/VgaIj
+################################################################################################################################################################################################
+
+#### CHECK X11 STATUS
+sudo cat /etc/ssh/sshd_config |grep -i X11Forwarding
+
+## X11 Install required packages
+$ sudo yum install xorg-x11-xauth -y
+$ sudo yum install xclock xterm -y
+
+# enable X11 Forwardin
+$ sudo vi /etc/ssh/sshd_config
+“X11Forwarding” parameter to “yes”
+
+# Verify X11Forwarding parameter:
+$ sudo cat /etc/ssh/sshd_config |grep -i X11Forwarding
+
+# restart ssh service 
+$ sudo service sshd restart 
+
+################################################################################################################################################################################################
+#### CCTV ## ISPYAGENTDVR ##  Shinobi vs Zoneminder vs Frigate vs Motioneye vs Bluecherry vs iSpy
+################################################################################################################################################################################################
+
+http://localhost:8090/index.html?v=0.895409558265448#Live
+
+# VIEW ONLINE
+rtsp://wuke:hw3a3w@192.168.1.10
+
+# CAPTURE STREAM
+ffmpeg -i rtsp://wuke:hw3a3w@192.168.1.10 -r 15 C:\cmder\703.mp4
+ffmpeg -i rtsp://wuke:hw3a3w@192.168.1.10 -r 15 -c:v libx265 C:\cmder\4k.mp4
+
+
+# CHCEK DOCKER PACK.YML FOR DOCKER COMPSOE
+
+sudo apt install mysql-server
+sudo add-apt-repository ppa:iconnor/zoneminder-master
+sudo apt install zoneminder
+sudo a2enconf zoneminder
+sudo a2enmod rewrite expires headers
+sudo systemctl reload apache2
+sudo systemctl enable zoneminder
+sudo systemctl start zoneminder
+
+
+
+################################################################################################################################################################################################
+#### ANDROID
+################################################################################################################################################################################################
+
+ARM 32 Bit  older devices armeabi-v7a
+ARM 64 Bit  most devices  arm64-v8a
+
+# CHECK THE ARM VERSION OF YOUR ANDROID PHONE @ IN A TERMINAL
+uname -m   #mine ARMv8-A
+
+# TERMIUS SD CARD PATH
+mnt/media_rw/4A21-0000
+
+
 
 ###############################################################################################################################################################################
 
@@ -930,8 +1024,8 @@ sudo snap install foobar2000
 dnf --enablerepo=epel group -y install "Xfce" "base-x"
 
 
-#### CHECK X11 STATUS
-sudo cat /etc/ssh/sshd_config |grep -i X11Forwarding
+
+
 
 
 #### FFMPEG

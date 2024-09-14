@@ -1,0 +1,6 @@
+## MP3 TAGE
+$num(%track%,3) - %artist% -  %title%
+
+
+## IMEI NUMBER CHECK
+*#06#

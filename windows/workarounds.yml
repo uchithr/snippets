@@ -1,13 +1,36 @@
+## CURRENTLY OPEN 
+https://github.com/microsoft/vscode-remote-release/issues/690
+https://github.com/microsoft/Windows-Dev-Performance/issues/20
+
+### FOLLOW -- v0.107.1
+Remote Explorer: SSH targets not appearing
+https://github.com/microsoft/vscode-remote-release/issues/9497
+https://github.com/microsoft/vscode-remote-release/issues/9561
+
+https://stackoverflow.com/questions/72193255/mobaxterm-follow-terminal-folder-doesnt-work/76729721#76729721
+
+Right-click the session profile > "Edit session"
+In "Session Settings":
+"SSH" > Tab "Advanced SSH settings"
+See item: "Follow SSH path (experimental)"
+=> Changing this setting will change the hook in "Follow terminal folder" at session start.
+
+
+Right-click the session profile > "Edit session"
+In "Session Settings":
+"SSH" > Tab "Advanced SSH settings" > Button "Expert SSH settings"
+Choose item: "SSH protocol version"
+=> Change to SSHv2
+After saving the changes to the session profile:
+EXIT & RESTART the program "MobaXterm"
+
+####################################################################################################################################
+####################################################################################################################################
+
 # FOLDER HIERARCHY
 tree /a /f > list.txt
 tree -h | grep "G"
 
-
-### CHROME CACHE CLEAR
-chrome://settings/content/all
-
-### CHROME INFO
-chrome://system/
 
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
@@ -20,6 +43,24 @@ Folder Properties > Customize > set Optimize this folder for "General Items" wit
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+####################################################################################################################################
+## CHROME ##########################################################################################################################
+#################################################################################################################################### 
+
+### CHROME CACHE CLEAR
+chrome://settings/content/all
+
+### CHROME INFO
+chrome://system/
+
+## REMOVE NOTIFICATIONS
+chrome://settings/content/notifications
+
+
+
+####################################################################################################################################
+## OUTLOOK ##########################################################################################################################
+#################################################################################################################################### 
 
 ## MAILBOX FULL
 $ create a pst and set a rule for a date range and move mail to a custom created pst file
@@ -35,6 +76,10 @@ MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400
 
 ## 365 TPM FIX
 "Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
+
+
+
+
 
 ## DISABLE THE DELIVERY OPTIMIZATION SERVICE
 DO

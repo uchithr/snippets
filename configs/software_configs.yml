@@ -6,6 +6,14 @@ C:\ProgramData\VMware\vmnetnat.conf
 ### SSH FORM HOST TO GUEST IN NAT CONFIGURED VM ####
 ## IN VIRTUAL NETWORK EDITOR CONFIGURE VMnet 8 AS NAT. ASSIGN THAT INTERFACE TO THE VM. ##
 ## VMDK & VMX FILE  WILL ENOUGH TO IMPORT VM IN VMWARE ##
+## DISABLE 3D ACCELATOR IF SHOWING BLACK SCREEN
+# BRIDGED PERFORMS SLOWLY ON VM
+
+
+## STOP VMWARE NAT SERVICE FORM HOST
+$ net stop “VMWare NAT Service”
+
+
 
 disable root and create new user in vm when ssh from windows.
 as admin navigate to the "virtaul netwrok editor"  > select "vmnet8" > nat settings > add
@@ -23,7 +31,7 @@ $ ssh sam@localhost -p <myport>
 firewall-cmd --permanent --add-port=<myport>/tcp
 sudo firewall-cmd --reload
 
-# BRIDGED PERFORMS SLOWLY ON VM
+
 
 
 #######################

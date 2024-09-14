@@ -199,8 +199,16 @@ ffmpeg -i file.mp4 -map 0:0 -map 0:2 -acodec copy -vcodec copy new_file.mp4
 
 to copy video stream and 2nd audio stream to new_file.mp4:
 
+
+
+
 # HANDBRAKE CLI   ### C:\Users\SLVR\AppData\Roaming\HandBrake
 HandBrakeCLI.exe --preset-import-file "presets.json" -Z "pf" -i input.mkv -o output.mkv
+
+# MAKE MKV CLI  ## C:\Program Files (x86)\MakeMKV
+$ makemkvcon -r info disc:9999
+
+$ makemkvcon mkv disc:2 all E:\output # CRAETE MKV  IN WI
 
 
 #############################################################################################################################################################################
@@ -283,6 +291,9 @@ $ rclone copy -P C:\Users\uchithr\Desktop\vs td:
 # ONE BY ONE
 $ rclone copy -P /home/u178234/up --transfers 1 dt1:
 
+## GENERATE SHAREABLE LINKS
+cat list.txt | xargs -I item rclone link "item" --dry-run
+
 # MOVE
 $ rclone move -v desmond_TD:/SLTD_FRMAL desmond_TDBKP:/1
 $ rclone move -v desmond_TD:/SLTD_FRMAL/"*.mp4"  desmond_TD:/SLTD_FRMAL/dESt
@@ -323,6 +334,9 @@ rclone mount ur: X: --network-mode
 $ --vv
 disable checksum flag
 
+# RCX - Rclone for Android
+https://play.google.com/store/apps/details?id=io.github.x0b.rcx&hl=en
+https://github.com/newhinton/Round-Sync/releases/tag/v2.5.4
 
 #####################################################################################################
 DDRESCUE\__________________________________________________________________ddrescue img|  > photorec
@@ -548,7 +562,7 @@ $ taskkill /F /PID pid_number
 
 ffmpeg -i "videomanifest" -codec copy out.mp4
 
-cat list.txt | xargs -I item rclone link "item" --dry-run
+
 
 
 Cygwin path - cmd /k "C:\cygwin64\Cygwin.bat" "
