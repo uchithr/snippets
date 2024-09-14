@@ -222,11 +222,3 @@ $ docker tag <image_id> <repository_name>:<tag>
 $ docker tag b48280f1866d  remotely:89
 
 
--------------------------------
-
-# RUN CUSTOM CREATED YML 
-docker-compose  up -d
-docker-compose -f your-file.yml up
-
-"sudo curl -L ""https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-$(uname -s)-$(uname -m)"" -o /usr/local/bin/docker-compose"
-

@@ -1,6 +1,7 @@
 
 
 $ docker compose up -d
+$ docker compose -f my-file.yml up -d
 5001:80 <hostport_externalport>:<guestport_insideport>
 
 #########################################################################################################################################################
