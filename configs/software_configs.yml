@@ -4,7 +4,8 @@
 C:\ProgramData\VMware\vmnetnat.conf
 
 ### SSH FORM HOST TO GUEST IN NAT CONFIGURED VM ####
-## IN VIRTUAL NETWORK EDITOR CONFIGURE VMnet 8 AS NAT. ASSIGN THAT INTERFACE TO THE VM. ## 
+## IN VIRTUAL NETWORK EDITOR CONFIGURE VMnet 8 AS NAT. ASSIGN THAT INTERFACE TO THE VM. ##
+## VMDK & VMX FILE  WILL ENOUGH TO IMPORT VM IN VMWARE ##
 
 disable root and create new user in vm when ssh from windows.
 as admin navigate to the "virtaul netwrok editor"  > select "vmnet8" > nat settings > add
