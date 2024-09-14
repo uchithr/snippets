@@ -1,0 +1,87 @@
+#################
+### REMOTELY 
+#################
+$ sudo mkdir -p /var/www/remotely
+$ sudo mv Remotely.db /var/www/remotely
+$ docker-compose up -d  #docker-compose.yml
+
+####################################################################################################################################################################################################################
+
+version: '3.8'
+
+networks:
+  remotely:
+    name: remotely-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
+
+services:
+  remotely:
+    image: immybot/remotely:latest
+    container_name: remotely
+    volumes:
+      - /var/www/remotely:/app/AppData
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - remotely
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=5000
+      # Other ASP.NET Core configurations can be overridden here, such as Logging.
+      # See https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0
+      - Serilog__MinimumLevel__Override__Microsoft.AspNetCore=Warning
+      - Serilog__MinimumLevel__Override__System=Warning
+
+      # Values for DbProvider are SQLite, SQLServer, and PostgreSQL.
+      - Remotely_ApplicationOptions__DbProvider=SQLite
+      # The Docker gateway will be used in Forwarded Headers, which is necessary to
+      # to correctly determine request hostname and scheme within the app.  If you change
+      # the network config, you must update this value as well.
+      - Remotely_ApplicationOptions__DockerGateway=172.28.0.1
+      # This path shouldn't be changed.  It points to the Docker volume.
+      - Remotely_ConnectionStrings__SQLite=Data Source=/app/AppData/Remotely.db
+      # If using SQL Server, change the connection string to point to your SQL Server instance.
+      - Remotely_ConnectionStrings__SQLServer=Server=(localdb)\\mssqllocaldb;Database=Remotely-Server-53bc9b9d-9d6a-45d4-8429-2a2761773502;Trusted_Connection=True;MultipleActiveResultSets=true
+      # If using PostgreSQL, change the connection string to point to your PostgreSQL instance.
+      - Remotely_ConnectionStrings__PostgreSQL=Server=Host=localhost;Database=Remotely;Username=postgres;
+
+
+
+#################################################################################################################################################
+
+I set up Remotely for myself a few months ago and deployed a few systems, only to find later that for whatever reason my Docker container had lost its mind and the database was basically empty, so Remotely wasn't working. I ended up rebuilding the container, but of course in the process I lost the old organization ID I had setup, which was not fun.
+
+Luckily, I discovered that one of the hosts on which I had installed the Remotely agent previously was still reporting back to my server, and the logs showed a message like this:
+
+2023-06-23 00:36:51.708 +00:00 [INF] Unable to add device MYCLIENT because organization {my old Organization ID}does not exist.
+
+The message has been edited to protect the innocent but the key thing here is that the message reported the old organization ID.
+
+First, I added a new user in the Remotely web UI under a second email address. Don't worry about any other settings but you may want to set up the password to save yourself some headaches later.
+
+Next, off to the docker shell I went!
+
+docker exec -it {remotely container name} /bin/bash
+
+This opens a command prompt within the Remotely container. From there:
+
+apt install sqlite3
+
+This installs the sqlite3 command line client where you can access and modify the database.
+
+Find the location of your Remotely.db file in the container; in my case it was at /remotely-data, so:
+
+cd /remotely-data sqlite3 Remotely.db
+
+Now at the sqlite> prompt you can access and modify the database itself. At this point what needs to be done is to add the old organization ID into the Organizations table, then update the user that was just created to be assigned to that OrganizationID:
+
+INSERT INTO Organizations ("ID","IsDefaultOrganization","OrganizationName") VALUES ("{my old Organization ID}",0,"{my old Organization name}") UPDATE RemotelyUsers SET OrganizationID="{my old Organization ID}" WHERE UserName="{new username just created above}";
+
+That should be it! Now log out of Remotely and try to log in as the new user; you should see {my old Organization name} instead of the name you assigned to the primary organization.
+
+Note that you'll want to make sure "Default organization for server" is UNCHECKED, probably for both organizations just to be safe.
