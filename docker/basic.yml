@@ -82,23 +82,13 @@ $ docker rm -f e91425f38618
 # AUTOMATICALLY REMOVE CONTAINER AFTER STOPEED
 $ docker run -p 3000:80 -d --rm e91425f38618
 
-# REMOVE UNUSED DOCKER CONTAINERS
-
-
 # DOWNLOAD THE DOCKER IMAGE
 $ docker pull <image_name>:<tag>
 
-# SAVE THE DOCKER IMAGE TO A FILE (OPTIONAL):
-$ docker save dc55c4221223 > ispy_2024-04-08.tar
-
-# LOAD THE DOCKER IMAGE ON THE NEW SERVER
-$ docker load -i <path_to_image_file>.tar
-
-
-# LIST DOCKER IAMGES
+# LIST DOCKER IMAGE
 $ docker images
 
-# SEARCH FOR IAMGES
+# SEARCH FOR IMAGE
 $ docker search apache
 
 # RENAMING IMAGES
@@ -107,11 +97,34 @@ $ docker tag node-demo:latest hello-node:latest
 # DOCKER IMAGE INFORMATION
 $ docker image inspect 0451vs5ag5
 
-# REMOVE DOCKER IAMGE
+# REMOVE DOCKER IMAGE
 $ docker rmi -f e91425f38618
 $ docker image prune <id>
 $ docker image prune -a
 
+
+# SAVE A PULLED DOCKER IMAGE TO A TARBALL. ((INCLUDING ALL LAYERS AND METADATA))
+$ docker save -o bkp_image.tar <image_id> <repositary_id>:<tag_id>
+$ docker save -o portainer-ce:2.2.tar 9c0b5a6a7e4d portainer/portainer-ce:2.2
+
+# TRANSFER THE IMAGE FILE TO THE DESTINATION SERVER
+$ scp my_busybox_image.tar user@destination_server:/path/to/save
+
+# LOAD THE DOCKER IMAGE ON THE DESTINATION SERVER
+$ docker load -i my_busybox_image.tar
+$ docker load -i /path/to/save/my_busybox_image.tar
+
+#  EXPORTS A FILESYSTEM SNAPSHOT OF A RUNNING OR STOPPED CONTAINER (OPTINAL)
+$ docker export -o <backup_tarball_name>.tar <container_id>
+
+# IMAGE TAG UPDATE
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+<none>        <none>    1a2b3c4d5e6f   2 days ago     123MB
+$ docker tag <image_id> <repository_name>:<tag>
+$ docker tag b48280f1866d  remotely:89
+
+
+# REMOVE UNUSED DOCKER CONTAINERS
 
 # FULL ID
 docker inspect --format="{{.Id}}" evil_swartz
@@ -123,7 +136,7 @@ $ docker build -t myapp1:v1 .   # "." indicates we're working on that directory 
 # DOCKER LOGIN
 $ docker login
 
-# PUSH DOCKER IAMGE
+# PUSH DOCKER IMAGE
 $ docker push samf/myapp1:v1
 
 ## anonymous & named VOLUMES MANAGE BY DOCKER. [flag "-v"]
@@ -160,7 +173,7 @@ $ docker network rm
 
 
 
-## BASED on "dockerfile" CREATING A DOCKER IMAGE 
+## BASED on "dockerfile"  DOCKER CREATING A IMAGE 
  
   FROM node               # use node base image
   WORKDIR /app            # create app directory in image when container spinup
@@ -202,23 +215,5 @@ $ scp my_busybox_image.tar user@destination_server:/path/to/save  #ransfer the i
 $ docker load -i my_busybox_image.tar                             #load the docker image on the destination server
 
 
-# SAVING A PULLED DOCKER IMAGE (INCLUDING ALL LAYERS AND METADATA) TO A TARBALL.
-$ docker save -o bkp_image.tar <image_id> <repositary_id>:<tag_id>
-
-# TRANSFER THE IMAGE FILE TO THE DESTINATION SERVER
-$ scp my_busybox_image.tar user@destination_server:/path/to/save
-
-# LOAD THE DOCKER IMAGE ON THE DESTINATION SERVER
-$ docker load -i my_busybox_image.tar
-$ docker load -i /path/to/save/my_busybox_image.tar
-
-#  EXPORTS A FILESYSTEM SNAPSHOT OF A RUNNING OR STOPPED CONTAINER (OPTINAL)
-$ docker export -o <backup_tarball_name>.tar <container_id>
-
-# IMAGE TAG UPDATE
-REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-<none>        <none>    1a2b3c4d5e6f   2 days ago     123MB
-$ docker tag <image_id> <repository_name>:<tag>
-$ docker tag b48280f1866d  remotely:89
 
 
