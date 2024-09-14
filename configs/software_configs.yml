@@ -27,7 +27,7 @@ sudo firewall-cmd --reload
 
 
 #######################
-## ESXi 
+## ESXi
 #######################
 vSphere Hypervisor (ESXi) - Install to a Phyisical Server
 vSphere Client - Manageable Web Based Dashboard
