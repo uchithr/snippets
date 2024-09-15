@@ -75,6 +75,10 @@ ls -lX
 # LIST FILES WITH ACESS TIME	
 ls -ult
 
+# VIEW PERMISSIONS	
+ls-l myfile
+
+
 # QUICK ONFO ABOUNT COMMANDS	
 whatis ls scp
 
@@ -97,8 +101,6 @@ du -sh * | sort -hr
 ## CREATE MULTIPLE FILES	
 touch myfile{1..5}
 
-# VIEW PERMISSIONS	
-ls-l myfile
 
 
 
