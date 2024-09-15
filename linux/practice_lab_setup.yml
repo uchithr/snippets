@@ -1,0 +1,473 @@
+
+BASE - CentOS-7-x86_64-Everything-1810 with rpms
+HOST OS - CentOS-7-x86_64-DVD-1804
+
+APLLIED PROCESSOR SETTINGS
+
+redhat - password for all
+instructor -  user noadimn    student
+
+foundation.example.com or ##classroom.example.com
+vmtools installed
+
+craeted a folder for rpm in / folder named repo
+copied dvd rpm file to /repo
+issuded command  - createrepo /repo
+
+in /etc/yum.repos.d
+vim mmybase.repo
+--
+[myrepo]
+name=dvd copied rpms
+baseurl=file:///repo
+enabled=1
+gpgcheck=0
+------------------------------------------------
+
+[root@foundation ~]# vim /etc/httpd/conf/httpd.conf
+
+##
+LINE 119
+DocumentRoot "/repo"
+
+# Relax access to content within /var/www.
+#
+<Directory "/repo">
+AllowOverride None
+# Allow open access:
+Require all granted
+</Directory>
+
+# Further relax access to the default document root:
+<Directory "/repo">
+####
+
+
+
+[root@foundation ~]# cat /etc/httpd/conf/repo.conf
+
+<VirtualHost 192.168.122.1>
+DocumentRoot /repo
+ServerName foundation.example.com
+DirectoryIndex index
+
+<Directory /repo>
+Options indexes
+Order allow,deny
+Allow From All
+</Directory>
+</VirtualHost>
+
+
+
+[root@foundation ~]# cat /etc/yum.repos.d/
+
+[myrepo]
+name=dvd copied rpms
+baseurl=http://192.168.122.1/index/packages/
+gpgcheck=0
+enabled=1
+
+
+
+
+-------------------------------------------
+BASE CONFIGS
+
+cd /etc/sysconfig/network-scripts/
+
+BOOTPROTO=none
+BRIDGE=br0
+
+cp ifcfg-ens33 ifcfg-br0    #### USE virbr0 IP
+
+
+DEVICE=br0
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Bridge
+IPADDR=Physical Machine IP 192.168.122.1 (manual) USE virbr0 IP
+NETMASK=255.255.255.0
+
+
+ISO location - /root/.cache/vmware/drag_and_drop [################]
+
+appy restart and tick virtualization in settnigs
+
+--------------------------------------------
+1st vm server with student account   server.example.com
+
+on vm
+
+cd /etc/sysconfig/network-scripts/
+
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+IPADDR=SAME NETWORK IP  192.168.122.10 (manual)
+NETMASK=255.255.255.0
+
+REBOOT
+
+
+2nd vm desktop with student account   desktop.example.com
+
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+IPADDR=SAME NETWORK IP   192.168.122.20 (manual)
+NETMASK=255.255.255.0
+
+REBOOT
+
+35 free
+32.5
+
+
+--------------------------------------------------------------------------------
+/reset
+
+#!/bin/bash
+echo "############### VIRTUAL MACHINE MANAGER ###############"
+virsh snapshot-revert server bkp_server
+virsh start server
+echo "############### SERVER VM RESTORED SUCCESSFULLY  ###############"
+--
+
+#!/bin/bash
+echo "############### VIRTUAL MACHINE MANAGER ###############"
+virsh snapshot-revert desktop bkp_desktop
+virsh start desktop
+echo "############### DESKTOP VM RESTORED SUCCESSFULLY  ###############"
+----
+
+#!/bin/bash
+echo "############### VIRTUAL MACHINE MANAGER ###############"
+
+virsh snapshot-revert server bkp_server
+virsh start server
+
+virsh snapshot-revert desktop bkp_desktop
+virsh start desktop
+
+echo "############### SEVER & DESKTOP VM RESTORED SUCCESSFULLY  ###############"
+
+------------
+chmod +x *
+------------------------------------------------------------------------------
+vim /etc/bashrc
+
+alias rht-vmctl-reset-server='/reset/server.sh'
+alias rht-vmctl-reset-desktop='/reset/desktop.sh'
+alias rht-vmctl-reset-all='/reset/all.sh
+
+source /etc/bashrc
+
+----------------------------------------------------------------------------#####UPTO HERE VMDK
+
+#!/bin/bash
+
+virsh start server
+echo "#### SERVER STARTED ####"
+--
+
+#!/bin/bash
+
+virsh start desktop
+echo "#### DESKTOP STARTED ####"
+--
+#!/bin/bash
+
+virsh start server
+virsh start desktop
+echo "#### SERVER & DESKTOP STARTED ####"
+
+
+chmod +x *
+
+alias rht-vmctl-start-server='/reset/start_server.sh'
+alias rht-vmctl-start-desktop='/reset/start_desktop.sh'
+alias rht-vmctl-reset-server='/reset/server.sh'
+alias rht-vmctl-reset-desktop='/reset/desktop.sh'
+alias rht-vmctl-reset-all='/reset/all.sh'
+
+
+vim /etc/bashrc
+
+
+CREATED A TEXT IN DESKTOP FOR EASY SSH
+
+
+#### SERVER  ####   ssh root@192.168.122.10
+
+#### DESKTOP ####   ssh root@192.168.122.20
+
+
+
+
+CentOS-7-x86_64-DVD-1804
+DVD REMAKE
+classroom.example.com
+
+[root@classroom ~]# mount -o loop /dev/sr0 /mnt/
+[root@classroom ~]# mkdir /packages
+[root@classroom ~]# cd /mnt/
+[root@classroom mnt]# cp -avr * /packages  ## JUST COPY RPMS
+
+
+[root@classroom mnt]# cd /etc/yum.repos.d/
+
+[root@classroom yum.repos.d]# mkdir online_repo
+[root@classroom yum.repos.d]# mv *.repo online_repo/
+[root@classroom yum.repos.d]# vim dvd.repo
+
+--
+[CENT_OS_DVD]
+name=CENTOS_7_RPM_PACK
+baseurl=file:///packages
+enabled=1
+gpgcheck=0
+--
+
+[root@classroom yum.repos.d]# yum clean all
+[root@classroom yum.repos.d]# rm -rf /var/cache/yum
+-----------------------------------------------------------------------------------------------
+
+[root@classroom ~]# yum install perl gcc make kernel-headers kernel-devel -y  ### GCC###
+INSTALL VM TOOLS
+
+SHARING THE FOLDER #####
+[root@classroom ~]# ls /mnt/hgfs/
+
+[root@classroom ~]# yum install httpd
+[root@classroom ~]# systemctl enable httpd.service
+[root@classroom ~]# systemctl start httpd.service
+[root@classroom ~]# firewall-cmd --permanent --add-service=http
+[root@classroom ~]# firewall-cmd --reload
+
+
+
+[root@classroom ~]# vim /etc/httpd/conf/httpd.conf
+
+#
+DocumentRoot "/repository"
+
+#
+# Relax access to content within /var/www.
+#
+<Directory "/repository">
+AllowOverride None
+# Allow open access:
+Require all granted
+</Directory>
+
+# Further relax access to the default document root:
+<Directory "/repository">
+#
+
+[root@classroom ~]# vim /etc/httpd/conf/repo.conf
+
+#
+<VirtualHost 192.168.122.1>
+DocumentRoot /repository
+ServerName classroom.example.com
+DirectoryIndex index
+
+<Directory /repository>
+Options indexes
+Order allow,deny
+Allow From All
+</Directory>
+</VirtualHost>
+#
+
+[root@classroom ~]# semanage fcontext -a -t httpd_sys_content_t "/repository(/.*)?"
+[root@classroom ~]# restorecon -R /repository
+[root@classroom ~]# systemctl reload httpd.service
+
+
+
+[root@classroom /]# vim /etc/yum.repos.d/dvd.repo
+
+[CENT_OS_DVD]
+name=CENTOS_7_RPM_PACK
+baseurl=http://192.168.122.1/index/packages
+enabled=1
+gpgcheck=0
+
+[root@classroom /]# yum clean all
+
+
+---------------------------------------------7.2G
+
+[root@classroom ~]# cd /etc/sysconfig/network-scripts/
+[root@classroom network-scripts]# vim ifcfg-ens33
+
+BOOTPROTO=none
+BRIDGE=br0
+
+[root@classroom network-scripts]# cp ifcfg-ens33 ifcfg-br0
+[root@classroom network-scripts]# vim ifcfg-br0
+
+DEVICE=br0
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Bridge
+IPADDR=192.168.122.1 (manual) USE virbr0 IP
+NETMASK=255.255.255.0
+
+[root@classroom network-scripts]# reboot
+
+
+-----------------------------------------------------------
+[root@classroom ~]# yum install virt*
+
+FOR DESKTOP ICONS - usr/share/application
+
+[root@classroom ~]# cat /etc/passwd | grep 107
+[root@classroom RHEL & Cent OS]# mount -t iso9660 -o loop name.iso /media/iso/
+
+exapnd state 19G 20.5
+
+VM INSIDE CONFIGURATIONS
+
+[root@server ~]# cd /etc/sysconfig/network-scripts/
+[root@server network-scripts]# vim ifcfg-eth0
+
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+IPADDR=192.168.122.10 (manual) SAME NETWORK IP
+NETMASK=255.255.255.0
+
+[root@server network-scripts]# reboot
+
+
+
+
+
+REPOS
+
+workstation with gnome
+
+[root@dhcppc2 ~]# mount /dev/cdrom  /mnt/
+
+[root@dhcppc2 ~]# mkdir /rhel8
+
+[root@dhcppc2 ~]# rsync -arv /mnt/ /rhel8/
+
+[root@dhcppc2 ~]# vim /etc/yum.repos.d/dvd.repo
+
+[base]
+name=RHEL8Base
+baseurl=file:///rhel8/BaseOS
+enabled=1
+gpgcheck=0
+
+
+[apps]
+name=RHEL8Apps
+baseurl=file:///rhel8/AppStream
+enabled=1
+gpgcheck=0
+
+[root@dhcppc2 ~]# yum clean all
+
+[root@dhcppc2 ~]# yum install gnome-tweaks
+
+
+[RHEL8_Base0S]
+name=RHEL8_Base0S
+baseurl=file:///rhel8_dvd/Base0S
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+
+[RHEL8_AppStream]
+name=RHEL8_AppStream
+baseurl=file:///rhel8_dvd/AppStream
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+
+
+
+install gnome-tweaks
+
+
+
+
+[my_repo]
+name=demo_repo
+baseurl=file:///repo
+enabled=1
+gpgcheck=0
+
+
+
+VIRTUALBOX FULL SCREEN [ ENABLE 3D ACCERLATION & SET VIDEO MEMEORY 128MB ]
+
+# Install Kernel Headers and Required Build Tools
+$ dnf install epel-release -y
+$ dnf install dkms kernel-devel kernel-headers gcc make bzip2 perl elfutils-libelf-devel
+
+
+# Ensure that the version of kernel-devel installed does match the version of your running kernel. You can verify by running the commands below.
+$ rpm -q kernel-devel > kernel-devel-4.18.0-240.22.1.el8.x86_64
+$ uname -r            > 4.18.0-240.22.1.el8.x86_64
+
+
+# If they do not match, update your kernel by running;
+$ dnf update kernel-*
+
+
+# VirtualBox guest additions on Rocky Linux 8 via Command Line
+$ wget http://download.virtualbox.org/virtualbox/6.1.30/VBoxGuestAdditions_6.1.30.iso -P /tmp
+$ mount /tmp/VBoxGuestAdditions_6.1.30.iso /run/media/
+$ cd /run/media/
+$ ./VBoxLinuxAdditions.run
+$ reboot
+
+
+
+
+
+###### FOR MORE ###########
+
+# Configure iSCSI Initiator
+https://www.server-world.info/en/note?os=Fedora_21&p=iscsi&f=2
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=iscsi&f=1
+
+# Initial Settings : Network Settings
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=initial_conf&f=3
+
+# BIND : Configure for Internal Network
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=dns&f=1
+
+
+# NFS : NFS 4 ACL Tool
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=nfs&f=3
+
+
+# Ceph Reef : Configure   Cluster #1
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=ceph18&f=1
+
+
+#OpenLDAP : Configure LDAP Server
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=openldap&f=1
+
+
+#Configure Network Teaming
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=teaming
+
+
+#FreeIPA : Configure Server
+https://www.server-world.info/en/note?os=CentOS_Stream_9&p=freeipa&f=1
+
+
+
+
+
+$ ssh-copy-id root@192.168.58.102

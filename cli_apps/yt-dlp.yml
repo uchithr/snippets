@@ -1,0 +1,89 @@
+#############################################################################################################################################################################
+youtube-dl -- yt-dlp\_____________________________________________________________________________________________________________________________________________________________
+#############################################################################################################################################################################
+
+DEPENDENCIES - {AtomicParsley, ffmpeg, ffplay, ffprobe}
+
+MAKE FILE NAMED 'config' > -o C:/Users/Ezio/Downloads/Video/%(title)s.%(ext)s (#DOWN_OUTPUT#)
+PLACE CONFIG IN  -  C:\Users\Ezio\AppData\Roaming\youtube-dl
+
+
+# VIDEO INFO
+$ -F https://www.youtube.com/watch?v=vPzON30fs_U
+
+# ONLY JPEG THUMBNAIL
+$ --write-thumbnail --skip-download https://www.youtube.com/watch?v=t5jiR1OZ9zw
+
+# OPUS 
+$ -f 251  --extract-audio --audio-format opus https://www.youtube.com/watch?v=t5jiR1OZ9zw
+
+# OPUS TO M4A
+$ -f 251 --embed-thumbnail --add-metadata --extract-audio --audio-format m4a https://www.youtube.com/watch?v=t5jiR1OZ9zw
+
+# M4A
+$ -f 140 --embed-thumbnail --add-metadata https://www.youtube.com/watch?v=t5jiR1OZ9zw
+
+# OPUS + CHAPTERS + THUBNAIL + METADATA
+$ -f 251 --embed-thumbnail  --embed-chapters --add-metadata --extract-audio --audio-format opus https://www.youtube.com/watch?v=t5jiR1OZ9zw
+
+# SINGLE FILE DOWNLAOD
+$ yt-dlp.exe -f 0 https://www98.zippyshare.com/d/6h73oplC/185196/sda1.backup.tar.gz.aa -o E:\prt\%(title)s.%(ext)s
+
+# BATCH DOWNLOAD
+$ -f 140 --embed-thumbnail --add-metadata --batch-file=C:\Users\Ezio\Downloads\list.txt
+
+# BATCH DOWNLOAD TEXT FILE ORDER  (go without -o)
+$ -f 140 -o "[%(autonumber)s]%(title)s.%(ext)s" --batch-file=C:\Users\Ezio\Downloads\list.txt
+
+# MERGE
+$ -f 278+249 https://www.youtube.com/watch?v=t_fbcgzmxHs [outputs webm]
+
+# TRIM PART
+yt-dlp -f "(bestvideo+bestaudio/best)[protocol!*=dash]" --external-downloader ffmpeg --external-downloader-args "ffmpeg_i:-ss 00:36:00.00 -t 00:37:00.00" "https://www.youtube.com/watch?v=wrUq030rFO8"
+
+# LIST SUBS
+$ --list-subs https://www.youtube.com/watch?v=Hjvm7o4Axn0
+
+# DOWNLOAD SUBS
+$ --all-subs --skip-download --convert-subs srt https://www.youtube.com/watch?v=Hjvm7o4Axn0
+youtube-dl --write-sub --sub-lang en https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# MERGE V+A to MKV & Download VTT sub file
+$ -f 278+249  --merge-output-format mkv --sub-lang en-US --write-sub https://www.youtube.com/watch?v=mELmw14yUOQ
+
+# MERGE V+A+Subtitle to MKV
+$ -f 278+249  --merge-output-format mkv --sub-lang en-US --write-sub --convert-subs srt --embed-subs https://www.youtube.com/watch?v=mELmw14yUOQ
+
+# BYPASS AGE RESTRICTION
+$  yt-dlp.exe -F --cookies-from-browser chrome
+
+# 500KB DWN LIMIT
+$ -f 244+140  -r 500k --merge-output-format mkv https://www.youtube.com/watch?v=0zhHLYOB7-c (480p webm+m4a)
+
+# DATEAFTER
+$ -f 251 --embed-thumbnail --add-metadata --extract-audio --dateafter 20231222 --audio-format opus  https://www.youtube.com/abccc
+$ yt-dlp -f 251 --playlist-index --embed-thumbnail --add-metadata --extract-audio --audio-format opus  https://www.youtube.com/abccc
+
+-f 140 --embed-thumbnail --add-metadata --dateafter 20211111 --playlist-end 90 https://www.youtube.com/c/GethsemaneSriLanka/videos (WRK 2022-06-03) (correct dates in gpc)
+-f 140 --embed-thumbnail --add-metadata --playlist-end 90  https://www.youtube.com/c/GethsemaneSriLanka/videos  (manual date count & set "--playlist-end" days) (WRK)
+
+# PLAYLIST NUBMER
+$ yt-dlp -f 251 "%(playlist_index)s-%(title)s.%(ext)s --embed-thumbnail --add-metadata --extract-audio  --audio-format opus https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK
+$ yt-dlp.exe -f 251 "%(playlist_index)s-%(title)s.%(ext)s" --embed-thumbnail --add-metadata --extract-audio --audio-format opus "https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK"
+
+# DOWNLOAD MANUALLY CREATED PALYLIST WITH NUMBERING
+$ -f 251 --embed-thumbnail --add-metadata --extract-audio --audio-format opus -o "%(autonumber)s - %(title)s.%(ext)s" --batch-file=C:\Users\Ezio\Desktop\test\42.txt
+
+# DOWNLOAD CREATOR CREATED PALYLIST WITH NUMBERING
+$ 136+140 --merge-output-format mp4 -o "%(playlist_index)s-%(title)s.%(ext)s" https://www.youtube.com/playlist?list=PLUZTRmXEpBy06eKXAAkirop9xgT_iMnq7
+
+# DOWNLOAD  PALYLIST FISRT VIDOES LINKS TO TEXT
+$ --get-id --playlist-items 1-20 https://www.youtube.com/playlist?list=PLSLDsQ1AbGgyz6hvYLvX26J-jybMKlk_j > video_links.txt
+
+yt-dlp --flat-playlist -i --print-to-file url gpc.txt "https://www.youtube.com/c/gpc/videos"
+
+https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos
+
+youtube-dl -i -o --get-filename -o "%(upload_date)s %(id)s %(title)s" --skip-download https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos > log.txt
+
+yt-dlp -j --flat-playlist "https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos" | jq -r '.id' | sed 's_^_https://youtu.be/_' > result.log

@@ -3,10 +3,10 @@
 $ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 
 
-# INSTALL DOCKER & DEPENDENCIES  ## https://docs.docker.com/engine/install/rhel/#prerequisites
+# INSTALL DOCKER & DEPENDENCIES  # https://docs.docker.com/engine/install/rhel/#prerequisites
 $ sudo dnf install -y docker-ce docker-ce-cli containerd.io
 
-# DOCKER COMPOSE MANUAL INSTALL  ## https://github.com/docker/compose/releases   # if failed remove "v" 
+# DOCKER COMPOSE MANUAL INSTALL (OPTIONAL) # https://github.com/docker/compose/releases   # if failed remove "v" 
 $ dnf install -y curl
 $ curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 $ chmod +x /usr/local/bin/docker-compose
@@ -21,7 +21,7 @@ $ systemctl status docker
 $ groupadd docker_users
 
 # ASSINGN USER FOR DOCKER GROUP
-$ sudo usermod -aG docker samf
+$ sudo usermod -aG docker_users sam
 
 # CHECK AVAILABE OR NOT
 $ id samf
@@ -61,13 +61,13 @@ $ docker cp  e91425f38618:/recieve_d send_d
 # STOP & START  CONTAINER
 $ docker stop or start id
 
-# ATTACH DETACH
+# ATTACH & DETACH
 $ docker run  -p 8000:80 -d e91425f38618
 $ docker run  -p 8000:80 -a e91425f38618
 
 # CURRENT RUNING CONTAINERS
-$ dokcer ps
-$ docer ps -a (-a for list previously usedones)
+$ docker ps
+$ docker ps -a (-a for list previously usedones)
 
 # RENAMING CONTAINER
 $ docker run -p 3000:80  -d --rm --name apache_http ad17c88403e2

@@ -1,0 +1,110 @@
+#############################################################################################################################################################################
+RCLONE\_______________________________________________________________________________________________
+#############################################################################################################################################################################
+
+PRECOMPILED BINARY
+$ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+$ unzip rclone-current-linux-amd64.zip
+$ cd rclone-*-linux-amd64
+
+$ sudo cp rclone /usr/bin/
+$ sudo chown root:root /usr/bin/rclone
+$ sudo chmod 755 /usr/bin/rclone
+
+./rclone (when no root)
+
+# ADD-EDIT-REMOVE
+$ rclone config
+
+#  RECONNECT
+$ rclone config reconnect remote:
+
+# LIST REMOTES
+$ rclone listremotes
+
+# SEARCH
+$ rclone ls --include "*tmnt*" desmond_td:
+
+# CONFIG FILE LOCATION
+$ rclone config file
+
+# FOLDER STRUCTRE
+$ rclone lsf desmond_TD:/path
+$ rclone lsd desmond_TD:/path
+
+# MAKE FOLDER
+$ rclone mkdir desmond_TD:/test
+
+# RENAME
+$ rclone moveto desmond_TD:/test  desmond_TD:/test2
+
+# LIMIT To 500KB
+$ rclone copy -P --bwlimit 512k C:\Users\uchithr\Desktop\vs td:
+
+"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Sat-00:00,50k Sun-00:00,50k"" --dry-run
+           "
+
+"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Mon-00:00,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Tue-00:00,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Wed-00:00,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Thu-00:00,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Fri-00:00,50k Sat-00:00,50k Sun-00:00,50k""
+"
+
+# SETS A LIMIT OF 512 KiB/s FROM 8:00 AM TO NOON, 10 MiB/s  FROM NOON TO  1:00 PM, 
+# LIMITS BACK TO 512 KiB/s FROM 1:00 PM to 6:00 PM, SETS A HIGHER LIMIT OF 30 MiB/s from 6:00 PM to 11:00 PM, AND THEN DISABLES ANY LIMIT AFTER 11:00 PM:
+$ rclone --bwlimit "08:00,512 12:00,10M 13:00,512 18:00,30M 23:00,off" [source] [destination]
+
+
+# DOWNLAOD WITH LOG
+$ rclone copy -P desmond_TD:/folder/"my_file1"  C:\Users\ABC\Desktop --log-file=mylogfile.txt
+
+# UPLAOD WITH LOG
+$ rclone copy -P C:\Users\uchithr\Desktop\vs td:
+# SHAREPOINT  #   --ignore-size --ignore-checksum  --transfers 1  --log-file=transfer1.txt  ### --tpslimit 0.5 
+
+# ONE BY ONE
+$ rclone copy -P /home/u178234/up --transfers 1 dt1:
+
+## GENERATE SHAREABLE LINKS
+cat list.txt | xargs -I item rclone link "item" --dry-run
+
+# MOVE
+$ rclone move -v desmond_TD:/SLTD_FRMAL desmond_TDBKP:/1
+$ rclone move -v desmond_TD:/SLTD_FRMAL/"*.mp4"  desmond_TD:/SLTD_FRMAL/dESt
+
+# REMOVE
+$ rclone rmdir -v desmond_TDBKP:/SLTD_FRMAL
+
+# EXCLUDE FOLDERS & FILES
+$ rclone copy -P cmsl_ict:/ C:\Users\samr\Downloads\bkp_sl_ict --exclude "/trainings/**" --exclude "/General/release.zip" 
+
+# SIZE TREE
+$ rclone ncdu desmond_TD:/gmz/
+
+# SIZE TREE REPORT EXPORT
+$  rclone.exe tree td:/ --human-readable -s -l > C:\Users\uchithr\Downloads\DONE\[sort]\ucm-td.txt
+
+# PRINT TO TEXT
+$ rclone ls desmond_TD:/MA2GD > C:\Users\Ezio\Desktop\file_list.txt
+
+# FOLDER SIZE
+$ rclone size desmond:/SLTD_FRMAL
+
+# SERVER SIDE COPY SYNC
+$ rclone copy -P dt1:/A dt3:/A_BKP --transfers 1 --drive-server-side-across-configs
+$ rclone copy -P dt1:/A dt2:/A_BKP                                      (*consume local data)
+
+# EMPTY TRASH
+$ rclone cleanup dt1:
+
+# RUN AS A DAEMON IN BACKGROUND
+$ rclone mount dt1:qbit /home/fedora/dt1 --vfs-cache-mode writes --allow-other --daemon
+
+## WINDOWS MOUNT
+rclone mount ur: X: --network-mode
+~~~~### --buffer-size=1G ####~~~~~~~*
+
+# TO SHOW ERRORS
+$ --vv
+disable checksum flag
+
+# RCX - Rclone for Android
+https://play.google.com/store/apps/details?id=io.github.x0b.rcx&hl=en
+https://github.com/newhinton/Round-Sync/releases/tag/v2.5.4

@@ -1,0 +1,226 @@
+
+# LOG FILES LOCATION
+/root/var
+
+# VERIFY SHELL MODE
+$ echo $SHELL
+
+# Monitor Commands
+psaux
+top
+htop
+pkill -KILL -U samf
+
+## SHOW PID IN ORDER
+$ ps -ef
+pstree -p
+
+• R is either currently running or waiting in the run queue.
+• l means the process is multithreaded.
+• S is interruptable sleep; the process is waiting for an event to complete.
+• s is a session leader. Sessions are related processes managed as a unit.
+• I is an idle kernel thread.
+• < means high priority.
+• N is low priority.
+
+
+##  HARDWARE INFOMATION 
+$ lshw #memory configuration, firmware versions, mainboard configuration,CPU version and speed, cache configuration, bus speed, hardware paths, attached devices, partitions, and filesystems.
+$ hwinfo #monitor information, RAID arrays, memory configuration, CPU information, firmware, mainboard configuration, caches, bus speeds, attached devices, partitions, and filesystems.
+$ lsusb #probes USB buses and the devices attached to them.
+$ lspci #probes PCI buses and the devices attached to them.
+$ lsblk #lists physical drives, partitions, and filesystems.
+$ lscpu #lists information about your CPU
+$ hwinfo --monitor
+
+$ lspci -v | awk '/USB/,/^$/'
+$ lspci -v | awk '/Audio/,/^$/'
+
+
+# GATEWAY
+ip route show default
+
+
+
+# CHECK CACHE FILE USAGE IN LINUX:
+free -h
+vmstat -s
+cat /proc/meminfo
+top or htop
+slabtop
+
+
+fdisk -l
+lsblk -f
+watch -sh /source
+tree --du -h | grep G]
+
+# SSH WITH KEYFILE	
+ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
+
+
+# VIEW LOGEED IN USERS	
+w
+
+
+
+
+
+
+
+
+# CHECK LOG	tail 
+/var/log/auth.log
+
+# CALANDER WITH SPECIFIC MONTH	
+cal oct 2020
+
+## OS DETAILS	
+cat /etc/relcat /etc/os-release
+
+# CURRENT TIME WITH WHICH USER USING THE SYSTEM	
+uptime
+
+# CPU INFORMATION	
+lscpu
+
+# RAM INFORMATION	
+free -h
+
+# FILE SYSTEM SIZE WITH TYPE	
+df -Th
+
+# SORT BY FILE SIZE, WITH THE LARGEST FILES FIRST.
+ls -lhS
+
+
+# LIST ALL FILES WITH HIDDEN FILES	
+ls -al
+
+# LIST FILES WITH FILE PERMISSIONS	
+ls -l
+
+# LIST ALL FILES WITH HIDDEN FILES iN READABLE FORMAT	
+ls -lsah
+
+# LIST FILES WITH ORDER	
+ls -lX
+
+# LIST FILES WITH ACESS TIME	
+ls -ult
+
+# QUICK ONFO ABOUNT COMMANDS	
+whatis ls scp
+
+# FILE INFORAMTION
+file rclone
+stat rclone
+
+## FILE SIZE	
+du -h /var/lib/deluge/Downloads/
+
+## FOLDER SIZE	
+du -sh 
+
+## WITH SUBDIRECTORY SIZES + MAIN FOLDER SIZE	
+du -h
+
+## LIST WITH SIZE	
+du -sh * | sort -hr
+
+## CREATE MULTIPLE FILES	
+touch myfile{1..5}
+
+# VIEW PERMISSIONS	
+ls-l myfile
+
+
+
+## MAKE ISO	
+genisoimage -o output_image.iso directory_name du -sh ~/up/ - directory size
+
+## MOUNT ISO
+$ mkdir viewpoint
+$ sudo mount -o loop myfile.iso viewpoint
+$ sudo umount viewpoint
+
+# COPY FILES FORM LINUX MACHINE TO WINDOWS
+scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
+
+scp sam@cmsl-si:/var/www/remotely "C:/Users/uchithr/Downloads/D_DRIVE"
+## VERIFYING IMAGE BY SHA
+$ echo "fa95fb748b34d470a7cfa5e3c1c8fa1163e2dc340cd5a60f7ece9dc963ecdf88 \ *ubuntu-21.04-desktop-amd64.iso" | shasum -a 256 --check
+
+## ISO TO USB BOOT DISC
+sudo dd status=progress if=ubuntu-20.04.1-LTS-desktop-amd64.iso of=/dev/sdb
+
+## FILE COPY FORM SVR 2 SVR	scp /home/student/testfile bob@desktop:/home/bob
+rsync –av /home/student/testfile bob@desktop:/home/bob
+
+
+## REMOVE SPECIFIC FILE FROM MULTIPLE DIRECTRIES	
+find . -name \*.flac -type f -delete
+
+
+## ACCESS WINDOWS PATH FROM LINUX	
+smbclient --user=sl/uchithr%apr@187*#  //slktweb/IT-Software
+
+
+## COCKPIT	
+yum install cockpit	
+sudo firewall-cmd --add-service=cockpit	
+sudo firewall-cmd --add-service=cockpit --permanent	
+systemctl enable --now cockpit.socket	
+systemctl start cockpit	
+ss -tulpn | grep :9090	
+
+firewall-cmd --zone=public --add-port=9090/tcp --permanent	
+firewall-cmd  --reload	
+
+# MIDNIGHT COMMANDER	
+sudo dnf install mc
+
+
+## INSTALL GUI MODE TO CLI SERVER
+$ dnf groupinstall "Server with GUI"
+
+## GUI CLI SWITCH	
+systemctl get-default	
+yum install epel-release	
+yum  groupinstall -y "KDE Plasma Workspaces"	
+yum config-manager --set-enabled powertools	
+
+sudo systemctl set-default graphical.target	GUI
+sudo systemctl set-default multi-user.target	CLI
+
+sudo init 6	
+
+ls -l /etc/systemd/system/default.target	
+
+
+## PIP	
+python3 -m pip show mutagen	
+sudo yum install epel-release	
+sudo yum install python-pip	
+sudo pip3 install mutagen	
+
+
+## MOUNT DISC	
+sudo blkid	
+sudo mkdir /media/dvd-r	
+sudo mount /dev/sr0 /media/dvd-r	
+tree --du -h | grep G]	
+
+
+## TERMINAL RECORD
+script
+exit
+script my_terminal_session.txt
+~/.bash_history
+
+
+## DISABLE BASH HISTORY
+nano ~/.bashrc
+unset HISTFILE #Add the following line at the end of the file to disable history:
+source ~/.bashrc #to apply
+
