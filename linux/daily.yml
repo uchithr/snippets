@@ -35,7 +35,6 @@ ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 # VIEW LOGEED IN USERS	
 w
 
-
 # CHECK LOG	tail 
 /var/log/auth.log
 
