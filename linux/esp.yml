@@ -6,14 +6,6 @@ nmcli connection down "System eth0" ; nmcli connection up NIC
 
 nmtui
 
-init 0 : Shutdown 
-init 1 : Single user mode or emergency mode no network no multitasking is present in this mode only root has access in this runlevel
-init 2 : No network but multitasking support is present .
-init 3 : Network is present multitasking is present but with out GUI .
-init 4 : It is similar to runlevel 3; It is reserved for other purposes in research.
-init 5 : Network is present multitasking and GUI is present with sound etc.
-init 6 : This runlevel is defined to system restart.
-init s : Tells the init command to enter the maintenance mode. (S/M)
 
 ##################################################################################################################
 ## DNS ###########################################################################################################
@@ -34,18 +26,6 @@ sudo vim /etc/named.conf
 # ADD DNS NAME WITH IP
 sudo vim /etc/hosts >> 10.0.0.198 slvr.site dns
 
-
-############################################################
-#### CENTOS REPOSITROY UPDATE ####
-############################################################
-
-The mirror system uses the connecting IP address of the client and the update status of each mirror to pick mirrors that are updated to and
-geographically close to the client.  You should use this for CentOS updates unless you are manually picking other mirrors.
-If the mirrorlist= does not work for you, as a fall back you can try the remarked out baseurl= line instead.
-
-sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
-sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
-sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
 ############################################################
 #### VIM ####

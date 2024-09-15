@@ -1,0 +1,53 @@
+## SHOW PID IN ORDER
+$ ps -ef
+pstree -p
+
+• R is either currently running or waiting in the run queue.
+• l means the process is multithreaded.
+• S is interruptable sleep; the process is waiting for an event to complete.
+• s is a session leader. Sessions are related processes managed as a unit.
+• I is an idle kernel thread.
+• < means high priority.
+• N is low priority.
+
+
+##  HARDWARE INFOMATION 
+$ lshw #memory configuration, firmware versions, mainboard configuration,CPU version and speed, cache configuration, bus speed, hardware paths, attached devices, partitions, and filesystems.
+$ hwinfo #monitor information, RAID arrays, memory configuration, CPU information, firmware, mainboard configuration, caches, bus speeds, attached devices, partitions, and filesystems.
+$ lsusb #probes USB buses and the devices attached to them.
+$ lspci #probes PCI buses and the devices attached to them.
+$ lsblk #lists physical drives, partitions, and filesystems.
+$ lscpu #lists information about your CPU
+$ hwinfo --monitor
+
+$ lspci -v | awk '/USB/,/^$/'
+$ lspci -v | awk '/Audio/,/^$/'
+
+
+###############################################################################################################################
+
+init 0 : Shutdown 
+init 1 : Single user mode or emergency mode no network no multitasking is present in this mode only root has access in this runlevel
+init 2 : No network but multitasking support is present .
+init 3 : Network is present multitasking is present but with out GUI .
+init 4 : It is similar to runlevel 3; It is reserved for other purposes in research.
+init 5 : Network is present multitasking and GUI is present with sound etc.
+init 6 : This runlevel is defined to system restart.
+init s : Tells the init command to enter the maintenance mode. (S/M)
+
+
+###############################################################################################################################
+
+#### CENTOS REPOSITROY UPDATE ####
+
+
+The mirror system uses the connecting IP address of the client and the update status of each mirror to pick mirrors that are updated to and
+geographically close to the client.  You should use this for CentOS updates unless you are manually picking other mirrors.
+If the mirrorlist= does not work for you, as a fall back you can try the remarked out baseurl= line instead.
+
+sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
+
+###############################################################################################################################

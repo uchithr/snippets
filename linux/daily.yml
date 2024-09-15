@@ -11,35 +11,9 @@ top
 htop
 pkill -KILL -U samf
 
-## SHOW PID IN ORDER
-$ ps -ef
-pstree -p
-
-• R is either currently running or waiting in the run queue.
-• l means the process is multithreaded.
-• S is interruptable sleep; the process is waiting for an event to complete.
-• s is a session leader. Sessions are related processes managed as a unit.
-• I is an idle kernel thread.
-• < means high priority.
-• N is low priority.
-
-
-##  HARDWARE INFOMATION 
-$ lshw #memory configuration, firmware versions, mainboard configuration,CPU version and speed, cache configuration, bus speed, hardware paths, attached devices, partitions, and filesystems.
-$ hwinfo #monitor information, RAID arrays, memory configuration, CPU information, firmware, mainboard configuration, caches, bus speeds, attached devices, partitions, and filesystems.
-$ lsusb #probes USB buses and the devices attached to them.
-$ lspci #probes PCI buses and the devices attached to them.
-$ lsblk #lists physical drives, partitions, and filesystems.
-$ lscpu #lists information about your CPU
-$ hwinfo --monitor
-
-$ lspci -v | awk '/USB/,/^$/'
-$ lspci -v | awk '/Audio/,/^$/'
-
 
 # GATEWAY
 ip route show default
-
 
 
 # CHECK CACHE FILE USAGE IN LINUX:
@@ -58,15 +32,8 @@ tree --du -h | grep G]
 # SSH WITH KEYFILE	
 ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 
-
 # VIEW LOGEED IN USERS	
 w
-
-
-
-
-
-
 
 
 # CHECK LOG	tail 
@@ -92,7 +59,6 @@ df -Th
 
 # SORT BY FILE SIZE, WITH THE LARGEST FILES FIRST.
 ls -lhS
-
 
 # LIST ALL FILES WITH HIDDEN FILES	
 ls -al
