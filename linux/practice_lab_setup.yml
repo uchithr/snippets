@@ -1,3 +1,5 @@
+## GUI MODE > SET TO GNOME CLASSIC  # DEFAULT "wayland"
+$ cat /var/lib/AccountsService/users/<your user name>
 
 BASE - CentOS-7-x86_64-Everything-1810 with rpms
 HOST OS - CentOS-7-x86_64-DVD-1804
