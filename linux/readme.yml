@@ -1,3 +1,5 @@
+## GUI MODE > SET TO GNOME CLASSIC  # DEFAULT "wayland"
+
 ## SHOW PID IN ORDER
 $ ps -ef
 pstree -p
