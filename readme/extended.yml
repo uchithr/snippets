@@ -57,3 +57,22 @@ ensuring that other applications or users can still access sufficient network re
 
 
 # ############################################################################################################################### 
+
+# DOCKER OP-LEVEL KEYS
+
+DB > WEBAPP
+
+# version
+# services
+# volumes
+# networks
+# configs
+# secrets
+
+
+
+https://images.chainguard.dev/
+https://elest.io/
+https://www.linuxserver.io/
+https://hub.rapidfort.com/
+RapidFort

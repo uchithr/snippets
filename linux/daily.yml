@@ -100,8 +100,11 @@ du -sh * | sort -hr
 ## CREATE MULTIPLE FILES	
 touch myfile{1..5}
 
+# OPENED PORT LIST
+$  sudo ss -tunlp
 
-
+## SEND REQUEST TO RELOAD
+$ curl -X POST localhost:7001/-/reload
 
 ## MAKE ISO	
 genisoimage -o output_image.iso directory_name du -sh ~/up/ - directory size
@@ -131,6 +134,12 @@ find . -name \*.flac -type f -delete
 
 ## ACCESS WINDOWS PATH FROM LINUX	
 smbclient --user=sl/uchithr%apr@187*#  //slktweb/IT-Software
+
+
+## SUBLIME TEXT 4
+$ sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+$ sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+$ sudo dnf install sublime-text -y
 
 
 ## COCKPIT	

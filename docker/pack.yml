@@ -210,3 +210,57 @@ version "3"
       - "5001:8080"
     volumes:
       - ${USERDIR}/docker/shared:/shared
+
+
+
+######################################################################################################################################################################################################
+## SECURIY #########################################################################################################################################################################################
+######################################################################################################################################################################################################
+
+DOCKER SCOUT Syft and Grype Anchore  OWASP ZAP
+https://github.com/docker/scout-cli/releases
+curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
+sh install-scout.sh
+
+
+AQUA_SECURITY-TRIVY
+https://aquasecurity.github.io/trivy/v0.55/getting-started/installation/  ## Use container image
+docker run -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy:0.55.1 image python:3.4-alpine
+
+docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image portainer/portainer-ce:2.21.1 | grep "Total"
+
+##SNIPEIT##
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image snipe/snipe-it:v7.0.11 | grep "Total"
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image linuxserver/snipe-it:7.0.12 | grep "Total"
+
+##MARIADB## 
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image mariadb:10.11.8 | grep "Total"
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image linuxserver/mariadb:10.11.8 | grep "Total"
+
+##PHP-MY-ADMIN##
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image phpmyadmin:5.2.1-apache | grep "Total"
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image linuxserver/phpmyadmin:5.2.1 | grep "Total"
+
+
+##MONGODB##
+sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image  mongodb/mongodb-community-server:7.0.9-ubi9 | grep "Total"
+
+
+
+########
+docker pull portainer/portainer-ce:2.21.1
+docker pull netdata/netdata:v1.47.1
+docker pull restic/restic:0.17.0
+docker pull chainguard/cadvisor
+docker pull docker/scout-cli:1.14
+docker pull crowdsecurity/crowdsec:v1.6.3
+
+docker pull grafana/grafana:11.2.0
+docker pull grafana/loki:main-5bffc10-amd64
+docker pull prom/prometheus:v2.54.1
+docker pull influxdb:1.8-alpine
+docker pull telegraf:1.32.0-alpine
+docker pull sitespeedio/graphite:1.1.10-5
+
+docker pull bitnami/phpmyadmin:5.2.1  #vmware [use-apache in other] [rooless]
+docker pull uldiseihenbergs/meshcentral:1.1.29

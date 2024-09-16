@@ -166,13 +166,20 @@ $ mongodb://mongo:27017/swfavourites  <in a custom created network>
 ## CREATE NETWORK
 $ docker network create custom-net1
 
-## LSIT DOCKER NETWORKS
+## LIST DOCKER NETWORKS
 $ docker network ls
 $ docker network rm
 
+## DOCKER NETWROK INSPCET
+$ sudo docker network inspect bridge
 
+## INSPECT CONTAINERS USAGE
+$ sudo docker stats
 
-## BASED on "dockerfile"  DOCKER CREATING A IMAGE 
+## RUN ONLY FAILED CONTAINER FORM YML CONFIG
+sudo docker compose up -d grafana
+
+## BASED on a "dockerfile"  DOCKER IMAGE WILL BE CREATED
  
   FROM node               # use node base image
   WORKDIR /app            # create app directory in image when container spinup
