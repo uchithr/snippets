@@ -3,6 +3,7 @@
 $ docker compose up -d
 $ docker compose -f my-file.yml up -d
 5001:80 <hostport_externalport>:<guestport_insideport>
+HOST CONFIGS : CONTAINER CONFIGS
 
 #########################################################################################################################################################
 ###########  DOCKER COMPOSE OVERVIEW  ###################################################################################################################
@@ -211,6 +212,28 @@ version "3"
     volumes:
       - ${USERDIR}/docker/shared:/shared
 
+####################################################################################################################################################################################
+#Stirling PDF ######################################################################################################################################################################
+#####################################################################################################################################################################################
+
+services:
+  stirling-pdf:
+    image: frooodle/s-pdf:0.29.0-fat 
+    ports:
+      - '8005:8080'
+    volumes:
+      - ./trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - ./extraConfigs:/configs
+#      - ./customFiles:/customFiles/
+#      - ./logs:/logs/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=en_GB
+
+# ADDITIONAL SECURITY 
+# when container is creating is create "extra configs" directory 
+# do the configuration and restart
 
 
 ######################################################################################################################################################################################################
@@ -260,7 +283,12 @@ docker pull grafana/loki:main-5bffc10-amd64
 docker pull prom/prometheus:v2.54.1
 docker pull influxdb:1.8-alpine
 docker pull telegraf:1.32.0-alpine
+docker pull chronograf:1.7.17-alpine
+
 docker pull sitespeedio/graphite:1.1.10-5
 
 docker pull bitnami/phpmyadmin:5.2.1  #vmware [use-apache in other] [rooless]
 docker pull uldiseihenbergs/meshcentral:1.1.29
+
+docker pull frooodle/s-pdf:0.29.0-fat       # [2G]
+docker pull frooodle/s-pdf:0.29.0-ultra-lite 
