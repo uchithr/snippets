@@ -138,7 +138,11 @@ $ docker login
 # PUSH DOCKER IMAGE
 $ docker push samf/myapp1:v1
 
-## anonymous & named VOLUMES MANAGE BY DOCKER. [flag "-v"]
+
+# HOST's $USER/CONTAINER-DATA must be mapped to a rootless container 
+## anonymous & named VOLUMES MANAGE BY DOCKER. [flag "-v"] 
+
+-V /HOSTDIR:/CONTAINERDIR 
 
   # "ANONYMOUS" VOLUME____________________________<data will stay until the container removed / can't share with other containers and no data location shared>
   $ -v /data portainer/portainer-ce 
