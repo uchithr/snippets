@@ -81,7 +81,9 @@ MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400
 "Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
 
 
-
+## BYPASS WSUS
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+UseWUServer  # set data to "0" & Restart
 
 
 ## DISABLE THE DELIVERY OPTIMIZATION SERVICE

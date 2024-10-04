@@ -114,6 +114,16 @@ $ mkdir viewpoint
 $ sudo mount -o loop myfile.iso viewpoint
 $ sudo umount viewpoint
 
+# COPY WITH PROGRESS
+rsync -ah --info=progress2 <source> <destination>
+rsync -ah --info=progress2 --stats <source> <destination>
+
+# TO COPY THE SOURCE DIRECTORY ITSELF (WITH THE FOLDER):
+$ rsync -ah --info=progress myfolder target_d/
+
+# TO COPY ONLY THE CONTENTS OF THE SOURCE DIRECTORY (WITHOUT THE FOLDER):
+$ rsync -ah --info=progress2 myfolder/ target_d/
+
 # COPY FILES FORM LINUX MACHINE TO WINDOWS
 scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
 

@@ -52,6 +52,25 @@ $ setup.exe /configure configuration.xml
 #######################################################################################
 #######################################################################################
 
+## DISABLE MS AUTH##
+
+INSTALL BELOW MODULES FROM POWERSHEL ADMIN
+Install-Module AzureAD
+Install-Module MSOnline
+Connect-MsolService
+
+#LIST USERS AND CHECK MFA STATUS:
+Get-MsolUser | Select DisplayName,UserPrincipalName,StrongAuthenticationMethods
+
+
+# DISABLE MFA FOR A SINGLE USER:
+Set-MsolUser -UserPrincipalName sam.fisher@abc.com -StrongAuthenticationRequirements @()
+
+
+
+$user = Get-MsolUser -UserPrincipalName sam.fisher@abc.com
+$user.StrongAuthenticationRequirements = @()
+Set-MsolUser -UserPrincipalName $user.UserPrincipalName -StrongAuthenticationRequirements @()
 
 
 

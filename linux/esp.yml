@@ -26,6 +26,17 @@ sudo vim /etc/named.conf
 # ADD DNS NAME WITH IP
 sudo vim /etc/hosts >> 10.0.0.198 slvr.site dns
 
+############################################################
+#### DATE/TIME ####
+############################################################
+
+sudo timedatectl set-time 14:30:00
+sudo timedatectl set-time 2024-09-25
+sudo timedatectl set-time '2024-09-25 14:30:00'
+
+sudo timedatectl set-ntp false
+
+
 
 ############################################################
 #### VIM ####
