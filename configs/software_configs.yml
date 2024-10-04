@@ -98,9 +98,15 @@ Host awslab
 
 
 
+# VSCODE + GITHUB # navigate to " C:\Program Files\Git\bin" # *PREREQUISITES: GIT
+git config --global user.name "John Doe"
+git config --global user.email "johndoe@email.com"
+
 
 # NAVIGATE TO THE  DIRECTORIES OF LINUX VM USING THE VS CODE FILE EXPLORER UI.
 $ File > Open Folder > 
+
+
 
 
 
