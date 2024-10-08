@@ -62,6 +62,7 @@ volumes:
 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:2.21.1
 
 
+
 services:
   portainer-ce:
     image: portainer/portainer-ce:2.21.1
@@ -155,6 +156,29 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+
+
+
+
+
+
+
+
+## yt-dlp-webui
+
+services:
+  yt-dlp-webui:
+    image: marcobaobao/yt-dlp-webui
+    ports:
+      - 3033:3033
+    volumes:
+      - jdown:/downloads # replace <jdown> with a directory on your host system
+    restart: unless-stopped
+
+
+
+
+
 
 
 # simplified

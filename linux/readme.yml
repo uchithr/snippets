@@ -25,6 +25,11 @@ $ hwinfo --monitor
 $ lspci -v | awk '/USB/,/^$/'
 $ lspci -v | awk '/Audio/,/^$/'
 
+## CHECK CPU ARCHITECTURE
+uname -m
+x86_64 indicates a 64-bit x86 architecture.
+armv7l indicates a 32-bit ARM architecture.
+aarch64 indicates a 64-bit ARM architecture.
 
 ###############################################################################################################################
 

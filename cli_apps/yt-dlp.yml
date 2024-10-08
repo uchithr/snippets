@@ -87,3 +87,20 @@ https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos
 youtube-dl -i -o --get-filename -o "%(upload_date)s %(id)s %(title)s" --skip-download https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos > log.txt
 
 yt-dlp -j --flat-playlist "https://www.youtube.com/channel/UCmGghrGSfB1txz3aNdmDKLg/videos" | jq -r '.id' | sed 's_^_https://youtu.be/_' > result.log
+
+
+
+
+
+
+
+
+############## LINUX
+
+wget "https://github.com/yt-dlp/yt-dlp/releases/download/2024.10.07/yt-dlp_linux"
+mv yt-dlp_linux yt-dlp
+sudo mv yt-dlp /usr/local/bin/
+sudo chmod a+rx /usr/local/bin/yt-dlp
+yt-dlp --version
+
+https://hub.docker.com/r/marcobaobao/yt-dlp-webui
