@@ -138,6 +138,11 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SchedulingAgent
 ## REMOVE AV [must be in safe mode]
 SentinelOneInstaller.exe -c -t token
 
+
+
+
+
+
 ### PRINTERS #############################################################################################################################################################
 
 
