@@ -23,17 +23,17 @@ $ ffmpeg -i video.mp4 -i audio.wav -c:v copy -c:a aac output.mp4
 
 ### EXTRACT FRAMES ####
 
-# extract all frames (for 4-5 mins vids)
+# EXTRACT ALL FRAMES (FOR 4-5 MINS VIDS)
 $ ffmpeg -i input.mp4 -vsync 0 thumb%04d.jpeg
 $ ffmpeg -i input.mov -r 24/1 thumb%03d.jpg
 
-# extract image every second
+# EXTRACT IMAGE EVERY SECOND
 $ ffmpeg -i input.mp4 -vf fps=1 thumb%04d.jpeg      
 
-# extract one image every 10 minutes (600 sec)  (increment 150/600 screen rec)
+# EXTRACT ONE IMAGE EVERY 10 MINUTES (600 SEC)  (INCREMENT 150/600 SCREEN REC)
 $ ffmpeg -i input.mp4 -vf fps=1/600  thumb%04d.jpeg      
 
-##  SOURCE COMPARISON
+## SOURCE COMPARISON
 ffmpeg -ss 01:11:30.000 -to 01:12:30.000 -i input.mkv  -vf fps=1  C:\Users\SLVR\Pictures\comparison\%04d_265.bmp
 
 # CONTACT SHEET <decrese the value for more famres (mod(n\,600))>
