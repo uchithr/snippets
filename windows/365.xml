@@ -1,8 +1,8 @@
 ### OFFICE DEPLOYMENT TOOL (ODT) ####
 
 # DOWNLOAD FROM A CONFIGURATION XML
-$ setup.exe /download configuration.xml
-
+$   setup.exe /download configuration.xml
+$ .\setup.exe /download configuration.xml
 
 # INSTALL EXE WITH XML CONFIG
 $ setup.exe /configure configuration.xml
@@ -10,43 +10,63 @@ $ setup.exe /configure configuration.xml
 #######################################################################################
 ## DOWNLOAD TEMPLATE ##################################################################
 
-
 <Configuration>
 
-  <Add OfficeClientEdition="64" Channel="PerpetualVL2019">
-    <Product ID="Standard2019Volume">
-      <Language ID="en-us" />
-    </Product>
-  </Add>
-
-  <!--  <RemoveMSI All="True" /> -->
-
-  <!--  <Display Level="None" AcceptEULA="TRUE" />  -->
-
-  <!--  <Property Name="AUTOACTIVATE" Value="1" />  -->
-
-</Configuration>
-
-
-#####################################################################################
-## EXCLUDE INSTALL ##################################################################
-
-
-<Configuration>
-
+  <!-- Specify the version and update channel for Microsoft 365 installation -->
   <Add OfficeClientEdition="64" Channel="Current">
-    <Product ID="O365ProPlusRetail">
+  
+    <!-- Install Microsoft 365 Apps for Business (change to O365ProPlusRetail for Enterprise) -->
+    <Product ID="O365BusinessRetail">
+    
+      <!-- Set the language to English (US) -->
       <Language ID="en-us" />
-	   <ExcludeApp ID="Lync" />
+      
+      <!-- Exclude OneDrive and Teams from the installation -->
+      <ExcludeApp ID="OneDrive" />
+	  <ExcludeApp ID="Lync" />
     </Product>
   </Add>
-
-  <!--  <Updates Enabled="TRUE" Channel="Current" /> -->
-
-  <!--  <Display Level="None" AcceptEULA="TRUE" />  -->
-
-  <!--  <Property Name="AUTOACTIVATE" Value="1" />  -->
-
+  
+  <!-- Enable automatic updates on the Current Update Channel -->
+  <Updates Enabled="TRUE" Channel="Current" />
+  
+  <!-- Remove any MSI-based Office installations to avoid conflicts -->
+  <RemoveMSI />
+  
+  <!-- Custom application settings (Registry modifications) -->
+  <AppSettings>
+  
+    <!-- Set the company name for the Office setup -->
+    <Setup Name="Company" Value="ABC (Pvt.) Limited" />
+    
+    <!-- Excel: Set default file format to .xlsx (value 51) -->
+    <User Key="software\microsoft\office\16.0\excel\options" 
+          Name="defaultformat" 
+          Value="51" 
+          Type="REG_DWORD" 
+          App="excel16" 
+          Id="L_SaveExcelfilesas" />
+          
+    <!-- PowerPoint: Set default file format to .pptx (value 27) -->
+    <User Key="software\microsoft\office\16.0\powerpoint\options" 
+          Name="defaultformat" 
+          Value="27" 
+          Type="REG_DWORD" 
+          App="ppt16" 
+          Id="L_SavePowerPointfilesas" />
+          
+    <!-- Word: Set default file format to .docx (value 7) -->
+    <User Key="software\microsoft\office\16.0\word\options" 
+          Name="defaultformat" 
+          Value="7" 
+          Type="REG_SZ" 
+          App="word16" 
+          Id="L_SaveWordfilesas" />
+  </AppSettings>
+  
+  <!-- Show the full installation interface and auto-accept the EULA -->
+  <Display Level="Full" AcceptEULA="TRUE" />
+  
 </Configuration>
 
 #######################################################################################
