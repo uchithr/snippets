@@ -181,10 +181,12 @@ networks:
 ####[DOCKER HOST]#####
 
 
-# Create Vault Agent Configurations 
+# 1 - CREATE VAULT AGENT CONFIGURATIONS 
 
+Create a file named agent.hcl in your host machine under ~/vault/config/.
 touch vault-agent.hcl    # CONTAINER MAPPING FILE
 
+# Example "agent.hcl" Configuration:
 vault {
   address = "http://vault:8200"
 }
@@ -208,22 +210,24 @@ template {
 }
 
 
-
-
-
-## CREATE TEMPLATE FILES FOR THE SECRETS. #
+####################################################################################################
+# 2 - VAULT TEMPLATES FOR SECRETS (db-creds.ctmpl, mail-creds.ctmpl)  [ templates with the Vault Agent ]
 
 # Create Database Credentials Template
 
 mkdir -p vault/templates
 touch vault/templates/db-creds.ctmpl
 
-# ISSUE BELOW
-MYSQL_DATABASE="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.database }}{{ end }}"
-MYSQL_USER="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.username }}{{ end }}"
-MYSQL_PASSWORD="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.password }}{{ end }}"
+# db-creds.ctmpl file
+
+{
+  "DB_USERNAME": "{{ .Data.data.username }}",
+  "DATABESE": "{{ .Data.data.username }}",
+  "DB_PASSWORD": "{{ .Data.data.password }}"
+}
 
 
+ 2ND WAY
 # Create Mail Credentials Template
 touch vault/templates/mail-creds.ctmpl
 
@@ -233,16 +237,26 @@ MAIL_USERNAME="{{ with secret "secret/data/mail" }}{{ .Data.data.username }}{{ e
 MAIL_PASSWORD="{{ with secret "secret/data/mail" }}{{ .Data.data.password }}{{ end }}"
 
 
+
+
+#
+
+
 # Start Consul and Vault
 docker compose -f docker-compose-consul-vault.yml up -d
 
 
 
 
-# ------------------------------------------------------
+##########################################################################
 
 # Initialize Vault > Access the Vault container:
 docker exec -it vault /bin/sh
+
+# vault status
+ vault status
+
+# initialize vault cluster
 vault operator init
 
 # Copy the unseal keys and root token generated.
@@ -251,6 +265,16 @@ vault operator init
 vault operator unseal <unseal_key_1>
 vault operator unseal <unseal_key_2>
 vault operator unseal <unseal_key_3>
+
+
+
+# unseal vault with three secret shares
+vault operator unseal
+
+
+
+
+
 
 
 # Login to Vault:
