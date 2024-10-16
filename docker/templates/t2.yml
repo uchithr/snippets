@@ -179,6 +179,8 @@ networks:
 #
 
 ####[DOCKER HOST]#####
+
+
 # Create Vault Agent Configurations 
 
 touch vault-agent.hcl    # CONTAINER MAPPING FILE
