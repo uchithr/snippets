@@ -1,21 +1,22 @@
-mkdir snipeit-vault-setup
-cd snipeit-vault-setup
+Step 1: Start Consul and Vault.
+Step 2: Configure and store secrets in Vault.
+Step 3: Start Snipe-IT and associated services.
 
 
-
-
+$ mkdir snipeit-vault
+$ cd snipeit-vault
 
 #################################################################################################
 ## consul-vault
 ################################################################################################
 
-vim docker-compose-consul-vault.yml
+vim consul-vault.yml
 
 
 services:
   # Consul Service
   consul:
-    image: consul:latest
+    image: hashicorp/consul:1.20
     container_name: consul
     ports:
       - '8500:8500'        # Consul UI
@@ -31,7 +32,7 @@ services:
 
   # Vault Service
   vault:
-    image: vault:latest
+    image: hashicorp/vault:1.18
     container_name: vault
     ports:
       - '8200:8200'         # Vault API/UI
@@ -73,6 +74,7 @@ networks:
 
 
 
+## docker compose -f consul-vault.yml up -d   
 
 
 #################################################################################################
@@ -80,7 +82,6 @@ networks:
 ################################################################################################
 
 services:
-  # MariaDB Service
   snipeit-mysql:
     image: linuxserver/mariadb:10.11.8
     container_name: snipeit-db
@@ -102,7 +103,7 @@ services:
           cpus: '1.0'          # Limit to 1 CPU
           memory: 512M         # Limit to 512MB RAM
 
-  # phpMyAdmin Service
+
   phpmyadmin:
     image: phpmyadmin:5.2.1-apache
     container_name: phpMyAdmin
@@ -122,7 +123,7 @@ services:
           cpus: '0.5'          # Limit to 0.5 CPU
           memory: 512M         # Limit to 512MB RAM
 
-  # Snipe-IT App Service
+
   snipeit-app:
     image: linuxserver/snipe-it:7.0.11
     container_name: snipeit-app
@@ -146,7 +147,7 @@ services:
 
   # Vault Agent to inject secrets
   vault-agent:
-    image: vault:latest
+    image: hashicorp/vault:1.18
     container_name: vault-agent
     volumes:
       - ./vault-agent.hcl:/vault-agent/config.hcl
@@ -175,12 +176,12 @@ networks:
 #
 #
 #
+#
 
+####[DOCKER HOST]#####
+# Create Vault Agent Configurations 
 
-
-# Create Vault Agent Configuration local
-
-touch vault-agent.hcl
+touch vault-agent.hcl    # CONTAINER MAPPING FILE
 
 vault {
   address = "http://vault:8200"
@@ -204,7 +205,11 @@ template {
   destination = "/etc/secrets/mail-creds.env"
 }
 
-## Create template files for the secrets. #
+
+
+
+
+## CREATE TEMPLATE FILES FOR THE SECRETS. #
 
 # Create Database Credentials Template
 
