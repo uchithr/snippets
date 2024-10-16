@@ -41,16 +41,6 @@ $ rclone moveto desmond_TD:/test  desmond_TD:/test2
 # LIMIT To 500KB
 $ rclone copy -P --bwlimit 512k C:\Users\uchithr\Desktop\vs td:
 
-"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Sat-00:00,50k Sun-00:00,50k"" --dry-run
-           "
-
-"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Mon-00:00,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Tue-00:00,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Wed-00:00,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Thu-00:00,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Fri-00:00,50k Sat-00:00,50k Sun-00:00,50k""
-"
-
-# SETS A LIMIT OF 512 KiB/s FROM 8:00 AM TO NOON, 10 MiB/s  FROM NOON TO  1:00 PM, 
-# LIMITS BACK TO 512 KiB/s FROM 1:00 PM to 6:00 PM, SETS A HIGHER LIMIT OF 30 MiB/s from 6:00 PM to 11:00 PM, AND THEN DISABLES ANY LIMIT AFTER 11:00 PM:
-$ rclone --bwlimit "08:00,512 12:00,10M 13:00,512 18:00,30M 23:00,off" [source] [destination]
-
 
 # DOWNLAOD WITH LOG
 $ rclone copy -P desmond_TD:/folder/"my_file1"  C:\Users\ABC\Desktop --log-file=mylogfile.txt
@@ -79,10 +69,10 @@ $ rclone copy -P cmsl_ict:/ C:\Users\samr\Downloads\bkp_sl_ict --exclude "/train
 $ rclone ncdu desmond_TD:/gmz/
 
 # SIZE TREE REPORT EXPORT
-$  rclone.exe tree td:/ --human-readable -s -l > C:\Users\uchithr\Downloads\DONE\[sort]\ucm-td.txt
+$  rclone.exe tree td:/ --human-readable -s -l > C:\Users\sam\Downloads\DONE\[sort]\ucm-td.txt
 
 # PRINT TO TEXT
-$ rclone ls desmond_TD:/MA2GD > C:\Users\Ezio\Desktop\file_list.txt
+$ rclone ls desmond_TD:/MA2GD > C:\Users\sam\Desktop\file_list.txt
 
 # FOLDER SIZE
 $ rclone size desmond:/SLTD_FRMAL
@@ -100,6 +90,18 @@ $ rclone mount dt1:qbit /home/fedora/dt1 --vfs-cache-mode writes --allow-other -
 ## WINDOWS MOUNT
 rclone mount ur: X: --network-mode
 ~~~~### --buffer-size=1G ####~~~~~~~*
+
+# LINITING
+"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Sat-00:00,50k Sun-00:00,50k"" --dry-run
+           "
+
+"--bwlimit ""Mon-07:15,2.5M 07:45,150k 18:15,50k Mon-00:00,50k Tue-07:15,2.5M 07:45,150k 18:15,50k Tue-00:00,50k Wed-07:15,2.5M 07:45,150k 18:15,50k Wed-00:00,50k Thu-07:15,2.5M 07:45,150k 18:15,50k Thu-00:00,50k Fri-07:15,2.5M 07:45,150k 18:15,50k Fri-00:00,50k Sat-00:00,50k Sun-00:00,50k""
+"
+
+# SETS A LIMIT OF 512 KiB/s FROM 8:00 AM TO NOON, 10 MiB/s  FROM NOON TO  1:00 PM, 
+# LIMITS BACK TO 512 KiB/s FROM 1:00 PM to 6:00 PM, SETS A HIGHER LIMIT OF 30 MiB/s from 6:00 PM to 11:00 PM, AND THEN DISABLES ANY LIMIT AFTER 11:00 PM:
+$ rclone --bwlimit "08:00,512 12:00,10M 13:00,512 18:00,30M 23:00,off" [source] [destination]
+
 
 # TO SHOW ERRORS
 $ --vv

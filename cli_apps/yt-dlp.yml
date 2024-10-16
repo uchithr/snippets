@@ -71,6 +71,10 @@ $ yt-dlp -f 251 --playlist-index --embed-thumbnail --add-metadata --extract-audi
 $ yt-dlp -f 251 "%(playlist_index)s-%(title)s.%(ext)s --embed-thumbnail --add-metadata --extract-audio  --audio-format opus https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK
 $ yt-dlp.exe -f 251 "%(playlist_index)s-%(title)s.%(ext)s" --embed-thumbnail --add-metadata --extract-audio --audio-format opus "https://www.youtube.com/playlist?list=PLPcqzOn3xm8nVgCvLpz5X_sFbUYz9KsK"
 
+# DOWNLAOD WITH COOKIES  # NETSCAPE FORMAT
+$ yt-dlp -f 251+247 --cookies yt.txt --merge-output-format mkv https://www.youtube.com/watch?v=QxVy4jNJTbE
+
+
 # DOWNLOAD MANUALLY CREATED PALYLIST WITH NUMBERING
 $ -f 251 --embed-thumbnail --add-metadata --extract-audio --audio-format opus -o "%(autonumber)s - %(title)s.%(ext)s" --batch-file=C:\Users\Ezio\Desktop\test\42.txt
 

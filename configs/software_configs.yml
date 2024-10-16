@@ -1,4 +1,6 @@
-## VMWARE WORKSATION ############
+###################################
+## VMWARE WORKSATION   
+###################################
 
 # WORKSATION CONFIG LOCATION
 C:\ProgramData\VMware\vmnetnat.conf
@@ -12,7 +14,6 @@ C:\ProgramData\VMware\vmnetnat.conf
 
 ## STOP VMWARE NAT SERVICE FORM HOST
 $ net stop “VMWare NAT Service”
-
 
 
 disable root and create new user in vm when ssh from windows.
@@ -72,24 +73,24 @@ $ halt
 
 
 
-########################
+#########################################################################
 ## VSCODE 
-########################
+#########################################################################
 
 # HOST DEFINED PATH
 $ C:\Users\SLVR\.ssh
 
-#########################################################################
+########################
 Host it-test
   HostName 127.0.0.1
   User bob
   Port <myport>
-########################################################################
+########################
 Host bob
     HostName 1.1.1.1
     User bob
     IdentityFile "C:\bob\keystore\ssh.key"
-########################################################################
+#########################
 Host awslab
   HostName 8.8.8.8
   User ec2-user
@@ -119,7 +120,7 @@ PowerShell
 Pylance
 Python
 Python Debugger
-
+Prettier
 
 
 ################################################################################################
