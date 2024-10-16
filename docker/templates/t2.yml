@@ -1,0 +1,265 @@
+mkdir snipeit-vault-setup
+cd snipeit-vault-setup
+
+
+
+
+
+#################################################################################################
+## consul-vault
+################################################################################################
+
+vim docker-compose-consul-vault.yml
+
+
+services:
+  # Consul Service
+  consul:
+    image: consul:latest
+    container_name: consul
+    ports:
+      - '8500:8500'        # Consul UI
+      - '8600:8600/udp'     # DNS for Consul
+    command: 'agent -dev -client=0.0.0.0'
+    volumes:
+      - consul-data:/consul/data
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+    networks:
+      - consul-vault-net
+    restart: unless-stopped
+
+  # Vault Service
+  vault:
+    image: vault:latest
+    container_name: vault
+    ports:
+      - '8200:8200'         # Vault API/UI
+    environment:
+      VAULT_LOCAL_CONFIG: |
+        {
+          "backend": {
+            "consul": {
+              "address": "consul:8500",     # Consul link for storage
+              "path": "vault/"              # Data stored under 'vault/' prefix in Consul
+            }
+          },
+          "listener": {
+            "tcp": {
+              "address": "0.0.0.0:8200",    # Vault listens on this port
+              "tls_disable": 1              # Disable TLS for simplicity (use TLS in production)
+            }
+          },
+          "default_lease_ttl": "168h",
+          "max_lease_ttl": "720h"
+        }
+    volumes:
+      - vault-data:/vault/file              # Persistent data storage for Vault
+    cap_add:
+      - IPC_LOCK                            # Extra security for Vault
+    depends_on:
+      - consul                              # Vault starts after Consul
+    networks:
+      - consul-vault-net
+    restart: unless-stopped
+
+volumes:
+  consul-data:
+  vault-data:
+
+networks:
+  consul-vault-net:
+    driver: bridge
+
+
+
+
+
+#################################################################################################
+## Snipe-IT App with MariaDB and phpMyAdmin
+################################################################################################
+
+services:
+  # MariaDB Service
+  snipeit-mysql:
+    image: linuxserver/mariadb:10.11.8
+    container_name: snipeit-db
+    restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - '3301:3306'            # Database port
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - snipeit-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'          # Limit to 1 CPU
+          memory: 512M         # Limit to 512MB RAM
+
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    container_name: phpMyAdmin
+    restart: unless-stopped
+    ports:
+      - '9002:80'              # phpMyAdmin port
+    environment:
+      PMA_HOST: snipeit-mysql  # MariaDB hostname
+      PMA_PORT: 3306
+    depends_on:
+      - snipeit-mysql
+    networks:
+      - snipeit-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'          # Limit to 0.5 CPU
+          memory: 512M         # Limit to 512MB RAM
+
+  # Snipe-IT App Service
+  snipeit-app:
+    image: linuxserver/snipe-it:7.0.11
+    container_name: snipeit-app
+    restart: unless-stopped
+    volumes:
+      - app-data:/var/lib/snipeit
+    ports:
+      - '9000:80'              # Snipe-IT app port
+    depends_on:
+      snipeit-mysql:
+        condition: service_healthy
+    env_file:
+      - /etc/secrets/snipeit.env   # Inject secrets (from Vault Agent)
+    networks:
+      - snipeit-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'          # Limit to 1.5 CPUs
+          memory: 1G           # Limit to 1GB RAM
+
+  # Vault Agent to inject secrets
+  vault-agent:
+    image: vault:latest
+    container_name: vault-agent
+    volumes:
+      - ./vault-agent.hcl:/vault-agent/config.hcl
+      - /etc/secrets:/etc/secrets
+    command: vault agent -config=/vault-agent/config.hcl
+    depends_on:
+      - vault
+    networks:
+      - snipeit-net
+
+volumes:
+  mysql-data:
+  app-data:
+
+networks:
+  snipeit-net:
+    driver: bridge
+
+#
+#
+#
+##
+#
+#
+#
+#
+#
+#
+
+
+
+# Create Vault Agent Configuration local
+
+touch vault-agent.hcl
+
+vault {
+  address = "http://vault:8200"
+}
+
+auto_auth {
+  method "token" {
+    config = {
+      token = "root"
+    }
+  }
+}
+
+template {
+  source      = "/vault/templates/db-creds.ctmpl"
+  destination = "/etc/secrets/db-creds.env"
+}
+
+template {
+  source      = "/vault/templates/mail-creds.ctmpl"
+  destination = "/etc/secrets/mail-creds.env"
+}
+
+## Create template files for the secrets. #
+
+# Create Database Credentials Template
+
+mkdir -p vault/templates
+touch vault/templates/db-creds.ctmpl
+
+# ISSUE BELOW
+MYSQL_DATABASE="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.database }}{{ end }}"
+MYSQL_USER="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.username }}{{ end }}"
+MYSQL_PASSWORD="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.password }}{{ end }}"
+
+
+# Create Mail Credentials Template
+touch vault/templates/mail-creds.ctmpl
+
+
+# ISSUE BELOW
+MAIL_USERNAME="{{ with secret "secret/data/mail" }}{{ .Data.data.username }}{{ end }}"
+MAIL_PASSWORD="{{ with secret "secret/data/mail" }}{{ .Data.data.password }}{{ end }}"
+
+
+# Start Consul and Vault
+docker compose -f docker-compose-consul-vault.yml up -d
+
+
+
+
+# ------------------------------------------------------
+
+# Initialize Vault > Access the Vault container:
+docker exec -it vault /bin/sh
+vault operator init
+
+# Copy the unseal keys and root token generated.
+
+
+vault operator unseal <unseal_key_1>
+vault operator unseal <unseal_key_2>
+vault operator unseal <unseal_key_3>
+
+
+# Login to Vault:
+vault login <root_token>
+
+
+#  Enable KV Secrets Engine
+vault secrets enable -path=secret kv-v2
+
+
+# Store MariaDB Secrets:
+vault kv put secret/snipeit-mysql username="sam" password="password" database="snipeit"
+vault kv put secret/mail username="sam@gmail.com" password="password"
+
+
+# ------------------------------------------------------
+
+# Start Snipe-IT, MariaDB, and phpMyAdmin
+docker-compose -f docker-compose-snipeit.yml up -d
