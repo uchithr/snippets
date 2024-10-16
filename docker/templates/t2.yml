@@ -211,7 +211,7 @@ template {
 
 
 ####################################################################################################
-# 2 - VAULT TEMPLATES FOR SECRETS (db-creds.ctmpl, mail-creds.ctmpl)  [ templates with the Vault Agent ]
+# 2 - VAULT TEMPLATES FOR SECRETS .ctmpl  [ templates with the Vault Agent ]
 
 # Create Database Credentials Template
 
