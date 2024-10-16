@@ -14,7 +14,6 @@ vim consul-vault.yml
 
 
 services:
-  # Consul Service
   consul:
     image: hashicorp/consul:1.20
     container_name: consul
@@ -29,8 +28,7 @@ services:
     networks:
       - consul-vault-net
     restart: unless-stopped
-
-  # Vault Service
+#
   vault:
     image: hashicorp/vault:1.18
     container_name: vault
@@ -102,8 +100,8 @@ services:
         limits:
           cpus: '1.0'          # Limit to 1 CPU
           memory: 512M         # Limit to 512MB RAM
-
-
+#
+#
   phpmyadmin:
     image: phpmyadmin:5.2.1-apache
     container_name: phpMyAdmin
@@ -122,8 +120,8 @@ services:
         limits:
           cpus: '0.5'          # Limit to 0.5 CPU
           memory: 512M         # Limit to 512MB RAM
-
-
+#
+#
   snipeit-app:
     image: linuxserver/snipe-it:7.0.11
     container_name: snipeit-app
@@ -144,8 +142,8 @@ services:
         limits:
           cpus: '1.5'          # Limit to 1.5 CPUs
           memory: 1G           # Limit to 1GB RAM
-
-  # Vault Agent to inject secrets
+#
+# Vault Agent to inject secrets
   vault-agent:
     image: hashicorp/vault:1.18
     container_name: vault-agent
@@ -157,11 +155,11 @@ services:
       - vault
     networks:
       - snipeit-net
-
+#
 volumes:
   mysql-data:
   app-data:
-
+#
 networks:
   snipeit-net:
     driver: bridge
@@ -169,7 +167,6 @@ networks:
 #
 #
 #
-##
 #
 #
 #
@@ -177,7 +174,8 @@ networks:
 #
 #
 #
-
+#
+####################################################################################################
 ####[DOCKER HOST]#####
 
 
@@ -187,6 +185,7 @@ Create a file named agent.hcl in your host machine under ~/vault/config/.
 touch vault-agent.hcl    # CONTAINER MAPPING FILE
 
 # Example "agent.hcl" Configuration:
+
 vault {
   address = "http://vault:8200"
 }
@@ -194,7 +193,7 @@ vault {
 auto_auth {
   method "token" {
     config = {
-      token = "root"
+      token = "root"  # In production, replace this with a secure auth method (e.g., AppRole or Kubernetes auth)
     }
   }
 }
@@ -202,12 +201,15 @@ auto_auth {
 template {
   source      = "/vault/templates/db-creds.ctmpl"
   destination = "/etc/secrets/db-creds.env"
+  perms       = "0644"       # Ensure the file is readable by the app
 }
 
 template {
   source      = "/vault/templates/mail-creds.ctmpl"
   destination = "/etc/secrets/mail-creds.env"
+  perms       = "0644"
 }
+
 
 
 ####################################################################################################
@@ -218,32 +220,25 @@ template {
 mkdir -p vault/templates
 touch vault/templates/db-creds.ctmpl
 
-# db-creds.ctmpl file
+# Database Credentials Template (db-creds.ctmpl):
 
-{
-  "DB_USERNAME": "{{ .Data.data.username }}",
-  "DATABESE": "{{ .Data.data.username }}",
-  "DB_PASSWORD": "{{ .Data.data.password }}"
-}
+DB_USERNAME="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.username }}{{ end }}"
+DATABASE="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.database }}{{ end }}"
+DB_PASSWORD="{{ with secret "secret/data/snipeit-mysql" }}{{ .Data.data.password }}{{ end }}"
 
 
- 2ND WAY
-# Create Mail Credentials Template
+# Mail Credentials Template (mail-creds.ctmpl):
 touch vault/templates/mail-creds.ctmpl
 
-
-# ISSUE BELOW
 MAIL_USERNAME="{{ with secret "secret/data/mail" }}{{ .Data.data.username }}{{ end }}"
 MAIL_PASSWORD="{{ with secret "secret/data/mail" }}{{ .Data.data.password }}{{ end }}"
-
-
 
 
 #
 
 
 # Start Consul and Vault
-docker compose -f docker-compose-consul-vault.yml up -d
+docker compose -f consul-vault.yml up -d
 
 
 
@@ -256,32 +251,29 @@ docker exec -it vault /bin/sh
 # vault status
  vault status
 
+
 # initialize vault cluster
 vault operator init
+
 
 # Copy the unseal keys and root token generated.
 
 
+# Unseal Vault
 vault operator unseal <unseal_key_1>
 vault operator unseal <unseal_key_2>
 vault operator unseal <unseal_key_3>
-
 
 
 # unseal vault with three secret shares
 vault operator unseal
 
 
-
-
-
-
-
 # Login to Vault:
 vault login <root_token>
 
 
-#  Enable KV Secrets Engine
+# Enable KV Secrets Engine
 vault secrets enable -path=secret kv-v2
 
 
@@ -293,4 +285,108 @@ vault kv put secret/mail username="sam@gmail.com" password="password"
 # ------------------------------------------------------
 
 # Start Snipe-IT, MariaDB, and phpMyAdmin
+docker-compose -f snipeit.yml up -d
+
+
+
+
+
+
+
+
+#################################
+recommended sequence 
+
+
+# 1. Setup Directory Structure | Create a working directory for your project:###############
+mkdir snipeit-vault
+cd snipeit-vault
+
+# 2. Setup Consul and Vault Services | Create the consul-vault.yml file for Docker Compose:##################
+vim consul-vault.yml
+
+# Define Consul and Vault services in the YAML file as described. | Start Consul and Vault Services: ###############
+docker compose -f consul-vault.yml up -d
+
+# 3. Initialize Vault ##########################
+
+#Access the Vault container:
+docker exec -it vault /bin/sh
+
+#Check Vault status:
+vault status
+
+
+#Initialize Vault:  ## Copy and save the unseal keys and root token from the output
+vault operator init
+
+
+#Unseal Vault using the three unseal keys:
+vault operator unseal <unseal_key_1>
+vault operator unseal <unseal_key_2>
+vault operator unseal <unseal_key_3>
+
+
+#Login to Vault using the root token:
+vault login <root_token>
+
+# 4. Enable Vault KV Secrets Engine ####
+
+#Enable KV Secrets Engine:
+vault secrets enable -path=secret kv-v2
+
+
+#Store MariaDB and Mail Secrets:
+vault kv put secret/snipeit-mysql username="sam" password="password" database="snipeit"
+vault kv put secret/mail username="sam@gmail.com" password="password"
+
+
+## 5. Create Vault Agent Configuration ######
+
+#Create the Vault Agent configuration file (vault-agent.hcl):
+#Define the configuration for auto-auth and template rendering.
+mkdir -p ~/vault/config/
+touch ~/vault/config/vault-agent.hcl
+
+
+
+
+## 6. Create Vault Templates ###
+
+#Create templates for secrets (.ctmpl files):
+
+#Database Credentials Template (db-creds.ctmpl):
+mkdir -p vault/templates
+touch vault/templates/db-creds.ctmpl
+
+
+#Mail Credentials Template (mail-creds.ctmpl):
+touch vault/templates/mail-creds.ctmpl
+
+#Define the template content as shown in the previous steps.
+
+
+# 7. Setup Snipe-IT, MariaDB, and phpMyAdmin Services
+# Create the Docker Compose file for Snipe-IT, MariaDB, and phpMyAdmin:
+
+
+vim docker-compose-snipeit.yml
+#Define the services with the correct volumes, environment variables, and resource limits.
+
+
+# 8. Add Vault Agent to Inject Secrets
+#Add the Vault Agent service in your docker-compose-snipeit.yml to inject secrets into environment files.
+
+
+#9. Start Snipe-IT, MariaDB, and phpMyAdmin Services
+#Start the services using Docker Compose:
+
 docker-compose -f docker-compose-snipeit.yml up -d
+
+
+#10. Monitor and Test Services
+#Check logs for Vault Agent, Snipe-IT, MariaDB, and other services to ensure the environment variables are injected correctly and services are running as expected:
+
+docker logs vault-agent
+docker logs snipeit-app
+
