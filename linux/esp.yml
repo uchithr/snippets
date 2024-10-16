@@ -177,9 +177,7 @@ DELL CBX3
 AMI
 FAKEP-RODUC-TKEY1-22222-33333
 
-C:\Users\Duchess> wmic path softwarelicensingservice get OA3xOriginalProductKey
-OA3xOriginalProductKey
-FAKEP-RODUC-TKEY1-22222-33333
+
 
 ############################################################
 #### USER CONFIGURATION ####

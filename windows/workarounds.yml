@@ -44,6 +44,8 @@ $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdk
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
 
+## PRODUCT KEY
+wmic path softwarelicensingservice get OA3xOriginalProductKey
 
 ####################################################################################################################################
 ## OUTLOOK ##########################################################################################################################
