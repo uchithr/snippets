@@ -2,6 +2,9 @@
 ## CHROME ##########################################################################################################################
 #################################################################################################################################### 
 
+## CHROME FLAGS (ADVANCED FEATURES)
+chrome://chrome-urls/
+
 ### CHROME CACHE CLEAR
 chrome://settings/content/all
 
@@ -22,6 +25,8 @@ remove 'dl' fonts
 ## MP3 TAG
 $num(%track%,3) - %artist% -  %title%
 
+# CREATE CUE FORM ANOTHER CONVETER 
+FOOBAR
 
 ## IMEI NUMBER CHECK
 *#06#

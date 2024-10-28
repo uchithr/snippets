@@ -32,6 +32,9 @@ $ yt-dlp.exe -f 0 https://www98.zippyshare.com/d/6h73oplC/185196/sda1.backup.tar
 # BATCH DOWNLOAD
 $ -f 140 --embed-thumbnail --add-metadata --batch-file=C:\Users\Ezio\Downloads\list.txt
 
+## LIVE CAPTURE
+$ yt-dlp -f 234 --extract-audio --audio-format opus -o "%(title)s.%(ext)s" https://www.youtube.com/watch?v=MD1P-HdvPcU
+
 # BATCH DOWNLOAD TEXT FILE ORDER  (go without -o)
 $ -f 140 -o "[%(autonumber)s]%(title)s.%(ext)s" --batch-file=C:\Users\Ezio\Downloads\list.txt
 
