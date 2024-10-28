@@ -57,6 +57,9 @@ $ -f 278+249  --merge-output-format mkv --sub-lang en-US --write-sub --convert-s
 # BYPASS AGE RESTRICTION
 $  yt-dlp.exe -F --cookies-from-browser chrome
 
+# OAUTH
+$ yt-dlp -f 251+401 --username=oauth --password="" --merge-output-format mkv https://www.youtube.com/watch?v=dSK13X9oGi8
+
 # 500KB DWN LIMIT
 $ -f 244+140  -r 500k --merge-output-format mkv https://www.youtube.com/watch?v=0zhHLYOB7-c (480p webm+m4a)
 
