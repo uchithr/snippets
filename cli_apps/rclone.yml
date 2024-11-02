@@ -16,7 +16,7 @@ $ sudo chmod 755 /usr/bin/rclone
 # ADD-EDIT-REMOVE
 $ rclone config
 
-#  RECONNECT
+# GET A NEW TOKEN AND REFRESH TOKEN
 $ rclone config reconnect remote:
 
 # LIST REMOTES
@@ -47,9 +47,15 @@ $ rclone copy -P desmond_TD:/folder/"my_file1"  C:\Users\ABC\Desktop --log-file=
 
 # UPLAOD WITH LOG
 $ rclone copy -P C:\Users\uchithr\Desktop\vs td:
-# SHAREPOINT  #   --ignore-size --ignore-checksum  --transfers 1  --log-file=transfer1.txt  ### --tpslimit 0.5 
 
-# ONE BY ONE
+# SHAREPOINT  # --tpslimit 0.5  or 5 # lower is better
+$ rclone --ignore-size --ignore-checksum  --transfers 1 --log-file=transfer1.txt  
+
+# DUMP HTTP HEADERS AND BODIES 
+$ rclone --dump-headers 
+$ rclone --dump-bodies
+
+# ONE TRANSFER AT A TIME
 $ rclone copy -P /home/u178234/up --transfers 1 dt1:
 
 ## GENERATE SHAREABLE LINKS
