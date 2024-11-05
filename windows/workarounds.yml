@@ -162,3 +162,20 @@ $ C:\Windows\System32\DriverStore\FileRepository
 #############################################################################################################################################################
 #############################################################################################################################################################
 
+
+# TEMPORARILY ALLOW SCRIPT EXECUTION FOR THE CURRENT SESSION
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+
+# EXPORT AN ENTIRE LOG  ## Security / Application / System / Setup / Forwarded Events
+Get-WinEvent -LogName System | Export-Clixml -Path "C:\Path\To\Save\SystemLog.evtx
+
+Get-WinEvent -LogName  | Export-Clixml -Path "C:\Path\To\Save\SystemLog.evtx
+
+# EXPORT ONLY ERROR EVENTS FROM THE LAST 24 HOURS IN THE SYSTEM LOG
+$events = Get-WinEvent -LogName System | Where-Object { $_.LevelDisplayName -eq "Error" -and $_.TimeCreated -ge (Get-Date).AddDays(-1) }
+$events | Export-Csv -Path "C:\Path\To\Save\SystemLog_Errors.csv" -NoTypeInformation
+
+
+# EXPORT EVENTS WITH SPECIFIC EVENT IDS
+$events = Get-WinEvent -LogName Application | Where-Object { $_.Id -in 1000, 2000 }
+$events | Export-Csv -Path "C:\Path\To\Save\ApplicationLog_SpecificIDs.csv" -NoTypeInformation
