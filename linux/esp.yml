@@ -116,6 +116,7 @@ $ nmcli device status
 
 
 ## GENERATE  WI-FI QR
+$ sudo dnf install qrencode
 $ qrencode "WIFI:S:<SSID>;T:WPA;P:<PASSWORD>;;" -d=150 -s 30 -o file1.png
 
 ## WAKE ON LAN
