@@ -31,6 +31,8 @@ EXIT & RESTART the program "MobaXterm"
 tree /a /f > list.txt
 tree -h | grep "G"
 
+# CHECK ISO VERSION > MOUNT THE ISO
+dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
 
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
