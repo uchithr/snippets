@@ -27,9 +27,10 @@ EXIT & RESTART the program "MobaXterm"
 ####################################################################################################################################
 ####################################################################################################################################
 
-# FOLDER HIERARCHY
-tree /a /f > list.txt
-tree -h | grep "G"
+# BITLOCKER
+$  manage-bde -off C: as ADMIN 
+$  manage-bde -status C:
+
 
 # CHECK ISO VERSION > MOUNT THE ISO
 dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
@@ -37,18 +38,52 @@ dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
 
-## METADATA SLOWNESS
-Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
+## PRODUCT KEY
+wmic path softwarelicensingservice get OA3xOriginalProductKey
 
 
 ## CLEAR CREDENTIALS
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+# DELETE NETWROK PROFILE
+netsh wlan show profiles | netsh wlan delete profile “PROFILE NAME”
 
-## PRODUCT KEY
-wmic path softwarelicensingservice get OA3xOriginalProductKey
+# FOLDER HIERARCHY
+tree /a /f > list.txt
+tree -h | grep "G"
 
+
+## METADATA SLOWNESS
+Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
+
+# SAFEBOOT
+$  bcdedit /set {current} safeboot minimal
+$  bcdedit /set {current} safeboot network
+$ shutdown /r
+$  bcdedit /deletevalue {current} safeboot
+
+
+# BOOTLAODER FIX
+bootrec /rebuildbcd
+bootrec /fixmbr
+bootrec /fixboot
+
+chkdsk /r c:
+chkdsk /r d:
+
+
+cd C:
+cd c:\windows\system32\config\
+md backup
+Copy *.* backup
+md backup1p
+Copy *.* backup1
+cd regback
+dir
+Copy *.*..
+All
+Exit 
 
 ####################################################################################################################################
 ## OUTLOOK ##########################################################################################################################
