@@ -65,25 +65,46 @@ $  bcdedit /deletevalue {current} safeboot
 
 
 # BOOTLAODER FIX
-bootrec /rebuildbcd
+#
+
+##1
+bcdedit
 bootrec /fixmbr
+bootsect /nt60 sys
 bootrec /fixboot
+chksdk  /f /x /r C:
 
-chkdsk /r c:
-chkdsk /r d:
+## 2 
+Advance Options > Startup Settings > F5 > Safemode with Networking  
+dism /online /cleanup-image /restorehealth
 
 
-cd C:
+
+## 3  OR X
 cd c:\windows\system32\config\
 md backup
 Copy *.* backup
-md backup1p
+PRESS "all"
+
+md backup1
 Copy *.* backup1
+PRESS "all"
+
 cd regback
 dir
-Copy *.*..
-All
+Copy *.* ..
+PRESS "all"
 Exit 
+
+bootrec /fixmbr
+bootrec /fixboot
+
+bcdedit  /export c:\bcdbackup
+attrib c:\boot\bcd -h -r -s 
+ren c:\boot\bcd bcd.old  
+
+bootrec /rebuildbcd
+exit
 
 ####################################################################################################################################
 ## OUTLOOK ##########################################################################################################################
