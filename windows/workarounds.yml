@@ -46,9 +46,16 @@ wmic path softwarelicensingservice get OA3xOriginalProductKey
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+## DISABLE APPXSVC
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\AppXSvc\Start  set value to 4.
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Clipsvc\Start  set value to 4.
 
-## PRODUCT KEY
-wmic path softwarelicensingservice get OA3xOriginalProductKey
+
+## SHAREPOINT
+GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
+
+## METADATA SLOWNESS
+Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
 
 
 ####################################################################################################################################
@@ -130,6 +137,12 @@ SentinelOneInstaller.exe -c -t token
 
 
 
+# FOLDER HIERARCHY
+tree /a /f > list.txt
+tree -h | grep "G"
+
+
+
 
 
 
@@ -180,3 +193,55 @@ $events | Export-Csv -Path "C:\Path\To\Save\SystemLog_Errors.csv" -NoTypeInforma
 # EXPORT EVENTS WITH SPECIFIC EVENT IDS
 $events = Get-WinEvent -LogName Application | Where-Object { $_.Id -in 1000, 2000 }
 $events | Export-Csv -Path "C:\Path\To\Save\ApplicationLog_SpecificIDs.csv" -NoTypeInformation
+
+
+# SAFEBOOT
+$  bcdedit /set {current} safeboot minimal
+$  bcdedit /set {current} safeboot network
+$ shutdown /r
+$  bcdedit /deletevalue {current} safeboot
+
+
+
+# BOOTLAODER FIX
+#
+
+##1
+bcdedit
+bootrec /fixmbr
+bootsect /nt60 sys
+bootrec /fixboot
+chksdk  /f /x /r C:
+
+## 2 
+Advance Options > Startup Settings > F5 > Safemode with Networking  
+dism /online /cleanup-image /restorehealth
+
+
+
+## 3 # C DRIVE OR X
+cd c:\windows\system32\config\
+md backup
+Copy *.* backup
+PRESS "all"
+
+md backup1
+Copy *.* backup1
+PRESS "all"
+
+cd regback
+dir
+Copy *.* ..
+PRESS "all"
+Exit 
+
+
+bootrec /fixmbr
+bootrec /fixboot
+
+bcdedit  /export c:\bcdbackup
+attrib c:\boot\bcd -h -r -s 
+ren c:\boot\bcd bcd.old  
+
+bootrec /rebuildbcd
+exit
