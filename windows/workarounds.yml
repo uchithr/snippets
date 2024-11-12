@@ -50,6 +50,13 @@ $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdke
 wmic path softwarelicensingservice get OA3xOriginalProductKey
 
 
+## DISABLE APPXSVC
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\AppXSvc\Start  set value to 4.
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Clipsvc\Start  set value to 4.
+
+## SHAREPOINT
+GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
+
 ####################################################################################################################################
 ## OUTLOOK ##########################################################################################################################
 #################################################################################################################################### 

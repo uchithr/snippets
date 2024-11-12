@@ -28,6 +28,9 @@ lsblk -f
 watch -sh /source
 tree --du -h | grep G]
 
+# CHECK SSD OR HDD ON DISK # 1 for hdd & 0 for ssd
+cat /sys/block/sda/queue/rotational
+
 # SSH WITH KEYFILE	
 ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 
