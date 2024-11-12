@@ -1,36 +1,12 @@
-## CURRENTLY OPEN 
-https://github.com/microsoft/vscode-remote-release/issues/690
-https://github.com/microsoft/Windows-Dev-Performance/issues/20
 
-### FOLLOW -- v0.107.1
-Remote Explorer: SSH targets not appearing
-https://github.com/microsoft/vscode-remote-release/issues/9497
-https://github.com/microsoft/vscode-remote-release/issues/9561
+## XP SUPPORTED BROWSERS
+supermium
+mypal
 
-https://stackoverflow.com/questions/72193255/mobaxterm-follow-terminal-folder-doesnt-work/76729721#76729721
-
-Right-click the session profile > "Edit session"
-In "Session Settings":
-"SSH" > Tab "Advanced SSH settings"
-See item: "Follow SSH path (experimental)"
-=> Changing this setting will change the hook in "Follow terminal folder" at session start.
-
-
-Right-click the session profile > "Edit session"
-In "Session Settings":
-"SSH" > Tab "Advanced SSH settings" > Button "Expert SSH settings"
-Choose item: "SSH protocol version"
-=> Change to SSHv2
-After saving the changes to the session profile:
-EXIT & RESTART the program "MobaXterm"
-
-####################################################################################################################################
-####################################################################################################################################
 
 # BITLOCKER
 $  manage-bde -off C: as ADMIN 
 $  manage-bde -status C:
-
 
 # CHECK ISO VERSION > MOUNT THE ISO
 dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
@@ -46,17 +22,26 @@ wmic path softwarelicensingservice get OA3xOriginalProductKey
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+
+## BYPASS WSUS
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+UseWUServer  # set data to "0" & Restart
+
+
 ## DISABLE APPXSVC
 HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\AppXSvc\Start  set value to 4.
 HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Clipsvc\Start  set value to 4.
 
+## DISABLE THE DELIVERY OPTIMIZATION SERVICE
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
+start - 4
 
-## SHAREPOINT
-GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
 
 ## METADATA SLOWNESS
 Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
 
+## SHAREPOINT
+GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
 
 ####################################################################################################################################
 ## OUTLOOK ##########################################################################################################################
@@ -78,37 +63,14 @@ MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400
 "Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
 
 
-## BYPASS WSUS
-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
-UseWUServer  # set data to "0" & Restart
-
-
-## DISABLE THE DELIVERY OPTIMIZATION SERVICE
-DO
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
-start - 4
+##############################################################################################################
+##############################################################################################################
 
 
 ## EXTRACT INTEL RST DRIVERS FORM EXE FILE
 $ SetupRST.exe -extractdrivers "C:\Users\SLVR\Desktop\rst"
 $ ./SetupRST.exe -extractdrivers SetupRST_extracted
 
-
-## PASSWORD RESET
-SHIFT + F10 - CMD
-
-X:\Sources>diskpart
-DISKPART> list Volume
-DISKPART> exit
-
-X:\Sources>d:  # OS FILES PARTITION
-D:\> cd windows\systems32
-D:\windows\systems32> move utilman.exe utiman.exe.bak
-D:\windows\systems32>copy cmd.exe utilman.exe
-D:\windows\systems32>wpeutil reboot
-
-$ net User
-$ net user "username" *
 
 
 ## Thumbnail Cache Clear
@@ -117,9 +79,7 @@ $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
 $ start explorer.exe
 
-## XP SUPPORTED BROWSERS
-supermium
-mypal
+
 
 ## DRIVER INSTALLATION
 Dell: Command Update
@@ -140,9 +100,6 @@ SentinelOneInstaller.exe -c -t token
 # FOLDER HIERARCHY
 tree /a /f > list.txt
 tree -h | grep "G"
-
-
-
 
 
 
@@ -195,53 +152,3 @@ $events = Get-WinEvent -LogName Application | Where-Object { $_.Id -in 1000, 200
 $events | Export-Csv -Path "C:\Path\To\Save\ApplicationLog_SpecificIDs.csv" -NoTypeInformation
 
 
-# SAFEBOOT
-$  bcdedit /set {current} safeboot minimal
-$  bcdedit /set {current} safeboot network
-$ shutdown /r
-$  bcdedit /deletevalue {current} safeboot
-
-
-
-# BOOTLAODER FIX
-#
-
-##1
-bcdedit
-bootrec /fixmbr
-bootsect /nt60 sys
-bootrec /fixboot
-chksdk  /f /x /r C:
-
-## 2 
-Advance Options > Startup Settings > F5 > Safemode with Networking  
-dism /online /cleanup-image /restorehealth
-
-
-
-## 3 # C DRIVE OR X
-cd c:\windows\system32\config\
-md backup
-Copy *.* backup
-PRESS "all"
-
-md backup1
-Copy *.* backup1
-PRESS "all"
-
-cd regback
-dir
-Copy *.* ..
-PRESS "all"
-Exit 
-
-
-bootrec /fixmbr
-bootrec /fixboot
-
-bcdedit  /export c:\bcdbackup
-attrib c:\boot\bcd -h -r -s 
-ren c:\boot\bcd bcd.old  
-
-bootrec /rebuildbcd
-exit

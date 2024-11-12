@@ -1,0 +1,25 @@
+## CURRENTLY OPEN 
+https://github.com/microsoft/vscode-remote-release/issues/690
+https://github.com/microsoft/Windows-Dev-Performance/issues/20
+
+### FOLLOW -- v0.107.1
+Remote Explorer: SSH targets not appearing
+https://github.com/microsoft/vscode-remote-release/issues/9497
+https://github.com/microsoft/vscode-remote-release/issues/9561
+
+https://stackoverflow.com/questions/72193255/mobaxterm-follow-terminal-folder-doesnt-work/76729721#76729721
+
+Right-click the session profile > "Edit session"
+In "Session Settings":
+"SSH" > Tab "Advanced SSH settings"
+See item: "Follow SSH path (experimental)"
+=> Changing this setting will change the hook in "Follow terminal folder" at session start.
+
+
+Right-click the session profile > "Edit session"
+In "Session Settings":
+"SSH" > Tab "Advanced SSH settings" > Button "Expert SSH settings"
+Choose item: "SSH protocol version"
+=> Change to SSHv2
+After saving the changes to the session profile:
+EXIT & RESTART the program "MobaXterm"

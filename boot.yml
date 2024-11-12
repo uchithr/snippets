@@ -1,0 +1,69 @@
+
+# SAFEBOOT
+$  bcdedit /set {current} safeboot minimal
+$  bcdedit /set {current} safeboot network
+$ shutdown /r
+$  bcdedit /deletevalue {current} safeboot
+
+
+## PASSWORD RESET
+SHIFT + F10 - CMD
+
+X:\Sources>diskpart
+DISKPART> list Volume
+DISKPART> exit
+
+X:\Sources>d:  # OS FILES PARTITION
+D:\> cd windows\systems32
+D:\windows\systems32> move utilman.exe utiman.exe.bak
+D:\windows\systems32>copy cmd.exe utilman.exe
+D:\windows\systems32>wpeutil reboot
+
+$ net User
+$ net user "username" *
+
+
+
+
+## BOOTLAODER FIX ##
+
+
+##1
+bcdedit
+bootrec /fixmbr
+bootsect /nt60 sys
+bootrec /fixboot
+chksdk  /f /x /r C:
+
+## 2 
+Advance Options > Startup Settings > F5 > Safemode with Networking  
+dism /online /cleanup-image /restorehealth
+
+
+
+## 3 # C DRIVE OR X
+cd c:\windows\system32\config\
+md backup
+Copy *.* backup
+PRESS "all"
+
+md backup1
+Copy *.* backup1
+PRESS "all"
+
+cd regback
+dir
+Copy *.* ..
+PRESS "all"
+Exit 
+
+
+bootrec /fixmbr
+bootrec /fixboot
+
+bcdedit  /export c:\bcdbackup
+attrib c:\boot\bcd -h -r -s 
+ren c:\boot\bcd bcd.old  
+
+bootrec /rebuildbcd
+exit
