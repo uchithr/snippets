@@ -1,4 +1,5 @@
 
+
 ## XP SUPPORTED BROWSERS
 supermium
 mypal
@@ -7,6 +8,7 @@ mypal
 # BITLOCKER
 $  manage-bde -off C: as ADMIN 
 $  manage-bde -status C:
+
 
 # CHECK ISO VERSION > MOUNT THE ISO
 dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
@@ -32,6 +34,7 @@ UseWUServer  # set data to "0" & Restart
 HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\AppXSvc\Start  set value to 4.
 HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Clipsvc\Start  set value to 4.
 
+
 ## DISABLE THE DELIVERY OPTIMIZATION SERVICE
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
 start - 4
@@ -39,6 +42,7 @@ start - 4
 
 ## METADATA SLOWNESS
 Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
+
 
 ## SHAREPOINT
 GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
@@ -83,10 +87,11 @@ $ start explorer.exe
 
 ## DRIVER INSTALLATION
 Dell: Command Update
-HP: HP Support Assistant
-Asus: MyASUS ASUS Live Update
-Acer: Acer Care Center
-Lenovo: Lenovo Vantage 
+HP : HP Support Assistant
+ASUS : MyASUS ASUS Live Update
+ACER : Acer Care Center
+LENOVO : Lenovo Vantage 
+
 
 ## OLD HOSTNAME
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SchedulingAgent
