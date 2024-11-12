@@ -147,3 +147,317 @@ Advanced System Settings > Environment Variables
 01- User Variables > New   |   Variable Name  - cmds   |   Variable Value - C:\Users\Ezio\cmd_prg\
 02 - System Variables > Path >  Variable Value - ;C:\Users\Ezio\cmd_prg;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################
+
+Issue/Introduction
+ 
+
+Uninstalling a VMware product from a Windows host fails.
+Uninstalling a VMware product from a Windows host appears successful, but cannot re-install it on the same host.
+Installing a VMware product produces an error or fails on a Windows host that previously had a VMware product installed.
+ 
+Error 28030.The installer failed to install the USB driver. To ensure a successful installation, please restart your machine and relaunch this installer.
+Error 28053.A DLL failed to register. Please see the most recent %TEMP%\vminst*.log file for details.
+Error 1706.No valid source could be found for product VMware View Client. The Windows Installer cannot continue.
+ 
+Upgrading VMware Workstation fails.
+You see the error:
+
+The MSI '' Failed
+ 
+
+Environment
+VMware vSphere ESXi 6.0
+VMware vSphere ESXi 6.5
+VMware vSphere ESXi 6.7
+VMware vSphere ESXi 7.0
+VMware vSphere ESXi 8.0
+VMware Workstation Pro
+VMware Fusion
+
+Cause
+VMware products might not install on Windows hosts if the installer detects certain other VMware products on the computer. These products might be incorrectly detected, even if the products have already been removed. This can occur if registry keys that should be removed during the uninstallation of a product are left behind. Registry keys can be left behind if the host computer hangs or resets while you are uninstalling the previous product. It can also be left behind due to user permissions issue. When the installer finds these registry keys, it interprets their presence as an indication that the previous product is still installed.
+
+Resolution
+If you have never installed a VMware product but are having installation issues with VMware ACE, VMware Server, VMware Player or VMware Workstation, see Troubleshooting a VMware hosted product that does not install (1005027).
+
+If you have a Linux host and are using VMware Workstation, see Manually uninstalling VMware Workstation from Linux hosts (38).
+
+If these articles do not resolve your issue, continue with the rest of this article. Work through the Prerequisite steps, then proceed to the Troubleshooting steps. Do not skip the Prerequisite steps.
+
+Prerequisite steps
+Ensure that you are logged into the Windows host as a local administrator. A Domain Administrator does not necessarily have the correct permissions on components the installer must access.
+
+For more information, see:
+ 
+Windows 7 and Windows 8: Microsoft article How do I log on as an administrator?
+Windows 10: To enable the Windows 10 administrator account:
+ 
+Click on Windows Search-key, type cmd, and press Enter.
+Right-click Command Prompt and click Run as Administrator.
+Run the net user command to display a list of all user accounts on the system.
+To activate the inactive administrator account, run the net user administrator /active:yes command.
+Disable firewalls and antivirus programs on protected systems. If your security policy allows this, disable any firewall and antivirus software you have installed. Some security programs can interfere with the installation process. You can do this by using the Windows System Configuration (msconfig) utility to disable all non-Microsoft startup utilities. For more information, see Using the Windows System Configuration utility . Restart Windows so that only the enabled Microsoft services are running.
+Troubleshooting steps
+Note: After completing each step, reboot the Windows host.
+
+Uninstall the program using Add/Remove Programs or from Program and Features. For more information, see:
+ 
+Windows XP: Microsoft article How to change or remove a program in Windows XP.
+Windows Vista: Microsoft article Uninstall or change a program.
+ 
+Depending on the product which you are using:
+ 
+If you are uninstalling Workstation 5.x or later versions, use the Workstation uninstaller.
+While you are logged on as a member of the Local Administrators group, run the installer program from a command prompt with a special switch to automatically remove the MSI registration information for VMware Workstation. For more information, see Opening a command or shell prompt (1003892).
+ 
+If you are running Workstation 5.x or 6.x, run the installer program with the /c switch.
+
+For example:
+
+VMware-workstation-5.0.0-13124.exe /c
+
+ 
+If you are using Workstation 12.x, 11.x, 10.x, 9.x, 8.x, or 7.x, run the installer program with the /clean switch.
+
+For example:
+
+VMware-workstation-full-7.1.2-301548.exe /clean
+
+ 
+If you do not have a copy of the installer, you can download it from https://support.broadcom.com
+ 
+Workstation 5.x
+Workstation 6.x
+Workstation 7.x
+Workstation 8.x
+Workstation 9.x
+Workstation 10.x
+Workstation 11.x
+Workstation 12.x
+
+Note: Download the installer for the version you have installed to ensure that the correct registry keys are removed. You do not need a license to download the program or run the installer because you are only uninstalling the program.
+If you are uninstalling Workstation 4.x or earlier versions, run the VMware registry cleaner script.
+
+Notes:
+Before making any registry modifications, ensure that you have a current and valid backup of the registry and the virtual machine. For more information on backing up and restoring the registry, see the Microsoft Knowledge Base article 136393.
+The cleaner script, VMware_Install_Cleaner.zip, is attached to this article.
+
+Run this script when you are logged in as a member of the Local Administrators group. The registry cleaner utility removes all registry keys used by the installers for Workstation 3.1, Workstation 3.2, Workstation 4.x, GSX Server 2.x, GSX Server 3.0, GSX Server 3.1, ACE Manager 1.0, and ACE 1.0.
+If the above steps do not uninstall the product and you still see the error then proceed with cleaning the Windows System manually. The manual process requires removal of the VMware files, VMware services, registry entries and various components for the products manually.
+
+Manually cleaning a Windows system
+To manually remove the product from the Windows machine:
+
+Log in to the Windows host operating system as the Local Administrator or a member of the Local Administrators group
+For more information, see:
+
+Windows 7: Microsoft article How do I log on as an administrator?
+Windows 8: Microsoft article How do I know I'm signed in as an administrator?
+Windows 10: To enable the Windows 10 administrator account:
+ 
+Click on Windows Search-key, type cmd and press Enter.
+Right-click on the Command Prompt and select Run as Administrator.
+Run the command net user to display a list of all user accounts on the system.
+To activate the inactive administrator account, run the command net user administrator /active:yes.
+
+Note: The preceding links were correct as of December 27, 2017. If you find a link is broken, provide feedback and a VMware employee will update the link.
+Stop the VMware Services on the Windows host operating system:
+ 
+Open Start > Run, type services.msc, and click OK. The Services Snap-in opens.
+Right-click these service and select Stop.
+ 
+VMware Authorization Service
+VMware Authentication Service
+VMware Registration Service
+VMware DHCP Service
+VMware NAT Service
+VMware USB Arbitration Service
+VMware Workstation Server
+VMware WSX Service
+ 
+Note: Depending on the VMware product, some services might not be there on your Windows host.
+Uninstall the VMware network bridge adapter:
+ 
+Open the Network Connection options in the Windows host
+ 
+Windows XP: Click Start > Settings > Network and Dial-up Connections.
+Windows Vista, Windows 7 and Windows 2008 Server: Click Start > Run, type ncpa.cpl, and click OK. The Network Connections Snap-in opens.
+Windows 8 and Windows 2012 Server: Open Run, type ncpa.cpl, and click OK. The Network Connections Snap-in opens.
+Right-click the network adapter icon and select Properties.
+Select VMware Bridge Protocol and click Uninstall.
+ 
+Uninstall all VMware devices:
+ 
+Right-click My Computer and select Manage.
+Click Device Manager.
+Choose Show hidden devices from the View menu.
+Double-click Network Adapters.
+Right-click each adapter whose name begins with VMware and select Uninstall.
+Delete folders on the Windows host containing files for the VMware product.
+
+Notes:
+ 
+For all folders, if you have installed only one VMware product, you can delete the entire VMware folder listed. If you have installed other products, such as VirtualCenter Client, delete only the relevant subfolders for the product you are trying to remove.
+On a GSX Server machine, remove the subfolders for VMware GSX Server, VMware Management Interface, VMware Scripting API, and either VMware Virtual Machine Console or VMware Remote Console.
+ 
+Delete these folders:
+ 
+The program folder in which the VMware product was installed.
+
+Note: If you have stored virtual machines in a folder under the program folder and want to save them, move them to a different folder before you delete the VMware program folder.
+
+The default installation directory is:
+ 
+32-bit versions of Windows: C:\Program Files\VMware\
+64-bit versions of Windows: C:\Program Files(X86)\VMware\
+ 
+The application data folders.
+
+The default locations are:
+ 
+Windows XP:
+ 
+C:\Documents and Settings\All Users\Application Data\VMware\
+C:\Documents and Settings\username\Application Data\VMware\
+ 
+Windows Vista/7/8/Server 2008:
+ 
+C:\Users\username\AppData\Local\VMware\
+C:\Users\username\AppData\Roaming\VMware\
+ 
+Windows 10:
+ 
+C:\Program Files(X86)\VMware\
+ 
+The VMware program group folder from the start menu.
+
+The default location is:
+ 
+Windows XP: C:\Documents and Settings\All Users\Start Menu\Programs\VMware\
+Windows Vista/7/8/Server 2008: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\VMware\
+Windows 10: C:\ProgramData\VMware
+Delete the VMware shortcut icons from the desktop.
+ 
+Delete these files:
+
+Note: Your system may not have all of these files.
+ 
+ 
+C:\Windows\system32\vmnat.exe
+C:\Windows\system32\vmnetbridge.exe
+C:\Windows\system32\VMNetDHCP.exe
+C:\Windows\system32\vmnetdhcp.leases
+C:\Windows\system32\vmxw2ksetup.dll
+C:\Windows\system32\vnetprobe.exe
+C:\Windows\system32\vnetprobelib.dll
+C:\Windows\system32\vnetinst.dll
+C:\Windows\system32\vnetlib.dll
+C:\Windows\system32\vnetlib.exe
+C:\Windows\system32\drivers\vmnet.sys
+C:\Windows\system32\drivers\vmnetx.sys
+C:\Windows\system32\drivers\VMparport.sys
+C:\Windows\system32\drivers\vmx86.sys
+C:\Windows\system32\drivers\vmnetadapter.sys
+C:\Windows\system32\drivers\vmnetbridge.sys
+C:\Windows\system32\drivers\vmnetuserif.sys
+C:\Windows\system32\drivers\hcmon.sys
+C:\Windows\system32\drivers\vmusb.sys
+ 
+Delete the __vmware_user__ local user and the __vmware__ local group from the Windows system, if they exist.
+ 
+Remove these registry keys for the VMware Product on the Windows Host. Refer to the list below for the product which you are removing.
+
+Note: Before making any registry modifications, ensure that you have a current and valid backup of the registry and the virtual machine. For more information on backing up and restoring the registry, see the Microsoft Knowledge Base article 136393.
+ 
+Workstation 4.5/5.0/5.5
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\317A1D89C83432A4A86B143BC7A4D274
+HKEY_CLASSES_ROOT\Installer\Products\317A1D89C83432A4A86B143BC7A4D274
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Features\317A1D89C83432A4A86B143BC7A4D274
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\317A1D89C83432A4A86B143BC7A4D274
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\317A1D89C83432A4A86B143BC7A4D274
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{98D1A713-438C-4A23-8AB6-41B37C4A2D47}
+HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.
+ 
+Workstation 6.x/7.x
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\2BC5FF3A53BF85647815E9EDD1563BAA
+HKEY_CLASSES_ROOT\Installer\Products\2BC5FF3A53BF85647815E9EDD1563BAA
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Features\2BC5FF3A53BF85647815E9EDD1563BAA
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\2BC5FF3A53BF85647815E9EDD1563BAA
+HKEY_CLASSES_ROOT\Installer\Products\7A26F0EA2A1AF704F9C48439B99DDAD8
+HKEY_CLASSES_ROOT\Installer\Products\7A79579133DA8984D9E8376086814B46
+HKEY_CLASSES_ROOT\Installer\UpgradeCodes\3F935F414A4C79542AD9C8D157A3CC39
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\2BC5FF3A53BF85647815E9EDD1563BAA
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A3FF5CB2-FB35-4658-8751-9EDE1D65B3AA}
+HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.
+ 
+Workstation 8.x/9.x/10.x/11.x/12.x/14.x
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\A57F49D06AE015943BFA1B54AFE9506C
+HKEY_CLASSES_ROOT\Installer\Products\A57F49D06AE015943BFA1B54AFE9506C
+HKEY_CLASSES_ROOT\Installer\UpgradeCodes\3F935F414A4C79542AD9C8D157A3CC39
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{0D94F75A-0EA6-4951-B3AF-B145FA9E05C6}
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\VMware, Inc.\VMware Workstation
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\VMware, Inc.\Installer\VMware Workstation
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Applications\vmware.exe
+ 
+VMware Player 2.x/3.x/4.x/5.x/6.x/7.x/12.x and Workstation Player 14.x
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\AE11A35A5900F39468AF1AE5A8684A50
+HKEY_CLASSES_ROOT\Installer\Products\AE11A35A5900F39468AF1AE5A8684A50
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Features\AE11A35A5900F39468AF1AE5A8684A50
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\AE11A35A5900F39468AF1AE5A8684A50
+HKEY_CLASSES_ROOT\Installer\Products\7A26F0EA2A1AF704F9C48439B99DDAD8
+HKEY_CLASSES_ROOT\Installer\Products\7A79579133DA8984D9E8376086814B46
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\AE11A35A5900F39468AF1AE5A8684A50
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A53A11EA-0095-493F-86FA-A15E8A86A405}
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\UpgradeCodes\3F935F414A4C79542AD9C8D157A3CC39
+HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.
+ 
+ACE Manager 1.0.1
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\BC5E922F5258EE74BAC9B3AA1D6E0B1B
+HKEY_CLASSES_ROOT\Installer\Products\BC5E922F5258EE74BAC9B3AA1D6E0B1B
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Features\BC5E922F5258EE74BAC9B3AA1D6E0B1B
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\BC5E922F5258EE74BAC9B3AA1D6E0B1B
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\BC5E922F5258EE74BAC9B3AA1D6E0B1B
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{F229E5CB-8525-47EE-AB9C-3BAAD1E6B0B1}
+HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.
+ 
+ACE Player 1.0
+ 
+ 
+HKEY_CLASSES_ROOT\Installer\Features\2C06509C057477E4FBEAC7E383CDFF3D
+HKEY_CLASSES_ROOT\Installer\Products\2C06509C057477E4FBEAC7E383CDFF3D
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Features\2C06509C057477E4FBEAC7E383CDFF3D
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\2C06509C057477E4FBEAC7E383CDFF3D
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\2C06509C057477E4FBEAC7E383CDFF3D
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C90560C2-4750-4E77-BFAE-7C3E38DCFFD3}
+HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.
+ 
+Reboot the Windows host system.
