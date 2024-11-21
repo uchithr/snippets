@@ -9,10 +9,7 @@ SecureToken admin user name [optional]:  #"leave blank"
 ## QUERY THE DIRECTORY SERVICE CACHE
 % dscacheutil -q user -a name sam
 
- 
-
 name: sam 
-
 password: 
 uid: 0064 
 gid: 82455 
