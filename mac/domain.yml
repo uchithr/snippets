@@ -1,0 +1,42 @@
+
+
+## CREATE A MOBILE ACCOUNT FOR A NETWORK USER
+% sudo /System/Library/CoreServices/ManagedClient.app/Contents/Resources/createmobileaccount -n sam 
+
+SecureToken admin user name [optional]:  #"leave blank"
+
+
+## QUERY THE DIRECTORY SERVICE CACHE
+% dscacheutil -q user -a name sam
+
+ 
+
+name: sam 
+
+password: 
+uid: 0064 
+gid: 82455 
+dir: /Users/sam 
+shell: /bin/bash 
+gecos: Sam Fisher
+
+ 
+
+ ## PROPER PERMISSIONS AND SECURITY MEASURES (OPTIONAL)
+sudo chmod 755 /System/Library/CoreServices/ManagedClient.app
+sudo chown -R root:wheel /System/Library/CoreServices/ManagedClient.app
+
+
+# ALLOW ONLY THE ADMIN GROUP TO RUN CREATEMOBILEACCOUNT
+%admin ALL=(ALL) NOPASSWD: /System/Library/CoreServices/ManagedClient.app/Contents/Resources/createmobileaccount
+
+# LOG ACTIVITY
+sudo echo "Defaults logfile=/var/log/sudo.log" >> /etc/sudoers
+
+
+# VERIFY NETWORK ACCOUNTS  ## Before creating a mobile account, verify the user exists in the network directory:
+dscl . -list /Users | grep username
+
+
+# Secure Logs: Ensure only admins can read the logs:
+sudo chmod 600 /var/log/mobile_account_creation.log
