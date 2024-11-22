@@ -276,3 +276,20 @@ https://aquasecurity.github.io/trivy/v0.55/getting-started/installation/  ## Use
 docker run -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy:0.55.1 image python:3.4-alpine
 
 docker run -v /var/run/docker.sock:/var/run/docker.sock -v /home/sam/caches:/root/.cache/ aquasec/trivy:0.55.1 image portainer/portainer-ce:2.21.1 | grep "Total"
+
+
+
+
+
+
+
+
+
+
+
+
+
+0 4 1-31/2 * * /usr/bin/php /var/www/html/snipeit/artisan snipeit:backup >> /var/log/snipeit-backup.log
+
+* */12 * * * /home/iplus/snipeit-backup/venv/bin/python3 /home/iplus/snipeit-backup/backup.py >> /var/log/snipeit-backup.log
+
