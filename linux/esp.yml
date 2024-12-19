@@ -6,6 +6,28 @@ nmcli connection down "System eth0" ; nmcli connection up NIC
 
 nmtui
 
+##################################################################################################################
+## NETWORK ###########################################################################################################
+##################################################################################################################
+
+# ENABLE NETWORKMANAGER SERVICE
+sudo systemctl enable NetworkManager
+sudo systemctl start NetworkManager
+
+# CONFIGURE THE NETWORK INTERFACE
+nmcli device
+nmcli connection modify <interface> connection.autoconnect yes
+nmcli connection show <interface>
+
+
+ # VERIFY NETWORKMANAGER CONFIGURATION
+sudo nano /etc/sysconfig/network-scripts/ifcfg-<interface>
+ONBOOT=yes
+
+#TEST AND REBOOT
+sudo systemctl restart NetworkManager
+sudo reboot
+
 
 ##################################################################################################################
 ## DNS ###########################################################################################################
