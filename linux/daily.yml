@@ -131,7 +131,7 @@ $ rsync -ah --info=progress2 myfolder/ target_d/
 $ rsync –av /home/student/testfile bob@desktop:/home/bob
 
 # COPY FILES FORM WINDOWS TO LINUX 
-scp .\p7zip.zip sam@10.220.30.62:/home/sam/
+scp .\p7zip.zip sam@1.22.3.6:/home/sam/
 
 # COPY FILES FORM LINUX MACHINE TO WINDOWS
 scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
