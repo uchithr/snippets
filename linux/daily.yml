@@ -130,8 +130,12 @@ $ rsync -ah --info=progress2 myfolder/ target_d/
 ## FILE COPY FORM SVR 2 SVR scp /home/student/testfile bob@desktop:/home/bob 
 $ rsync –av /home/student/testfile bob@desktop:/home/bob
 
+# COPY FILES FORM WINDOWS TO LINUX 
+scp .\p7zip.zip sam@10.220.30.62:/home/sam/
+
 # COPY FILES FORM LINUX MACHINE TO WINDOWS
 scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
+
 
 scp sam@cmsl-si:/var/www/remotely "C:/Users/uchithr/Downloads/D_DRIVE"
 ## VERIFYING IMAGE BY SHA
