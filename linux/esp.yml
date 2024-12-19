@@ -21,8 +21,10 @@ nmcli connection show <interface>
 
 
  # VERIFY NETWORKMANAGER CONFIGURATION
-sudo nano /etc/sysconfig/network-scripts/ifcfg-<interface>
-ONBOOT=yes
+/etc/NetworkManager/system-connections/<interface>
+
+[connection]
+autoconnect=true
 
 #TEST AND REBOOT
 sudo systemctl restart NetworkManager
