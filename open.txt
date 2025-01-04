@@ -23,3 +23,11 @@ Choose item: "SSH protocol version"
 => Change to SSHv2
 After saving the changes to the session profile:
 EXIT & RESTART the program "MobaXterm"
+
+
+## File Explorer very slow when there are a lot of media files
+https://github.com/microsoft/Windows-Dev-Performance/issues/20
+
+%userprofile%\AppData\Local\Microsoft\Windows\Explorer 
+
+run > cleanmgr

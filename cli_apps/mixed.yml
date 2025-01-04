@@ -187,6 +187,13 @@ $ sudo systemctl restart jdownloader.service
 # INSPECT THE JDOWNLOADER JAR
 $ /usr/bin/java -jar /home/sam/jd/JDownloader.jar
 
+
+## REMOVE CODEC INFORMATION FROM YOUTUBE 
+SETTINGS > PLUGINS > YOUTUBE > FILENAME & PACKAGE NAME > FILENAME FOR VIDEO FILES
+
+DEFAULT - *3D* *360* *VIDEO_NAME* (*H*p_*FPS*fps_*VIDEO_CODEC*-*AUDIO_BITRATE*kbit_*AUDIO_CODEC*).*EXT*
+CUSTOM - *VIDEO_NAME*.*EXT*
+
 ####################################################################################################
 iperf3\_____________________________________________________________________________________________
 
@@ -223,6 +230,21 @@ $ nvitop -m
 
 ## WINDOWS PID KILL
 $ taskkill /F /PID pid_number
+
+####################################################################################################
+
+
+# BULK IAMGE DOWNLAODER
+BID Queue Manager
+OPTIONS > FILTER > EMBEDED IMAGES ONLY
+
+Advance Configuration
+INNORE
+<pixhost.to/show/*._cover.jpg>
+<t99.pixhost.to>
+<apc.to>
+
+
 
 
 

@@ -31,75 +31,82 @@ tree --du -h | grep G]
 # CHECK SSD OR HDD ON DISK # 1 for hdd & 0 for ssd
 cat /sys/block/sda/queue/rotational
 
-# SSH WITH KEYFILE	
+## FIND LARGER FILES
+find . -type f -size +500M
+find . -type f -size +500M -exec ls -lh {} \; | awk '{print $9, $5}'
+
+# LVL 1 & L5 TREE DUMP
+{ tree -h -L 1; echo ""; tree -h -L 5 | tail -n +2; } > "/f/Cloud/mega_mixes_g.txt"
+
+# SSH WITH KEYFILE  
 ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 
-# VIEW LOGEED IN USERS	
+# VIEW LOGEED IN USERS  
 w
 
-# CHECK LOG	tail 
+# CHECK LOG tail 
 /var/log/auth.log
 
-# CALANDER WITH SPECIFIC MONTH	
+# CALANDER WITH SPECIFIC MONTH  
 cal oct 2020
 
-## OS DETAILS	
+## OS DETAILS 
 cat /etc/relcat /etc/os-release
 
-# CURRENT TIME WITH WHICH USER USING THE SYSTEM	
+# CURRENT TIME WITH WHICH USER USING THE SYSTEM 
 uptime
 
-# CPU INFORMATION	
+# CPU INFORMATION 
 lscpu
 
-# RAM INFORMATION	
+# RAM INFORMATION 
 free -h
 
-# FILE SYSTEM SIZE WITH TYPE	
+# FILE SYSTEM SIZE WITH TYPE  
 df -Th
 
 # SORT BY FILE SIZE, WITH THE LARGEST FILES FIRST.
 ls -lhS
 
-# LIST ALL FILES WITH HIDDEN FILES	
+# LIST ALL FILES WITH HIDDEN FILES  
 ls -al
 
-# LIST FILES WITH FILE PERMISSIONS	
+# LIST FILES WITH FILE PERMISSIONS  
 ls -l
 
-# LIST ALL FILES WITH HIDDEN FILES iN READABLE FORMAT	
+# LIST ALL FILES WITH HIDDEN FILES iN READABLE FORMAT 
 ls -lsah
 
-# LIST FILES WITH ORDER	
+# LIST FILES WITH ORDER 
 ls -lX
 
-# LIST FILES WITH ACESS TIME	
+# LIST FILES WITH ACESS TIME  
 ls -ult
 
-# VIEW PERMISSIONS	
+# VIEW PERMISSIONS  
 ls-l myfile
 
 
-# QUICK ONFO ABOUNT COMMANDS	
+# QUICK ONFO ABOUNT COMMANDS  
 whatis ls scp
 
 # FILE INFORAMTION
 file rclone
 stat rclone
 
-## FILE SIZE	
+## FILE SIZE  
 du -h /var/lib/deluge/Downloads/
 
-## FOLDER SIZE	
+## FOLDER SIZE  
 du -sh 
 
-## WITH SUBDIRECTORY SIZES + MAIN FOLDER SIZE	
+## WITH SUBDIRECTORY SIZES + MAIN FOLDER SIZE 
 du -h
 
-## LIST WITH SIZE	
+## LIST WITH SIZE 
 du -sh * | sort -hr
 
-## CREATE MULTIPLE FILES	
+## CREATE MULTIPLE FILES  
 touch myfile{1..5}
 
 # OPENED PORT LIST
