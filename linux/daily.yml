@@ -7,9 +7,41 @@ $ echo $SHELL
 
 # Monitor Commands
 psaux
-top
+
 htop
 pkill -KILL -U samf
+
+# TOP
+Sort by CPU usage / top -o %CPU
+Sort by Memory usage: / top -o %MEM
+Display specific users' processes: / top -u username
+ps aux --sort=-%cpu | head -n 10
+
+
+
+Find processes using more than 50% CPU
+ps aux | awk '$3 > 50 {print $0}'
+
+
+Filter processes belonging to a specific user consuming >10% memory
+ps aux | awk '$1 == "user1" && $4 > 10 {print $0}'
+
+
+ List top 5 memory-consuming processes
+ ps aux --sort=-%mem | head -n 6
+
+
+Sort by both CPU and memory usage
+ps aux --sort=-%cpu,-%mem
+
+Kill all processes with a specific name
+ps aux | grep myprocess | awk '{print $2}' | xargs kill -9
+
+
+Find all processes grouped by a user and sort by CPU
+ps aux | awk '$1 == "user1" {print $0}' | sort -k3 -nr
+
+
 
 # GATEWAY
 ip route show default
