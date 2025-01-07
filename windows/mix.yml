@@ -25,6 +25,22 @@ remove 'dl' fonts
 ## MP3 TAG
 $num(%track%,3) - %artist% -  %title%
 
+
+
+## REMOVE EVERYTHING AFTER "-"
+\s*-\s*.*$
+
+
+## REMOVE EVERYTHING BEFORE "-" 
+^(.*?)\s*-\s*
+
+
+
+
+
+
+
+
 # CREATE CUE FORM ANOTHER CONVETER 
 FOOBAR
 
