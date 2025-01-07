@@ -337,6 +337,13 @@ sudo setfacl -m g:hrgrp:rwx /HRDATA ## For new files
 ### SSH KEYGEN
 ################################################################################################################################################################################################
 
+sudo dnf install openssh-server openssh-clients
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
+# firewall-cmd --zone=public --permanent --add-service=ssh
+# firewall-cmd --reload
+
 
 # GENERATE THE SSH KEY PAIR (on your local machine)
 $ ssh-keygen -t rsa -b 4096 -C "bob@gmail.com" # OR any comment
@@ -391,6 +398,7 @@ $ sudo systemctl start fail2ban
 ################################################################################################################################################################################################
 
 ## 7-ZIP
+sudo dnf install epel-release
 sudo dnf install p7zip p7zip-plugins
 
 # EXTRACT 7z.001 FILE
