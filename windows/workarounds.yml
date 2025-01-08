@@ -44,6 +44,10 @@ start - 4
 ## METADATA SLOWNESS
 Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
 
+clear File Explorer history
+Sfc /scannow as admin
+cleanmgr 
+
 
 ## SHAREPOINT
 GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
