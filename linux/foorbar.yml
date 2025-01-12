@@ -1,0 +1,254 @@
+Verify 64-bit architecture. The following command should respond with "amd64".
+
+$ dpkg --print-architecture
+
+See if 32-bit architecture is installed. The following command should respond with "i386".
+
+$ dpkg --print-foreign-architectures
+
+If "i386" is not displayed, execute the following.
+
+$ sudo dpkg --add-architecture i386
+
+Recheck with.
+
+$ dpkg --print-foreign-architectures
+
+Download and add the WineHQ repository key
+$ sudo mkdir -pm755 /etc/apt/keyrings
+$ sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+
+Download the WineHQ sources file
+$ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources
+
+Update the package database
+$ sudo apt update
+
+Install Wine
+The next command installs Wine Stable. To install Wine Development or Wine Staging, replace winehq-stable  by  winehq-devel or winehq-staging
+
+Sometimes Wine Stable is unavailable, but Wine Development and Wine Staging can still be installed.
+
+$ sudo apt install --install-recommends winehq-stable
+
+Verify the installation
+$ wine --version
+
+Configure Wine
+To bring up Wine's configuration panel, open a Terminal window and execute winecfg. If installing mono is offered, accept the offer. When prompted, set your preferred version of Windows.
+
+==> If installing mono fails, let winecfg continue to completion. An alternate way to install Wine Mono is described below.
+
+$ wine winecfg
+
+==> If you are creating custom Wine prefixes, this configuration must be repeated for each prefix.
+
+A simple test: Display a clock
+$ wine clock
+
+Take a look, and then close the Clock panel.
+
+Wine Mono and Wine Gecko
+Wine Mono and Wine Gecko are Windows apps required for full functionality of a Wine installation. Information about them is included in an Appendix, below.
+
+They should install automatically when needed, or you can install them manually, either now or later.
+
+Optional: Install Wine Mono
+==> If Wine Mono was installed when $ wine winecfg was executed, or if you do not want to install Wine Mono, skip this section. Proceeding with the installation is harmless and may be beneficial later.
+
+==> Different versions of Wine require different versions of Wine Mono. For information on choosing the appropriate version of Wine Mono, use the following link to choose the appropriate version of Wine Mono. But first, read the note in this Yellow box.
+
+If, in the table in the above link, you do not see an exact match for the version of Wine you are installing, choose the most recent version of Wine Mono that precedes your Wine version. Example: Assume Wine 9.0 has just been installed and initialized. In the list of Wine Mono installers, Wine 8.19 is the most recent version of Wine which is older than Wine 9.0. From the table, Wine 8.19 requires Wine Mono 8.1.0. So you would choose Wine Mono 8.1.0.
+
+==> Browse to
+
+Wine Mono InstallersNew Window Icon
+
+==> After determining which version of Wine Mono you need, browse to
+
+Wine Download Server / wine-monoNew Window Icon
+
+==> Locate and click on the name of the Wine Mono .msi file you need. The download is automatic.
+
+==> Execute these three commands, but substitute the name of the .msi file that you downloaded. If the download was not to ~/Downloads, change that, too.
+
+$ cd ~/Downloads
+
+$ ls wine-mono*
+
+$ wine msiexec -i wine-mono-8.1.0-x86.msi
+
+==> If you are creating custom Wine prefixes, this Wine Mono installation must be repeated for each prefix.
+
+Optional: Install Wine Gecko
+==> If you do not want to install Wine Gecko, skip this section. Proceeding with the installation is harmless and may be beneficial later.
+
+==> For 64-bit Wine (x86_64 Wine, aka Wine WoW64), both 32-bit Wine Gecko and 64-bit Wine Gecko are needed.
+
+==> Browse to
+
+Wine Gecko x86 and x86_64 InstallersNew Window Icon
+
+==> Locate and click on the names of the 32-bit and the 64-bit Wine Gecko .msi files you need. The downloads begin automatically.
+
+==> Execute these four commands, but substitute the name of the .msi file that you downloaded. If the download was not to ~/Downloads, change that, too.
+
+$ cd ~/Downloads
+
+$ ls wine-gecko*
+
+$ wine msiexec -i wine-gecko-2.47.4-x86.msi
+
+$ wine msiexec -i wine-gecko-2.47.4-x86_64.msi
+
+==> If you are creating custom Wine prefixes, these Wine Gecko installations must be repeated for each prefix.
+
+Installation and configuration of Wine is complete
+Execute
+
+$ wine uninstaller
+
+The panel that opens displays the versions of Wine Mono and Wine Gecko you installed. If you installed both Wine Mono and Wine Gecko, this is what you should see, though the version numbers may differ.
+
+Image showing Wine Uninstaller panel with Mono and Gecko
+
+Click OK or Cancel.
+
+Options for installing Windows apps
+The fundamental installation method uses Terminal commands to install Windows apps. This is described in the next section of this document.
+When you run the $ wine uninstaller command, the Add/Remove Programs panel opens and contains an "Install" button, as can be seen above in the output from $ wine uninstaller. Wine Uninstaller both uninstalls and installs Windows apps.
+For some distributions, Wine adds "Open With Wine Windows Program Loader" to the menu that opens when you right-click a Windows .exe or .msi installation file. Clicking that option installs the app.
+Image showing the Wine Windows Program Loader panel
+
+How to install a Windows app with Terminal commands
+Wine is a Terminal application. After installing Wine, you will not find Wine listed among your installed desktop applications. Wine is invoked using Terminal commands.
+
+As an example of installing a Windows app with Wine, this section will install 64-bit Notepad++, a popular text editor and replacement for Windows Notepad.
+
+==> Open your web browser and browse to the Notepad++ home page at https://notepad-plus-plus.orgNew Window Icon
+
+==> Download a Windows installer for 64-bit Notepad++ into ~/Downloads.
+
+Open the ~/Downloads directory and display the name of the Notepad++ installer.
+
+$ cd ~/Downloads
+$ ls npp*
+
+Initialize Wine, if this has not already been done. Redoing it is harmless.
+
+$ wine winecfg
+
+The next command will install Notepad++. This installer is an .exe file, so the wine command can do the installation.
+
+Accepting the option of creating a Notepad++ shortcut on the Desktop is strongly recommended.
+
+==> In the next command, replace "npp.#.#.#.Installer.x64.exe" with the name of the installation file you downloaded.
+
+$ wine npp.#.#.#.Installer.x64.exe
+
+==> Installation files of type .msi require a different command.
+
+$ msiexec -i installer_name.msi
+
+It is possible that the Desktop shortcut (if you installed one) does not work. In that case:
+
+==> Right-click the Desktop icon.
+
+==> In the panel that opens, click Allow Launching
+
+More about installing Windows apps
+When installing with Terminal commands, the installer does not need to be in the Downloads directory. Any directory is fine, as long as you issue the wine command from that directory.
+Not all Windows apps can run under Wine. Consulting the Wine Application DatabaseNew Window Icon may be helpful.
+For more information, search for online tutorials on using Wine. One that includes basic information plus some advanced techniques is Installing Windows Apps on LinuxNew Window Icon
+Appendix: Wine Mono and Wine Gecko
+As stated above, Wine Mono and Wine Gecko are Windows apps required for full functionality of a Wine installation.
+
+"Mono is an open-source and cross-platform implementation of the .NET Framework. Wine Mono is a fork of Mono that Wine uses to run .NET Framework applications." See WineHQ re Wine MonoNew Window Icon
+
+"Wine implements its own version of Internet Explorer. The implementation is based on a custom version of Mozilla's Gecko Layout Engine." See WineHQ re Wine GeckoNew Window Icon
+
+Because Wine Mono and Wine Gecko are Windows apps, they can be installed only after Wine is installed and configured.
+
+
+
+
+
+
+
+-------------
+
+wine regedit wine-breeze-dark.reg
+
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Control Panel\Colors]
+"ActiveBorder"="49 54 58"
+"ActiveTitle"="49 54 58"
+"AppWorkSpace"="60 64 72"
+"Background"="49 54 58"
+"ButtonAlternativeFace"="200 0 0"
+"ButtonDkShadow"="154 154 154"
+"ButtonFace"="49 54 58"
+"ButtonHilight"="119 126 140"
+"ButtonLight"="60 64 72"
+"ButtonShadow"="60 64 72"
+"ButtonText"="219 220 222"
+"GradientActiveTitle"="49 54 58"
+"GradientInactiveTitle"="49 54 58"
+"GrayText"="155 155 155"
+"Hilight"="119 126 140"
+"HilightText"="255 255 255"
+"InactiveBorder"="49 54 58"
+"InactiveTitle"="49 54 58"
+"InactiveTitleText"="219 220 222"
+"InfoText"="159 167 180"
+"InfoWindow"="49 54 58"
+"Menu"="49 54 58"
+"MenuBar"="49 54 58"
+"MenuHilight"="119 126 140"
+"MenuText"="219 220 222"
+"Scrollbar"="73 78 88"
+"TitleText"="219 220 222"
+"Window"="35 38 41"
+"WindowFrame"="49 54 58"
+"WindowText"="219 220 222"
+
+
+
+
+
+wine regedit wine-reset-theme.reg
+
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Control Panel\Colors]
+"ActiveBorder"=-
+"ActiveTitle"=-
+"AppWorkSpace"=-
+"Background"=-
+"ButtonAlternativeFace"=-
+"ButtonDkShadow"=-
+"ButtonFace"=-
+"ButtonHilight"=-
+"ButtonLight"=-
+"ButtonShadow"=-
+"ButtonText"=-
+"GradientActiveTitle"=-
+"GradientInactiveTitle"=-
+"GrayText"=-
+"Hilight"=-
+"HilightText"=-
+"InactiveBorder"=-
+"InactiveTitle"=-
+"InactiveTitleText"=-
+"InfoText"=-
+"InfoWindow"=-
+"Menu"=-
+"MenuBar"=-
+"MenuHilight"=-
+"MenuText"=-
+"Scrollbar"=-
+"TitleText"=-
+"Window"=-
+"WindowFrame"=-
+"WindowText"=-
