@@ -416,8 +416,12 @@ unzip cloud_dump.zip
 
 # RAR FILE	
 
-# URAR FILE	
+# UNRAR FILE	
 unrar e 'REV.part01.rar' rev-fgr
+
+# IF RAR ARCHIVE IS PASSWORD-PROTECTED:
+unrar x -pPASSWORD file.rar
+
 
 ## MAKE TAR FILE	
 tar cvf /home/sam/hrdata_bkp.tar /HRDATA 
