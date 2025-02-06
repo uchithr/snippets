@@ -1,3 +1,9 @@
+# BOOTKEYS
+
+HP 
+F9 - Boot Menu
+F10 - BIOS
+
 
 # SAFEBOOT
 $  bcdedit /set {current} safeboot minimal
