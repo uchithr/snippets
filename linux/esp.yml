@@ -407,7 +407,7 @@ sudo 7z x 'test.7z.001'
 # ZIP SINGLE FILE	
 zip -r -s 500m myzip myfile.mkv
 
-# ZIP FOLDER WITH ZERO COMPRESSION	
+# ZIP FOLDER WITH ZERO COMPRESSION WITH 500M SPLIT	 (0-9)
 zip -0 -r -s 500m output/myzip source/
 
 # UZIP FILE	unzip file.zip
