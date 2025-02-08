@@ -41,13 +41,19 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc
 start - 4
 
 
-## METADATA SLOWNESS
+## METADATA SLOWNESS  | Icaros Shell Extensions
 Folder Properties > Customize > set Optimize this folder for "General Items" with subfolders.
 
 clear File Explorer history
 Sfc /scannow as admin
 cleanmgr 
 
+
+
+# Disable Absolute Volume in Windows 10 bluetooth stack
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Bluetooth\Audio\AVRCP\CT
+Create REG_DWORD DisableAbsoluteVolume and set it's value to 1.
+ restart your PC for changes to take affect.
 
 ## SHAREPOINT
 GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
