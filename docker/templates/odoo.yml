@@ -1,0 +1,118 @@
+## STAGING ##
+
+
+
+services:
+  db:
+    image: bitnami/postgresql:17.4.0
+    container_name: odoo_db
+    restart: always
+    environment:
+      POSTGRES_DB: odoo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: securepassword  # Change this to a strong password
+    volumes:
+      - odoo_db_data:/var/lib/postgresql/data
+    networks:
+      - odoo_network
+
+  odoo:
+    image: bitnami/odoo:18.0.20250105  # Change this to your locally built Odoo image
+    container_name: odoo_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: securepassword  # Must match the PostgreSQL password
+    volumes:
+      - odoo_data:/var/lib/odoo
+    networks:
+      - odoo_network
+
+volumes:
+  odoo_db_data:
+  odoo_data:
+
+networks:
+  odoo_network:
+    driver: bridge
+
+
+////////////////////////////////////////////////
+
+
+
+services:
+  web:
+    image: odoo:17.0
+    depends_on:
+      - mydb
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./web-data:/var/lib/odoo
+      - ./addons:/mnt/extra-addons
+      - ./web-data/config:/etc/odoo
+    environment:
+      - HOST=mydb
+      - USER=odoo
+      - PASSWORD=myodoo #change this to something secure
+    networks:
+      odoonet:
+        ipv4_address: 10.10.0.5
+  mydb:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=myodoo #change this to something secure and match up with line no. 15 above
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    networks:
+      odoonet:
+        ipv4_address: 10.10.0.6
+  proxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./proxy-data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      odoonet:
+        ipv4_address: 10.10.0.7
+networks:
+  odoonet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/16
+          gateway: 10.10.0.1
+
+
+
+
+
+          services:
+  stirling-pdf:
+    image: frooodle/s-pdf:0.29.0-fat
+    ports:
+      - '5001:8080'
+    volumes:
+      - ./trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - ./extraConfigs:/configs
+      - ./customFiles:/customFiles/
+      - ./logs:/logs/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=en_GB
