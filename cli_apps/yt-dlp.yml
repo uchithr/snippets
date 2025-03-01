@@ -26,9 +26,9 @@ $ -f 140 --embed-thumbnail --add-metadata https://www.youtube.com/watch?v=t5jiR1
 # OPUS + CHAPTERS + THUBNAIL + METADATA
 $ -f 251 --embed-thumbnail  --embed-chapters --add-metadata --extract-audio --audio-format opus https://www.youtube.com/watch?v=t5jiR1OZ9zw
 
-# RANGE DOWNLAOD
+# RANGE DOWNLAOD / PART OF VIDEO
 $ yt-dlp.exe -f  251+270 --download-sections "*01:01:35-01:03:00" --merge-output-format mkv https://www.youtube.com/watch?v=95u7Tkheljk
-
+$ yt-dlp.exe -f  251+270 --download-sections "*1900-1967" --merge-output-format mkv https://www.youtube.com/watch?v=dPBKB7kO6
 
 # SINGLE FILE DOWNLAOD
 $ yt-dlp.exe -f 0 https://www98.zippyshare.com/d/6h73oplC/185196/sda1.backup.tar.gz.aa -o E:\prt\%(title)s.%(ext)s

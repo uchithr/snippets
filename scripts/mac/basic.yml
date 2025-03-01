@@ -1,0 +1,2 @@
+# ISSUES WITH FONTS IN OFFICE FOR MACOS
+defaults write com.microsoft.office PrioritizedFonts -array "Helvetica-Light" "Helvetica" "Arial" "TimesNewRomanPSMT"
