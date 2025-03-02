@@ -1,8 +1,8 @@
 import os
 import shutil
 
-source_dir = r'C:\Users\SLVR\Downloads\JDWN\zDone\Zx\check_date\scr'
-destination_dir = r'C:\Users\SLVR\Downloads\JDWN\zDone\Zx\check_date\scr'
+source_dir = r'C:\Users\ABC\Desktop\PAK'
+destination_dir = r'C:\Users\ABC\Desktop\PAK'
 files_per_directory = 500
 extensions = ('.jpg',)
 
