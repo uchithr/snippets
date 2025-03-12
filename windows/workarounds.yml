@@ -11,6 +11,12 @@ thorium
 https://www.google.com/intl/en/chrome/?standalone=1
 
 
+# W11 MICROSOFT SIGN BYPASS
+$ Shift + F10 
+$ ncpa.cpl > disable ethernet
+$ oobe\bypassnro
+
+
 # BITLOCKER
 $  manage-bde -off C: as ADMIN 
 $  manage-bde -status C:
@@ -55,13 +61,15 @@ cleanmgr
 
 
 
-# Disable Absolute Volume in Windows 10 bluetooth stack
+##  DISABLE ABSOLUTE VOLUME IN WINDOWS 10 BLUETOOTH STACK
 Computer\HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Bluetooth\Audio\AVRCP\CT
 Create REG_DWORD DisableAbsoluteVolume and set it's value to 1.
  restart your PC for changes to take affect.
 
+
 ## SHAREPOINT
 GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
+
 
 ## WMIC
 DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
