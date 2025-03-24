@@ -22,8 +22,10 @@ $  manage-bde -off C: as ADMIN
 $  manage-bde -status C:
 
 
-# CHECK ISO VERSION > MOUNT THE ISO
-dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
+## FIND WAN IP
+$ nslookup myip.opendns.com resolver1.opendns.com
+$ tracert 8.8.8.8
+$ powershell -Command "(Invoke-WebRequest -Uri 'https://api64.ipify.org').Content"
 
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
@@ -36,6 +38,9 @@ wmic path softwarelicensingservice get OA3xOriginalProductKey
 $  for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
 $  for /F "tokens=1,* delims= " %G in ('cmdkey /list ^| findstr Adobe') do cmdkey /delete %H
 
+
+# CHECK ISO VERSION > MOUNT THE ISO
+dism /Get-WimInfo /WimFile:G:\sources\install.wim /index:2
 
 ## BYPASS WSUS
 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
