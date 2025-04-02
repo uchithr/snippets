@@ -104,6 +104,12 @@ find / -name rclone 2>/dev/null
 find /usr/bin -name rclone 2>/dev/null
 
 
+## LIST ISO FILES IN ALL SUBDIRECTORIES
+find /path/to/directory -type f -name "*.iso"
+
+## FOR BETTER READABILITY WITH FILE SIZES
+find /path/to/directory -type f -name "*.iso" -exec ls -lh {} +
+
 ############################################################
 #### WI-FI ####
 ############################################################
