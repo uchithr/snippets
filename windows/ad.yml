@@ -1,0 +1,55 @@
+#GET USER OU
+Get-ADUser -Identity "username" | Select-Object DistinguishedName
+
+#GET GPO
+Get-GPO -All
+
+
+#Remove User from Security Filtering #"OU" \ username
+Set-GPPermissions -Name "firewall_test" -TargetName "firewall" -TargetType User -PermissionLevel None
+
+
+# apply this to multiple GPOs, loop through them 
+$gpos = Get-GPO -All
+foreach ($gpo in $gpos) {
+    Set-GPPermissions -Name $gpo.DisplayName -TargetName "firewall" -TargetType User -PermissionLevel None
+}
+
+
+##  Disable Group Policy Processing for the User
+$gpos = Get-GPO -All
+foreach ($gpo in $gpos) {
+    Set-GPPermissions -Name $gpo.DisplayName -TargetName "firewall" -TargetType User -PermissionLevel DenyApply
+}
+
+
+
+# filter the output of Get-GPPermissions and show only the permissions for the "firewall" user
+Get-GPPermissions -Name "Default Domain Policy" -All | Where-Object { $_.Trustee.Name -eq "firewall" }
+
+
+
+
+Set-GPPermissions -Name "Default Domain Policy1" -TargetName "firewall" -TargetType User -PermissionLevel DenyApply
+
+
+## ON USR
+gpresult /r
+
+
+sudo shutdown -r now
+
+sudo shutdown -r now
+
+
+
+CREATED OU  firewall_test
+MOVE firewall TO OU
+
+
+gpmangemaget > block inherritance
+
+https://www.rebeladmin.com/exclude-user-user-group-group-policy/
+
+
+gpmc.msc > Default Domain Policy1 > Delegation > ADD > Select User > Advanced > Set Apply group Policy "Deny"
