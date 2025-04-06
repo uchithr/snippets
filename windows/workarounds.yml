@@ -16,6 +16,7 @@ $ Shift + F10
 $ ncpa.cpl > disable ethernet
 $ oobe\bypassnro
 
+$ start ms-cxh:localonly
 
 # BITLOCKER
 $  manage-bde -off C: as ADMIN 
