@@ -5,6 +5,26 @@
 Remove-AppxProvisionedPackage -AllUsers -Online -PackageName (Get-AppxPackage Microsoft.OutlookForWindows).PackageFullName
 
 
+
+## REMOVE (W10)
+Remove-AppxProvisionedPackage -AllUsers -Online -PackageName (Get-AppxPackage Microsoft.OutlookForWindows).PackageFullName
+Remove-AppxPackage -AllUsers -Package (Get-AppxPackage Microsoft.OutlookForWindows).PackageFullName
+
+
+
+## NEW OLK LOGS
+%localappdata%\Microsoft\Olk\logs
+
+
+
+
+
+## MICROSOFT 365 APPS ADMIN CENTER
+Customization > New > Hide the "Try the new Outlook" toggle in Outlook > 
+
+##############################
+
+
 ## MAILBOX FULL
 $ create a pst and set a rule for a date range and move mail to a custom created pst file
 
@@ -19,3 +39,8 @@ MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400
 
 ## 365 TPM FIX
 "Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
+
+
+
+
+
