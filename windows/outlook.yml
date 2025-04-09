@@ -1,0 +1,21 @@
+
+### NEW OLUTLOOK ##   https://learn.microsoft.com/en-us/microsoft-365-apps/outlook/get-started/control-install ##
+
+## BLOCK NEW OUTLOOK PREINSTALL ON WINDOWS (Windows 11 builds after 23H2 )
+Remove-AppxProvisionedPackage -AllUsers -Online -PackageName (Get-AppxPackage Microsoft.OutlookForWindows).PackageFullName
+
+
+## MAILBOX FULL
+$ create a pst and set a rule for a date range and move mail to a custom created pst file
+
+
+## OST BYPASS
+HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Outlook\PST
+
+CREATE DWORD 32BIT RECORD
+WarnLargeFileSize  4090445042 (decimal) or f3cf3cf2 (hexadecimal) 110000 97280 
+MaxLargeFileSize 4294967295 (decimal) or ffffffff (hexadecimal) 110000  102400 
+
+
+## 365 TPM FIX
+"Get-ItemProperty -Path ""C:\Users\%userprofile%\AppData\Local\Packages"" | ForEach-Object {Remove-Item -Path ""$_\Microsoft.AAD.BrokerPlugin*"" -Recurse -Force | Out-Null}"
