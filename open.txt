@@ -31,3 +31,39 @@ https://github.com/microsoft/Windows-Dev-Performance/issues/20
 %userprofile%\AppData\Local\Microsoft\Windows\Explorer 
 
 run > cleanmgr
+
+
+
+
+
+
+
+ ArubaOS-Switch MSTP Configuration 
+
+conf t
+spanning-tree
+spanning-tree protocol-version mstp
+
+spanning-tree config-name MST-Region
+spanning-tree config-revision 1
+
+spanning-tree instance 1 vlan 1-10
+spanning-tree instance 2 vlan 11-20
+
+interface 1-24
+spanning-tree
+exit
+
+write memory
+
+show spanning-tree
+show spanning-tree config
+show spanning-tree instance 1
+show spanning-tree instance 2
+
+
+interface 1-24
+spanning-tree bpdu-protection
+
+interface 1
+spanning-tree root-guard
