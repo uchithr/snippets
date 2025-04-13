@@ -26,7 +26,6 @@ remove 'dl' fonts
 $num(%track%,3) - %artist% -  %title%
 
 
-
 ## REMOVE EVERYTHING AFTER "-"
 \s*-\s*.*$
 
@@ -35,18 +34,32 @@ $num(%track%,3) - %artist% -  %title%
 ^(.*?)\s*-\s*
 
 
-
-# POT PALYER CUSTOM VIDEO SIZE
-Preferences > playback > default size (1.0) > set your resolution
-
-
+# TITILE META DATA EDIT IN FOOBAR
+Tagging → Manage Scripts > Format value from other fields > TITILE
+$trim($replace(%title%,'[','(','[ ','(',' ]',')',']',')'))
 
 
 # CREATE CUE FORM ANOTHER CONVETER 
 FOOBAR
 
+
+# AUDIO BOOKS
+FOR M4B FILE CHANGE FORMAT TO M4A
+POSSIBLE TO GENERATE CUE SHEET FORM FOOBAR >  CUE SHEET CREATOR
+
+
+#############################################################################
+# POT PALYER CUSTOM VIDEO SIZE
+Preferences > playback > default size (1.0) > set your resolution
+
+
 ## IMEI NUMBER CHECK
 *#06#
+
+## Bring up the Remote Desktop Connection bar when you're in full-screen mode.
+CRTL+ALT+HOME
+
+SHELL X VIEW
 
 ## HIGH USAGE
 "C:\Program Files\Microsoft Office\root\Office16\SDXHelper.exe"
@@ -59,3 +72,4 @@ https://www.facebook.com/deactivate_delete_account
 Shotcut
 Shutter Encoder
 mpv.net
+https://rescribe.xyz/

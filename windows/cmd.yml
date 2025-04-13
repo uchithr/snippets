@@ -1,0 +1,11 @@
+# LIST FILE NAMES ONLY IN DIRECTORY
+$ for /r %i in (*) do @echo %~nxi
+
+# TO RUN COMMAND PROMPT AS ADMINISTRATOR IN POWERSHELL,
+$ Start-Process cmd -Verb RunAs
+
+Commands-
+1- taskkill /f /im explorer.exe
+2- del /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
+3- start explorer.exe
+v

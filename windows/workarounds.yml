@@ -81,6 +81,9 @@ GEAR > SITE PERMISSIONS >  ADVANCE PERMISSON SETTINGS
 DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
 
 
+## AUDITS ## JumpListView
+%AppData%\Microsoft\Windows\Recent\AutomaticDestinations
+
 
 ##############################################################################################################
 ##############################################################################################################
@@ -92,11 +95,12 @@ $ ./SetupRST.exe -extractdrivers SetupRST_extracted
 
 
 
-## Thumbnail Cache Clear
+## Thumbnail Cache Clear  ## Icaros  
 $ taskkill /f /im explorer.exe
 $ cd /d %localappdata%\Microsoft\Windows\Explorer
 $ del thumbcache_*.db
 $ start explorer.exe
+
 
 
 
