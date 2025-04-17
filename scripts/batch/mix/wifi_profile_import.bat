@@ -2,7 +2,7 @@
 
 
 echo ## Copying NEW Wi-Fi profile... ##
-xcopy "\\CMSLWEB\Chathuranga-IT\zwi\CM.xml" "C:\Users"
+xcopy "\\CMSLWEB\zwi\CM.xml" "C:\Users"
 
 
 echo ## Deleting OLD CRYSTAL-MARTIN ##
