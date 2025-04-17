@@ -260,30 +260,76 @@ source ~/.bashrc #to apply
 
 ## CHK ######################################################
 
+### SYSTEM PERFORMANCE ANALYSIS ###
+#
+# SHOW TOP 10 PROCESSES USING THE MOST CPU
 ps aux --sort=-%cpu | head
-ps aux | grep apache2
 
-sudo service apache2 restart
+# RUN A STRESS TEST: 2 CPU WORKERS, 1 IO WORKER, 1 VM USING 128MB RAM FOR 10 SECONDS
+stress --cpu 2 --io 1 --vm 1 --vm-bytes 128M --timeout 10s
+
+
+### MEMORY AND DISK CACHE CLEANUP ###
+#
+# DELETE ALL PHP5 SESSION FILES (USE WITH CAUTION; PATH MAY VARY BY PHP VERSION)
 sudo rm -rf /var/lib/php5/*
 
+# -------------------------------------------------------------------------
+### SERVICE MANAGEMENT & TROUBLESHOOTING ###
+# 
+# RESTART THE APACHE2 WEB SERVER
+sudo systemctl restart apache2
 
+# CHECK RUNNING APACHE2 PROCESSES
+ps aux | grep apache2
+
+# DISPLAY STATUS OF APACHE2 SERVICE
+systemctl status apache2
+
+
+# -------------------------------------------------------------------------
+###  NETWORK MONITORING & DIAGNOSTICS ###
+#
+# DISPLAY LIVE INTERFACE BANDWIDTH USAGE
 ifstat
+
+# DISPLAY PACKET/TRAFFIC STATISTICS FOR ALL NETWORK INTERFACES
 ip -s link
+
+# GRAPHICAL REAL-TIME BANDWIDTH MONITOR PER INTERFACE
+nload
+
+# SHOW ACTIVE CONNECTIONS AND LISTENING PORTS WITH ASSOCIATED PROCESSES
+ss -tunap
+
+# PING A REMOTE SERVER TO TEST CONNECTIVITY
 ping <server-ip>
+
+# TRACE ROUTE TO A REMOTE SERVER TO IDENTIFY NETWORK PATH AND DELAYS
 traceroute <server-ip>
 
+# SEND A HEAD REQUEST TO TEST HTTP RESPONSE HEADERS
+curl -I http://your-server/
 
+# RUN APACHE BENCHMARK WITH 100 REQUESTS AND 10 CONCURRENT USERS
+ab -n 100 -c 10 http://your-server/
 
+# -------------------------------------------------------------------------
+
+###  LOGS & SYSTEM EVENTS ##
+#
+# VIEW RECENT SYSTEM LOGS WITH EXTENDED INFORMATION (ERRORS, WARNINGS, ETC.)
 journalctl -xe
+
+# VIEW KERNEL AND HARDWARE-RELATED MESSAGES (SCROLLABLE)
 dmesg | less
 
 
-mysqladmin processlist
+# DATABASE (MYSQL) MONITORING
+# SHOW ACTIVE MYSQL PROCESSES (REQUIRES ROOT OR MYSQL ADMIN USER)
+mysqladmin processlist -u root -p
+
+# SHOW CURRENTLY RUNNING QUERIES WITH FULL DETAILS (RUN INSIDE MYSQL SHELL)
 SHOW FULL PROCESSLIST;
 
 
-sudo apt install stress
-stress --cpu 2 --io 1 --vm 1 --vm-bytes 128M --timeout 10s
-
-ab -n 100 -c 10 http://your-server/
-curl -I http://your-server/
