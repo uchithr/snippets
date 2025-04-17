@@ -62,3 +62,10 @@ echo ""
 
 
 echo "==== TROUBLESHOOTING REPORT COMPLETE ===="
+
+
+
+# chmod +x troubleshoot_report.sh
+# ./troubleshoot_report.sh | tee troubleshoot_report.txt
+#
+#
