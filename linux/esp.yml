@@ -110,9 +110,12 @@ find /path/to/directory -type f -name "*.iso"
 ## FOR BETTER READABILITY WITH FILE SIZES
 find /path/to/directory -type f -name "*.iso" -exec ls -lh {} +
 
+
+
 ############################################################
 #### WI-FI ####
 ############################################################
+
 
 # WLAN CONFIGS LOCATION
 /etc/network/interfaces OR  /etc/wpa_supplicant/wpa_supplicant.conf

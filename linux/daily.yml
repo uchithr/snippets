@@ -256,3 +256,34 @@ nano ~/.bashrc
 unset HISTFILE #Add the following line at the end of the file to disable history:
 source ~/.bashrc #to apply
 
+
+
+## CHK ######################################################
+
+ps aux --sort=-%cpu | head
+ps aux | grep apache2
+
+sudo service apache2 restart
+sudo rm -rf /var/lib/php5/*
+
+
+ifstat
+ip -s link
+ping <server-ip>
+traceroute <server-ip>
+
+
+
+journalctl -xe
+dmesg | less
+
+
+mysqladmin processlist
+SHOW FULL PROCESSLIST;
+
+
+sudo apt install stress
+stress --cpu 2 --io 1 --vm 1 --vm-bytes 128M --timeout 10s
+
+ab -n 100 -c 10 http://your-server/
+curl -I http://your-server/
