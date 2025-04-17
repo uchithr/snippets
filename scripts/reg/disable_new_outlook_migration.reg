@@ -1,0 +1,4 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Outlook\Preferences]
+"NewOutlookMigrationUserSetting"=dword:00000000
