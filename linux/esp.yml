@@ -1024,6 +1024,32 @@ sudo systemctl start zoneminder
 
 
 
+#############################################################################################
+## CHECK CVES WITH OPENSCAP
+#############################################################################################
+
+sudo dnf install openscap-scanner scap-security-guide -y
+
+
+sudo oscap xccdf eval \
+  --profile xccdf_org.ssgproject.content_profile_stig \
+  --results /tmp/scan-results.xml \
+  --report /tmp/scan-report.html \
+  /usr/share/xml/scap/ssg/content/ssg-centos-stream9-xccdf.xml
+
+
+
+## LYNIS SECURITY AUDIT
+
+sudo dnf install epel-release -y
+sudo dnf install lynis -y
+sudo lynis audit system
+
+
+
+
+
+
 ################################################################################################################################################################################################
 #### ANDROID
 ################################################################################################################################################################################################
