@@ -1040,8 +1040,6 @@ sudo oscap xccdf eval \
 
 
 ## LYNIS SECURITY AUDIT
-
-sudo dnf install epel-release -y
 sudo dnf install lynis -y
 sudo lynis audit system
 
