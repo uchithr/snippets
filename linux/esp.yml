@@ -1025,7 +1025,7 @@ sudo systemctl start zoneminder
 
 
 #############################################################################################
-## CHECK CVES WITH OPENSCAP
+## DIAGNOSTIC
 #############################################################################################
 
 sudo dnf install openscap-scanner scap-security-guide -y
@@ -1043,6 +1043,9 @@ sudo oscap xccdf eval \
 sudo dnf install lynis -y
 sudo lynis audit system
 
+
+## CHECK LAST REBOOT TIME
+last -x -F | grep -E "shutdown|reboot" | sort -k5,5M -k6,6n
 
 
 
