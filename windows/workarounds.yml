@@ -31,6 +31,13 @@ $ powershell -Command "(Invoke-WebRequest -Uri 'https://api64.ipify.org').Conten
 ## PING LOG
 $ ping -t 192.168.225.40|cmd /q /v /c "(pause&pause)>nul & for /l %a in () do (set /p "data=" && echo(!time! !data!)&ping -n 2 192.168.225.40 >nul" > C:\Users\uchithr\Desktop\ping-test.txt
 
+
+# NETWORK STACK RESET
+netsh winsock reset catalog
+netsh int ipv4 reset reset.log
+netsh int ipv6 reset reset.log 
+
+
 ## PRODUCT KEY
 wmic path softwarelicensingservice get OA3xOriginalProductKey
 

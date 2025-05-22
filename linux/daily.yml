@@ -333,3 +333,5 @@ mysqladmin processlist -u root -p
 SHOW FULL PROCESSLIST;
 
 
+# CHECK LAST REBOOT TIME
+last -x -F | grep -E "shutdown|reboot" | sort -k5,5M -k6,6n
