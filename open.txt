@@ -67,3 +67,31 @@ spanning-tree bpdu-protection
 
 interface 1
 spanning-tree root-guard
+
+
+
+
+
+
+
+
+| Segment | Branding     | Example Processor Number | Notes                                  |
+| ------- | ------------ | ------------------------ | -------------------------------------- |
+| Desktop | Core i9      | **i9-14900K**            | High-end desktop (Raptor Lake Refresh) |
+|         | Core i7      | **i7-14700K**            | Performance desktop                    |
+|         | Core i5      | **i5-14600K**            | Mid-range desktop                      |
+| Mobile  | Core 5       | **Core 5 120U**          | Low-power laptop (Meteor Lake)         |
+|         | Core 7       | **Core 7 165H**          | High-performance laptop                |
+|         | Core Ultra 5 | **Ultra 5 125H**         | Meteor Lake, includes NPU for AI       |
+|         | Core Ultra 7 | **Ultra 7 155H**         | AI-enhanced, high-end mobile           |
+|         | Core Ultra 9 | **Ultra 9 185H**         | Top-tier mobile chip                   |
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+| Segment | Branding     | Example Processor Number      | Notes                                  |
+| ------- | ------------ | ----------------------------- | -------------------------------------- |
+| Desktop | Core Ultra 7 | **Ultra 7 285K** (expected)   | Arrow Lake desktop with AI support     |
+|         | Core Ultra 5 | **Ultra 5 245K** (expected)   | Mid-tier Arrow Lake desktop            |
+| Mobile  | Core Ultra 5 | **Ultra 5 234V** (Lunar Lake) | Early model shown at Computex 2024     |
+|         | Core Ultra 7 | **Ultra 7 268V** (Lunar Lake) | High-end, AI-focused mobile            |
+|         | Core Ultra 9 | **Ultra 9 288V** (expected)   | Flagship mobile chip with upgraded NPU |
