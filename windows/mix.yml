@@ -77,3 +77,12 @@ Shotcut
 Shutter Encoder
 mpv.net
 https://rescribe.xyz/
+
+
+
+
+earch for “painter.ini” file inside your installation folder then change or add those lines
+
+ForceLanguage=1
+Language=en_EN
+en_EN for english but you can make it as you want according to the language you want to switch for
