@@ -95,3 +95,15 @@ spanning-tree root-guard
 | Mobile  | Core Ultra 5 | **Ultra 5 234V** (Lunar Lake) | Early model shown at Computex 2024     |
 |         | Core Ultra 7 | **Ultra 7 268V** (Lunar Lake) | High-end, AI-focused mobile            |
 |         | Core Ultra 9 | **Ultra 9 288V** (expected)   | Flagship mobile chip with upgraded NPU |
+
+
+
+| **Number (Intl. Format)** | **In Crores** | **In Lakhs**  | **International Equivalent** |
+| ------------------------- | ------------- | ------------- | ---------------------------- |
+| 100,000                   | –             | 1 Lakh        | 0.1 Million                  |
+| 1,000,000                 | –             | 10 Lakhs      | 1 Million                    |
+| 10,000,000                | 1 Crore       | 100 Lakhs     | 10 Million                   |
+| 50,000,000                | 5 Crores      | 500 Lakhs     | 50 Million                   |
+| 100,000,000               | 10 Crores     | 1,000 Lakhs   | 100 Million / 0.1 Billion    |
+| 1,000,000,000             | 100 Crores    | 10,000 Lakhs  | 1 Billion                    |
+| 10,000,000,000            | 1,000 Crores  | 100,000 Lakhs | 10 Billion                   |
