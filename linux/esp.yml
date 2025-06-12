@@ -482,6 +482,91 @@ split: split a large file into smaller ones.
 -a: length of the suffixes (4)
 
 
+
+
+################################################################################################################################################################################################
+####  VSFTPD FTP WITH SECURE CHROOT JAIL
+################################################################################################################################################################################################
+
+# INSTALL VSFTPD AND FTP CLIENT
+sudo dnf install vsftpd ftp -y 
+
+# START AND ENABLE VSFTPD SERVICE
+sudo systemctl enable --now vsftpd
+
+# BACKUP ORIGINAL CONFIG
+sudo cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.bak
+
+### CONFIGURE VSFTPD ####
+vim /etc/vsftpd/vsftpd.conf 
+
+# Disable anonymous login
+anonymous_enable=NO
+
+# Allow local users to log in
+local_enable=YES
+
+# Allow FTP write commands
+write_enable=YES
+
+# Set default file permissions for uploaded files
+local_umask=022
+
+# Show directory messages
+dirmessage_enable=YES
+
+# Enable FTP transfer logging
+xferlog_enable=YES
+xferlog_std_format=YES
+
+# Enable IPv6 listening
+listen_ipv6=YES
+
+# Disable IPv4 listening (optional)
+listen=NO
+
+# Jail local users to their home directory for security
+chroot_local_user=YES
+
+# Use PAM for authentication
+pam_service_name=vsftpd
+
+# Enable userlist: only allow users in user_list file
+userlist_enable=YES
+userlist_deny=NO
+userlist_file=/etc/vsftpd/user_list
+
+
+# ADD CURRENT USER TO THE ALLOWED LIST
+echo sam | sudo tee -a /etc/vsftpd/user_list
+
+# SET PERMISSIONS AND HOME DIRECTORY
+sudo mkdir /home/sam/ftp/files -p
+sudo chmod a-w /home/sam/ftp
+
+sudo chown nobody:nobody /home/sam/ftp
+sudo chown sam:sam /home/sam/ftp/files
+
+sudo chown root:root /home/sam
+sudo chmod 755 /home/sam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################################################################################################################################
 #### APACHE
 ################################################################################################################################################################################################
