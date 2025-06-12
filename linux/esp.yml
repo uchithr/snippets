@@ -552,10 +552,61 @@ sudo chmod 755 /home/sam
 
 
 
+sudo firewall-cmd --permanent --add-port=21/tcp
+sudo firewall-cmd --reload
+
+sudo systemctl restart vsftpd
+sudo systemctl status vsftpd
 
 
 
+----
 
+# --- Add user to system and userlist ---
+read -p "Enter username to create for FTP access: " ftpuser
+
+# Create user if not exists (without shell login)
+if ! id "$ftpuser" &>/dev/null; then
+  sudo useradd -m -s /sbin/nologin "$ftpuser"
+  echo "User $ftpuser created."
+else
+  echo "User $ftpuser already exists."
+fi
+
+# Set password for the user
+sudo passwd "$ftpuser"
+
+# Add user to vsftpd userlist
+if ! grep -q "^$ftpuser$" /etc/vsftpd/user_list 2>/dev/null; then
+  echo "$ftpuser" | sudo tee -a /etc/vsftpd/user_list
+fi
+
+# --- Setup directory structure and permissions for chroot jail ---
+
+# Change ownership of home directory to root and permission to 755 (not writable by user)
+sudo chown root:root /home/"$ftpuser"
+sudo chmod 755 /home/"$ftpuser"
+
+# Create FTP folder structure inside home for uploads/downloads
+sudo mkdir -p /home/"$ftpuser"/ftp/files
+
+# Change ownership of ftp directory to nobody:nobody, not writable by user
+sudo chown nobody:nobody /home/"$ftpuser"/ftp
+sudo chmod 755 /home/"$ftpuser"/ftp
+
+# Change ownership of files directory to ftpuser (writable)
+sudo chown "$ftpuser":"$ftpuser" /home/"$ftpuser"/ftp/files
+sudo chmod 755 /home/"$ftpuser"/ftp/files
+
+# --- Restart vsftpd to apply changes ---
+sudo systemctl restart vsftpd
+
+# --- Step 8: Open FTP port in firewall (if firewalld active) ---
+sudo firewall-cmd --permanent --add-port=21/tcp
+sudo firewall-cmd --reload
+
+echo "FTP setup complete. You can now connect with user '$ftpuser' using FTP on port 21."
+echo "The FTP root is /home/$ftpuser/ftp (readonly), and writable directory is /home/$ftpuser/ftp/files."
 
 
 
