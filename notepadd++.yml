@@ -1,0 +1,22 @@
+Notepad++ Regex Note: Move Year to Start of Line
+
+Steps:
+Open the file in Notepad++.
+Press Ctrl + H to open the Find and Replace dialog.
+
+Use the following:
+Find what:
+
+^(.*) \((\d{4})\)
+
+Replace with:
+
+
+[\2] \1
+
+
+
+TICK MATCH CASE AND REGX
+Set Search Mode (bottom of the window) to "Regular expression".
+
+Click Replace All.
