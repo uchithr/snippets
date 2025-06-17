@@ -3,6 +3,11 @@
 wf.msc
 
 
+## PDF SIGNATURE MANNUAL VERIFICATION
+Adobe Reader > Preferences > Signatures > Verification 
+untick "require certification revocation checking suceed whenever possible during signature verification"    
+
+
 ## XP SUPPORTED BROWSERS
 supermium
 mypal
