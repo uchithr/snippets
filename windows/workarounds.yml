@@ -1,4 +1,36 @@
 
+### PRINTERS #############################################################################################################################################################
+
+
+## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
+$ run > printmanagement.msc > All Printers
+
+
+## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
+$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
+DRIVERS TAB
+
+
+## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
+$ Create a System Restore point.
+$ regedit 
+ > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
+ > HKEY_CURRENT_USER\Printers\Connections
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
+
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
+
+
+ ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
+$ C:\Windows\System32\DriverStore\FileRepository 
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+
+
+
 ## WINDOWS FIREWALL
 wf.msc
 
@@ -147,35 +179,7 @@ tree -h | grep "G"
 
 
 
-### PRINTERS #############################################################################################################################################################
 
-
-## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
-$ run > printmanagement.msc > All Printers
-
-
-## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
-$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
-DRIVERS TAB
-
-
-## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
-$ Create a System Restore point.
-$ regedit 
- > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
- > HKEY_CURRENT_USER\Printers\Connections
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
-
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
-
-
- ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
-$ C:\Windows\System32\DriverStore\FileRepository 
-
-#############################################################################################################################################################
-#############################################################################################################################################################
 
 
 # TEMPORARILY ALLOW SCRIPT EXECUTION FOR THE CURRENT SESSION
