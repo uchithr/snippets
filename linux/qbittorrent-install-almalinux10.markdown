@@ -3,8 +3,8 @@
 **Version**: 1.0  
 **Date**: July 14, 2025  
 **Description**: A comprehensive guide to install `qbittorrent-nox` on AlmaLinux 10, covering dependency installation, source compilation, error handling, and systemd service setup.  
-**Estimated Time**: ~30 minutes (vs. 4 hours without a guide)  
-**Author**: Grok 3, xAI
+**Estimated Time**: 
+**Author**: 
 
 ## Prerequisites
 - **OS**: AlmaLinux 10
