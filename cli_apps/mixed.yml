@@ -1,4 +1,25 @@
 
+#####################################################################################################
+NOMACHINE\__________________________________________________________________
+
+sudo dnf install epel-release -y
+sudo dnf install xrdp -y
+sudo systemctl enable --now xrdp
+sudo firewall-cmd --add-port=3389/tcp --permanent
+sudo firewall-cmd --reload
+
+
+cd /tmp
+wget  https://download.nomachine.com/download/9.0/Linux/nomachine_9.0.188_11_x86_64.rpm
+sudo dnf install nomachine_9.0.188_11_x86_64.rpm -y
+sudo systemctl status nxserver
+
+
+
+
+
+
+
 #############################################################################################################################################################################
 TESSERACT\____________________________________________________________________________________________
 #############################################################################################################################################################################
@@ -41,6 +62,22 @@ Saved session to C:\Users\SLVR\AppData\Local\Instaloader\session-sam_fisher
 
 # ONE POST
 $ instaloader -- -CO-LoHfnO01 --no-metadata-json --no-compress-json
+
+## COOKIELOAD
+--load-cookies BROWSER-NAME
+
+# TIME SPAN
+instaloader --login=sam ":saved" ^
+--no-video-thumbnails ^
+--no-compress-json ^
+--no-metadata-json ^
+--post-filter="datetime(2021, 8, 30) <= date <= datetime(2021, 12, 30)" ^
+--max-connection-attempts=5 ^
+--request-timeout=300 ^
+--resume-prefix=session  
+
+
+instaloader --login=sam ":saved" --no-video-thumbnails --no-compress-json --no-metadata-json --post-filter="datetime(2024, 1, 1) <= date <= datetime(2024, 12, 31)"
 
 
 # DOWNLOAD ALL PICTURES AND VIDEOS OF A PROFILE

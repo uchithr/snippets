@@ -732,6 +732,65 @@ crontab -e
 crontab -l
 00 09 * * * cp /home/sam/usage_script.sh /home/sam/HRDATA/
 
+################################################################################################################################################################################################
+#### LOW LEVEL FORAMT
+################################################################################################################################################################################################
+
+# blkdiscard (non-secure, quick discard)
+sudo blkdiscard -f /dev/sdX
+
+# hdparm secure erase (will fully wipe and reset drive)
+sudo hdparm --user-master u --security-set-pass NULL /dev/sdX
+sudo hdparm --user-master u --security-erase NULL /dev/sdX
+
+
+
+Check if the process is still running
+ps aux | grep blkdiscard
+sudo iotop -o
+
+
+
+
+################################################################################################################################################################################################
+#### DRIVE EJECT
+################################################################################################################################################################################################
+
+sam@localhost:~$ wodim --devices 
+wodim: Overview of accessible drives (2 found) :
+-------------------------------------------------------------------------
+ 0  dev='/dev/sr0'  rwrw-- : 'PLDS' 'DVD+-RW DH-16AES'
+ 1  dev='/dev/sr1'  rwrw-- : 'PIONEER' 'BD-RW   BDR-209M'
+
+
+cd /home/sam/Documents/disc_drives/
+
+gedit toggle-sr0.sh
+
+#!/bin/bash
+eject -T /dev/sr0
+
+chmod +x toggle-sr0.sh
+
+---
+cat toggle-sr1.sh 
+#!/bin/bash
+eject -T /dev/sr1
+
+
+/home/sam/Documents/disc_drives/toggle-sr0.sh
+
+
+Assign Keyboard Shortcuts 
+
+
+Open System Settings → Keyboard → Keyboard Shortcuts
+Scroll to Custom Shortcuts (or click “+” to create new)
+
+NAME: BD1
+COMMAND: /home/sam/Documents/disc_drives/toggle-sr0.sh
+SHORTCUT: shift + ctrl + 2
+
 
 ################################################################################################################################################################################################
 #### LVM
@@ -863,6 +922,11 @@ $ sudo parted /dev/sdc
 Number Start End Size File system Name Flags
 1 1049kB 2005MB 2004MB ext4 images
 2 2006MB 4009MB 2003MB xfs audio files
+
+
+
+
+
 
 ################################################################################################################################################################################################
 #### LDAP

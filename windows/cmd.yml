@@ -4,3 +4,10 @@ $ for /r %i in (*) do @echo %~nxi
 # TO RUN COMMAND PROMPT AS ADMINISTRATOR IN POWERSHELL,
 $ Start-Process cmd -Verb RunAs
 
+
+# MAKE DIRECTORIES
+for /l %i in (1990,1,1999) do md _%i
+
+
+# TEMP 5GB FILE
+fsutil file createnew dummyfile.txt 5368709120

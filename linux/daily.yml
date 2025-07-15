@@ -8,6 +8,21 @@ $ echo $SHELL
 # Monitor Commands
 psaux
 
+# GAIN SFTP CONTROL IN MOBA XTERM
+[sam@dockerhost1 movies]$ sudo chown sam:sam /home/sam/jellyfin/movies/
+[sam@dockerhost1 movies]$ sudo chmod u+w /home/sam/jellyfin/movies/
+
+
+# GNOME TWEAKS 
+sudo dnf install gnome-tweaks -y
+
+Tweaks > Windows > Toggle “Minimize” and “Maximize” buttons to ON.
+
+
+
+
+
+
 htop
 pkill -KILL -U samf
 

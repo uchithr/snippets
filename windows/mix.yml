@@ -38,6 +38,8 @@ $num(%track%,3) - %artist% -  %title%
 Tagging → Manage Scripts > Format value from other fields > TITILE
 $trim($replace(%title%,'[','(','[ ','(',' ]',')',']',')'))
 
+##  FOO MILK DROP REMOVE
+##  C:\Program Files\Common Files\VST3
 
 # CREATE CUE FORM ANOTHER CONVETER 
 FOOBAR
@@ -65,12 +67,27 @@ CRTL+ALT+HOME
 
 SHELL X VIEW
 
+### ICON CASHE LOCATION
+C:\Users\SLVR\AppData\Local\Microsoft\Windows\Explorer\2024-12-29
+
+
 ## HIGH USAGE
 "C:\Program Files\Microsoft Office\root\Office16\SDXHelper.exe"
 "C:\Windows\System32\svchost.exe"
 
 ## DEACTIVATION
 https://www.facebook.com/deactivate_delete_account
+
+## RENAME
+CREATE  LIKE BELOW IN A TEXTFILE 
+list.txt >  Best of Road Runner 1(UKB)-001.mkv|1952-05-24 - Beep, Beep.mkv
+
+ACTIONS > Import Rename-Pairs
+
+
+
+## CAD
+C:\Users\SLVR\Documents\Chaos Cosmos\Packages\3D_Models
 
 
 Shotcut
