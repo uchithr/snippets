@@ -8,18 +8,26 @@ $ echo $SHELL
 # Monitor Commands
 psaux
 
-# GAIN SFTP CONTROL IN MOBA XTERM
-[sam@dockerhost1 movies]$ sudo chown sam:sam /home/sam/jellyfin/movies/
-[sam@dockerhost1 movies]$ sudo chmod u+w /home/sam/jellyfin/movies/
-
-
-# GNOME TWEAKS 
-sudo dnf install gnome-tweaks -y
-
-Tweaks > Windows > Toggle “Minimize” and “Maximize” buttons to ON.
 
 
 
+# TEST SPEED 
+curl -o /dev/null http://speedtest.tele2.net/100MB.zip
+
+
+##
+# passwordless sudo:
+sudo visudo 
+
+## add below
+sam ALL=(ALL) NOPASSWD: ALL
+
+
+sudo hostnamectl set-hostname openstack1
+
+
+sudo dnf install cockpit -y
+sudo systemctl enable --now cockpit.socket
 
 
 

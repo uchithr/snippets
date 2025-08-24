@@ -1,0 +1,150 @@
+
+
+The host machine must satisfy the following minimum requirements:
+2 network interfaces
+8GB main memory
+40GB disk space
+
+
+Install dependencies:
+sudo dnf install git python3-devel libffi-devel gcc openssl-devel python3-libselinux
+
+
+Install dependencies for the virtual environment:
+python3 -m venv /path/to/venv
+source /path/to/venv/bin/activate
+pip install -U pip
+
+
+Install Kolla-ansible:
+git clone --branch master https://opendev.org/openstack/kolla-ansible
+pip install -e ./kolla-ansible
+
+sudo mkdir -p /etc/kolla
+sudo chown $USER:$USER /etc/kolla
+
+cp -r kolla-ansible/etc/kolla/* /etc/kolla
+cp kolla-ansible/ansible/inventory/* .
+
+
+
+Install Ansible Galaxy requirements
+kolla-ansible install-deps
+
+
+
+
+
+---
+
+# UPDATE SYSTEM
+sudo dnf update -y
+
+# INSTALL ESSENTIAL PACKAGES
+sudo dnf install -y git gcc make wget curl unzip \
+    python3 python3-pip python3-devel \
+    mariadb-server mariadb-devel \
+    rabbitmq-server memcached \
+    libffi-devel openssl-devel
+
+# DISABLE FIREWALL AND SELINUX (DEVSTACK WON’T WORK NICELY OTHERWISE)
+sudo systemctl disable --now firewalld
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
+# START REQUIRED SERVICES
+sudo systemctl enable --now mariadb
+sudo systemctl enable --now rabbitmq-server
+sudo systemctl enable --now memcached
+
+
+---------------------------
+
+# CREATE A STACK USER
+sudo useradd -s /bin/bash -d /opt/stack -m stack
+echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+
+# SWITCH TO STACK USER
+sudo su - stack
+
+# CLONE DEVSTACK REPOSITORY
+git clone https://opendev.org/openstack/devstack
+cd devstack
+
+# CREATE local.conf FILE
+nano local.conf
+
+# ADD THE FOLLOWING TO local.conf
+[[local|localrc]]
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+
+# RUN THE INSTALLATION
+./stack.sh
+
+
+
+
+
+
+/////----------------------------////
+
+
+
+VirtualBox Adapter Order
+
+Adapter 1 → NAT [enp0s3]
+Purpose: Internet access (apt/dnf updates, downloading packages).
+Typical IP: 10.0.2.15 (default VirtualBox NAT range).
+No need to configure manually — just use it for outbound traffic.
+
+
+Adapter 2 → Host-only [enp0s8]
+Purpose: Management network (your host ↔ VM communication).
+Example range: 192.168.56.5 (default VirtualBox host-only network). 192.168.56.0/24
+You’ll use this to SSH from your host to the VM and possibly configure Ansible.
+
+Adapter 3 → Bridged [enp0s9]
+Purpose: External / Public / Floating IP network.
+Makes your VM look like another device on your LAN.
+Example range: 192.168.1.8 Your real LAN, e.g., 192.168.1.0/24.
+
+
+
+
+hostnamectl set-hostname openstack1
+
+
+
+ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+enp0s3           UP             10.0.2.15/24 fd17:625c:f037:2:a00:27ff:fe6b:a0b7/64 fe80::a00:27ff:fe6b:a0b7/64
+enp0s8           UP             192.168.56.5/24 fe80::9bbd:fe0b:9fd9:907d/64
+enp0s9           UP             192.168.1.8/24 fe80::de29:80cf:c6b2:bf34/64
+
+
+
+
+Host-only (enp0s8 → Wired connection 1)
+sudo nmcli con mod "Wired connection 1" ipv4.addresses 192.168.56.5/24
+sudo nmcli con mod "Wired connection 1" ipv4.gateway 192.168.56.1
+sudo nmcli con mod "Wired connection 1" ipv4.method manual
+sudo nmcli con up "Wired connection 1"
+
+
+
+Bridged (enp0s9 → Wired connection 2)
+sudo nmcli con mod "Wired connection 2" ipv4.addresses 192.168.1.8/24
+sudo nmcli con mod "Wired connection 2" ipv4.gateway 192.168.1.1
+sudo nmcli con mod "Wired connection 2" ipv4.dns "8.8.8.8 1.1.1.1" #OPTIONAL
+sudo nmcli con mod "Wired connection 2" ipv4.method manual
+sudo nmcli con up "Wired connection 2"
+
+netsh advfirewall firewall add rule name="Allow ICMPv4" dir=in action=allow protocol=icmpv4:8,any
+
+sudo nmcli connection add type ethernet ifname enp0s3 con-name "bridge-eth0" ipv4.method auto ipv6.method ignore
+
+
+podman save --format oci-archive -o all-images.oci $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v "<none>:<none>")

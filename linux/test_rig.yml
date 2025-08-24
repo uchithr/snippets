@@ -6,6 +6,11 @@ sudo dnf install code -y
 
 
 
+# GNOME TWEAKS 
+sudo dnf install gnome-tweaks -y
+
+Tweaks > Windows > Toggle “Minimize” and “Maximize” buttons to ON.
+
 
 sudo dnf install brasero
 

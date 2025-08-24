@@ -33,6 +33,30 @@ firewall-cmd --permanent --add-port=<myport>/tcp
 sudo firewall-cmd --reload
 
 
+# GAIN SFTP CONTROL IN MOBA XTERM
+[sam@dockerhost1 movies]$ sudo chown sam:sam /home/sam/jellyfin/movies/
+[sam@dockerhost1 movies]$ sudo chmod u+w /home/sam/jellyfin/movies/
+
+
+
+
+###################################
+## VirtualBox
+###################################
+
+
+
+cd "C:\Program Files\Oracle\VirtualBox"
+
+
+
+C:\Program Files\Oracle\VirtualBox
+λ VBoxManage list vms
+"openstack-caracal" {c7582361-213a-4e8f-810f-f06026a26cbc}
+
+C:\Program Files\Oracle\VirtualBox
+λ VBoxManage modifyvm "openstack-caracal" --nic1 none
+
 
 
 #######################
