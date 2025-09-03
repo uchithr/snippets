@@ -1,3 +1,690 @@
+VirtualBox VM Spec for OpenStack AIO on i5-12400
+CPU (Processors): 6 vCPUs (good balance)
+
+RAM:
+If host has 16 GB → allocate 8–10 GB to the VM  PROMISCUOUS MODE ALL
+If host has 32 GB → allocate 12–16 GB
+
+Disk: 100 GB (dynamic VDI or qcow2; OpenStack services + Glance images grow quickly)
+
+
+## PARTITION LAYOUT RECOMMENDATION (FOR A 100G DISK)
+
+Mount Point	  Size		Type		Notes
+/boot		1G		   Standard	    Required to boot
+swap		4G–8G	    LVM			Depends on your RAM size
+/		    20G–30G		LVM			OS files only
+/home	    50G+		LVM			Assign the majority of space
+
+
+## ENTERPRISE-READY PARTITION LAYOUT (100 GB DISK)
+
+Mount Point     Size       Type       File System   Notes
+------------    ---------  ---------  ------------  ---------------------------------------------
+/boot           1 GB       Standard   ext4          Required for boot; outside LVM
+swap            8 GB       LVM        swap          Swap space; adjust based on RAM
+/               20 GB      LVM        xfs           Root filesystem for OS and system files
+/home           10 GB      LVM        xfs           Optional; user data (minimal on OpenStack nodes)
+/var            30 GB      LVM        xfs           For logs, databases, and variable data
+/var/log        20 GB      LVM        xfs           Dedicated log storage to prevent full root FS
+(Unallocated)   11 GB      LVM VG     —             Reserved for future expansion or snapshots
+
+
+//////////////////////////////////////////////////////////////////////////
+## WHEN TESTING ON VM FOLLOW BELOW STEPS 
+
+ENABLE NESTED VIRTUALIZATION
+
+C:\Program Files\Oracle\VirtualBox
+VBoxManage.exe modifyvm "<vm_name>" --nested-hw-virt on
+
+
+
+FOR ADAPTER 1 (BRIDGE → ENP0S3)
+
+# IDENTIFY CONNECTIONS
+ip a
+nmcli con show
+
+# MAKE THE IP PERMANENT
+sudo nmcli con mod enp0s3 ipv4.method manual ipv4.addresses 192.168.8.105/24 ipv4.gateway 192.168.8.1 ipv4.dns "8.8.8.8 1.1.1.1" ipv6.method ignore  
+
+## FOR kolla_internal_vip_address: MARIA DB ISSUE WHEN DEPLOYING
+sudo ip addr add 192.168.1.10/24 dev enp0s3
+sudo nmcli connection modify "Wired connection 2" +ipv4.addresses 192.168.1.10/24
+sudo nmcli connection up "Wired connection 2"
+
+
+
+
+# BRING IT DOWN AND UP   
+sudo nmcli con down enp0s3  ## BDRIDGED ADAPATER
+sudo nmcli con up enp0s3   ## UP FROM VM - CONNETION WILL BE BORKEN
+
+
+
+--------------------------------------------------------------------
+FOR ADAPTER 2 (INTERNAL → ENP0S8)
+
+# Identify connection name 
+ip a
+nmcli con show
+
+
+##Add a new connection for enp0s8 if not present
+sudo nmcli con add type ethernet ifname enp0s8 con-name enp0s8
+
+
+# To disable IP assignment (guide method)
+sudo nmcli con mod enp0s8 ipv4.method disabled ipv6.method ignore
+
+
+sudo nmcli con down enp0s8
+sudo nmcli con up enp0s8
+
+
+GUEST ADDINS
+sudo mkdir -p /mnt/cdrom
+sudo mount /dev/sr0 /mnt/cdrom
+
+chmod -R 777 *
+./VBoxLinuxAdditions.run
+
+//////////////////////////////////////////////////////////////////////////
+PRE SET
+
+Passwordless sudo
+
+sudo visudo 
+sam ALL=(ALL) NOPASSWD: ALL
+
+sudo dnf install cockpit -y
+sudo systemctl enable --now cockpit.socket
+pcp, python3-pcp
+pmlogger.service
+redis
+
+dnf update  
+dnf upgrade  
+dnf install -y epel-release
+dnf config-manager --set-enabled crb   
+  
+
+sudo dnf install podman nano vim -y
+
+systemctl --user start podman.service  (optional)
+
+
+
+sudo dnf -y groupinstall "Development Tools" && \
+sudo dnf -y install \
+  git nano epel-release \
+  python3-devel libffi-devel openssl-devel python3-libselinux \
+  dbus dbus-devel dbus-glib-devel \
+  cmake glib2 glib2-devel pkgconfig \
+  meson ninja-build \
+  python3-podman python3-openstackclient
+  
+
+
+
+
+sudo dnf install -y python3-pip
+pip3 install --user meson ninja
+
+
+
+
+
+
+KOLLA-ANSIBLE // deactivate        
+
+
+
+
+python3 -m venv $HOME/kolla-openstack       
+source $HOME/kolla-openstack/bin/activate
+pip install -U pip      
+pip install docker pkgconfig dbus-python ## optional
+pip install git+https://opendev.org/openstack/kolla-ansible@stable/2024.1 
+
+pip install 'ansible>=8,<9'  
+
+
+
+
+## VM BKP CREATED 30/08/25 [openstack_rocky3.ova]
+
+
+
+#### LOAD IAMGES WITH SUDO
+for f in *.tar.gz; do
+    sudo podman load -i "$f"
+done
+
+
+
+nano $HOME/ansible.cfg  
+[defaults]
+host_key_checking=False  ##enable in production.
+pipelining=True
+forks=100 
+/////
+
+
+
+
+
+
+
+CONFIGURE KOLLA-ANSIBLE FOR ALL-IN-ONE OPENSTACK DEPLOYMENT
+
+
+# CUSTOM CREATING CONFIGURE FILES
+sudo mkdir /etc/kolla
+sudo mkdir -p /var/log/journal  
+sudo chown $USER:$USER /etc/kolla   
+
+
+# COPING GOT LOADED CODES TO CUSTOM CREATING CONFIGURE DIRECTORY
+cp $HOME/kolla-openstack/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/ 
+
+# COPYING ALL-IN-ONE TO CUSTOM CREATING CONFIGURE FOLDER
+cp $HOME/kolla-openstack/share/kolla-ansible/ansible/inventory/all-in-one .
+
+
+# INSTALL ANSIBLE GALAXY REQUIREMENTS (VEVE)
+kolla-ansible install-deps 
+
+
+# Generate Kolla Passwords
+kolla-genpwd   
+
+///////////////MKE BKP OF VM
+
+
+
+nano /etc/kolla/globals.yml   
+
+
+---
+####################
+# Basic Environment
+####################
+kolla_base_distro: "rocky"
+kolla_install_type: "binary"
+kolla_container_engine: "podman"
+
+####################
+# Network Settings
+####################
+kolla_internal_vip_address: "192.168.1.10"   # Must be unused IP on your LAN # ADD IP TO ADAPATER BEFORE EXECUTION
+network_interface: "enp0s3"                   # Replace with your actual NIC name
+neutron_external_interface: "enp0s8"          # no ip PORT
+
+####################
+# Image Settings
+####################
+pull_policy: "if-not-present"                  # Only pull images if not already present
+docker_registry: "quay.io"
+#docker_namespace: "openstack"
+kolla_namespace: "openstack.kolla"
+openstack_tag: "2024.1-rocky-9"               # Match your image tags exactly
+
+
+####################
+# Timezone
+####################
+kolla_timezone: "Asia/Kolkata"
+
+####################
+# Services to Enable
+####################
+#cinder_backup_driver: "nfs"
+enable_keystone: "yes"
+enable_glance: "yes"
+enable_nova: "yes"
+enable_neutron: "yes"
+enable_cinder: "yes"
+enable_cinder_backend_lvm: "yes"
+
+
+enable_horizon: "yes"             # Horizon Dashboard
+enable_prometheus: "yes"          # Monitoring - Prometheus
+enable_grafana: "yes"             # Monitoring - Grafana
+enable_mariadb: "yes"
+enable_memcached: "yes"
+
+# Logging/Monitoring (optional, turn on if needed)
+enable_fluentd: "no"
+enable_elasticsearch: "no"
+enable_kibana: "no"
+
+####################
+# HA Proxy
+####################
+enable_haproxy: "no"              # Disable for single-node
+
+####################
+# CUSTOM FOR VM
+## IF FAILED
+rabbitmq_use_ip: "yes"
+rabbitmq_bind_address: "192.168.1.4"
+
+
+
+END OF YML 
+
+
+podman stats
+        
+## SIDE Notes
+change hosts file ip to internal if fialed
+ 
+cat /etc/hosts
+127.0.0.1 localhost
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+# BEGIN ANSIBLE GENERATED HOSTS
+192.168.1.10 openstack1
+# END ANSIBLE GENERATED HOSTS
+
+ 
+------------------------------------
+
+## USE IF FAILED
+/etc/containers/registries.conf and add a mapping:
+
+toml
+￼Copy code
+unqualified-search-registries = ["quay.io"]
+
+[[registry]]
+prefix = "kolla"
+location = "quay.io/openstack.kolla"
+
+
+////
+CINDER BLOCK STORAGE FOR OPENSTACK AND DEFINED THE NAME OF THE EXISTING VOLUME GROUP. 
+
+
+## STICK TO "cinder-volumes" name
+sudo pvcreate /dev/sdb   
+sudo vgcreate cinder-volumes /dev/sdb  
+sudo vgdisplay cinder-volumes 
+
+
+sudo vgrename cinder cinder-volumes
+sudo vgdisplay cinder-volumes
+
+////
+
+
+
+
+
+## 
+
+# Bootstrap Kolla-Ansible Nodes
+kolla-ansible -i all-in-one bootstrap-servers  
+localhost : ok=20 changed=8 unreachable=0 failed=0 skipped=27 rescued=0 ignored=0  #FAIL FIX 
+
+
+# 2 CHK
+kolla-ansible -i all-in-one prechecks 
+
+
+# Deploy AIO OpenStack with Kolla-Ansible  
+kolla-ansible -i all-in-one deploy 
+
+
+
+
+
+
+
+
+
+## MUST  DO IN PRE CONFIG
+/etc/hosts 
+sudo mkdir -p /var/lib/docker
+sudo ln -s /var/lib/containers /var/lib/docker    
+
+
+
+
+# Install OpenStack Command Line tools
+source $HOME/kolla-openstack/bin/activate 
+
+pip install python-openstackclient -c https://releases.openstack.org/constraints/upper/2024.1 
+pip install python-neutronclient -c https://releases.openstack.org/constraints/upper/2024.1  
+pip install python-glanceclient -c https://releases.openstack.org/constraints/upper/2024.1
+pip install python-heatclient -c https://releases.openstack.org/constraints/upper/2024.1  
+
+
+
+
+# Generate OpenStack Admin Credentials
+kolla-ansible post-deploy 
+
+# Enable OpenStack command line tools  to activate the credentials using the command below;
+source /etc/kolla/admin-openrc.sh    
+openstack service list     
+
+
+       
+
+
+# obtain the admin credentials from the Kolla passwords file
+grep keystone_admin_password /etc/kolla/passwords.yml  
+keystone_admin_password: ziwFxPDPhudKDiasDOXJjRQXqoAJjUbS6YAeXHKh  
+
+admin:ziwFxPDPhudKDiasDOXJjRQXqoAJjUbS6YAeXHKh
+
+
+## AFTER RESTART CMD MANGES FAILS ALWAYS **SORUCE***
+
+(kolla-openstack) [sam@openstack1 ~]$ source /etc/kolla/admin-openrc.sh
+
+openstack service list
+openstack compute service list
+openstack compute service list
+openstack network agent  list
+openstack volume service list
+
+
+
+
+
+
+
+###################################### WORKING WITH OPENSTACK
+
+CREATING EXAMPLE NETWORKS, IMAGES, AND NOVA KEYS ADD NETWORK IMAGE CONFIGS
+$ source $HOME/kolla-openstack/bin/activate
+
+
+$ nano kolla-openstack/share/kolla-ansible/init-runonce  
+
+# This EXT_NET_CIDR is your public network,that you want to connect to the internet via.
+ENABLE_EXT_NET=${ENABLE_EXT_NET:-1}
+EXT_NET_CIDR=${EXT_NET_CIDR:-'192.168.1.0/24'}
+EXT_NET_RANGE=${EXT_NET_RANGE:-'start=192.168.1.20,end=192.168.1.30'}
+EXT_NET_GATEWAY=${EXT_NET_GATEWAY:-'192.168.1.1'}
+##
+
+## RUN FOR APPLY
+$ kolla-openstack/share/kolla-ansible/init-runonce
+
+##  UPDATE
+source /etc/kolla/admin-openrc.sh
+
+## CHECK
+openstack network list  
+
+## CREATE SIMPLE DEMO INSTANCE
+openstack --os-cloud kolla-admin server create \
+  --image cirros \
+  --flavor m1.tiny \
+  --key-name mykey \
+  --network demo-net \
+  demo
+
+OR 
+openstack server create \
+  --image cirros \
+  --flavor m1.tiny \
+  --key-name mykey \
+  --network demo-net \
+  demo1
+
+
+## CHECK: LIST CURRENT SERVERS AND NETWORKS
+openstack server list
+openstack network list 
+
+## LIST AVAILABLE EXTERNAL NETWORKS
+openstack network list --external
+
+## ALLOCATE FLOATING IP FROM EXTERNAL NETWORK (e.g., public1)
+openstack floating ip create public1
+
+## ASSOCIATE FLOATING IP WITH CREATED INSTANCE (replace IP with actual floating IP)
+openstack server add floating ip demo1 192.168.1.22
+
+## CHECK FLOATING IP OF INSTANCE 'demo1'
+openstack server show demo1 -c addresses
+
+## SSH INTO INSTANCE 'demo1' (default password: gocubsgo)
+ssh cirros@192.168.1.22
+
+
+------------------------------------------------------------------------------------------------------------
+
+SSH ISSUE
+
+kolla-openstack/share/kolla-ansible/init-runonce
+
+######################################
+
+2025-08-28
+---
+chmod +x export_podman_images.sh
+./export_podman_images.sh
+
+
+
+
+#!/bin/bash
+# ---------------------------------------------------------
+# Script to export all OpenStack Kolla Podman images
+# ---------------------------------------------------------
+
+# Folder to store exported images
+BACKUP_DIR=~/podman_images_backup
+mkdir -p "$BACKUP_DIR"
+cd "$BACKUP_DIR" || exit
+
+# List of all images
+images=(
+"quay.io/openstack.kolla/neutron-server"
+"quay.io/openstack.kolla/neutron-l3-agent"
+"quay.io/openstack.kolla/neutron-openvswitch-agent"
+
+)
+
+# Loop through images and export each
+for img in "${images[@]}"; do
+    # Create a safe filename: replace / and : with _
+    filename=$(echo "$img" | sed 's/[\/:]/_/g').tar
+    echo "Exporting $img -> $filename"
+    sudo podman save -o "$filename" "$img"
+    
+    # Compress to save space
+    gzip -f "$filename"
+done
+
+echo "All images exported and compressed in $BACKUP_DIR"
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+:ON REMOTE SEVER
+
+scp ~/podman_images_backup/*.tar.gz user@other-server:/path/to/backup/
+
+
+cd /path/to/backup
+
+# SUDO MUST
+for f in *.tar.gz; do
+    sudo podman load -i "$f"
+done
+
+
+
+
+
+---
+blind check and loads to with sudo 
+
+
+for f in *.tar.gz; do
+    # extract repo:tag info from the tar file
+    repo_tag=$(tar -O -xzf "$f" manifest.json | jq -r '.[0].RepoTags[0]')
+    
+    if sudo podm1an images --format "{{.Repository}}:{{.Tag}}" | grep -q "^${repo_tag}$"; then
+        echo "Skipping $repo_tag (already loaded)"
+    else
+        echo "Loading $repo_tag ..."
+        sudo podman load -i "$f"
+    fi
+done
+------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+KOLLA WITH PYTHON
+
+
+
+//////////////////////////////////////////////////////
+
+
+ENABLE PROMISCUOUS MODE
+
+On Windows hosts: Edit your .vmx VM configuration file and add: 
+to enable promiscuous mode for the first network adapter (and repeat or adapt for others as needed) 
+
+ethernet0.noPromisc = "false
+
+
+
+sudo nmcli con add type ethernet ifname ens224 con-name ens224
+
+MAKE NETWRK ADPATERS - USE SS
+ASSING STATIC IPS FOR INTERFACES
+
+sudo nmcli con modify ens224 ipv4.addresses 192.168.110.10/24 
+sudo nmcli con modify ens224 ipv4.gateway 192.168.110.1 
+sudo nmcli con modify ens224 ipv4.dns "8.8.8.8 1.1.1.1" 
+sudo nmcli con modify ens224 ipv4.method manual 
+
+
+
+
+
+
+
+------
+/etc/kolla/globals.yml
+source $HOME/kolla-openstack/bin/activate   
+pip install git+https://opendev.org/openstack/kolla-ansible@stable/2024.1    
+kolla-ansible install-deps  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------
+ https://superuser.openinfra.org/articles/kolla-ansible-openstack-installation-ubuntu-24-04/
+ 
+ 
+im following above guide with oracle VirtualBox rocky linux i've done the initial network interface configurations  
+podman installation and what to do next. guide me step by step
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////
+////////////////////////////////////////
+////////////////////////////////
+/////////////////////////
+//////////////////
+//////////////
+EOF
+-----
+
+WTS GDE
+
+
+
+# INSTALL ESSENTIAL PACKAGES
+sudo apt install -y git gcc make wget curl unzip \
+    python3 python3-pip python3-dev \
+    mariadb-server libmariadb-dev \
+    rabbitmq-server memcached \
+    libffi-dev libssl-dev
+
+# DISABLE UFW (firewall) AND SET SELinux TO PERMISSIVE (SELinux is not enforced on Ubuntu by default)
+sudo systemctl disable --now ufw
+
+# START REQUIRED SERVICES
+sudo systemctl enable --now mariadb
+sudo systemctl enable --now rabbitmq-server
+sudo systemctl enable --now memcached
+
+# SECURE MariaDB INSTALLATION (optional but recommended)
+# You can automate this using the 'mysql_secure_installation' script or do it manually.
+
+# CREATE A STACK USER
+sudo useradd -s /bin/bash -d /opt/stack -m stack
+echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+
+# SWITCH TO STACK USER
+sudo su - stack
+
+# CLONE DEVSTACK REPOSITORY
+git clone https://opendev.org/openstack/devstack
+cd devstack
+
+# CREATE local.conf FILE
+cat <<EOF > local.conf
+[[local|localrc]]
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=\$ADMIN_PASSWORD
+RABBIT_PASSWORD=\$ADMIN_PASSWORD
+SERVICE_PASSWORD=\$ADMIN_PASSWORD
+EOF
+
+# RUN THE INSTALLATION
+./stack.sh
+------------------------------
+
+
+
+
+
 
 
 The host machine must satisfy the following minimum requirements:
