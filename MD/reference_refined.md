@@ -34,7 +34,7 @@
   - [NFS](#nfs)
 - [File Transfer & Remote Access](#file-transfer--remote-access)
   - [SCP & Rsync](#scp--rsync)
-  - [NOMACHINE] (#nomachine)
+  - [NOMACHINE] (#NOMACHINE)
 - [Databases](#databases)
   - [MariaDB / MySQL](#mariadb--mysql)
 - [Automation & Scheduling](#automation--scheduling)
