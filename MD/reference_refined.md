@@ -34,6 +34,7 @@
   - [NFS](#nfs)
 - [File Transfer & Remote Access](#file-transfer--remote-access)
   - [SCP & Rsync](#scp--rsync)
+  - [NOMACHINE] (#nomachine)
 - [Databases](#databases)
   - [MariaDB / MySQL](#mariadb--mysql)
 - [Automation & Scheduling](#automation--scheduling)
@@ -2107,6 +2108,27 @@ _Snippets related to **SCP & Rsync**._
 # Use PAM for authentication
 pam_service_name=vsftpd
 ```
+
+### NOMACHINE
+_Snippets related to **NO MACHINE**
+
+```bash
+sudo dnf install epel-release -y
+sudo dnf install xrdp -y
+sudo systemctl enable --now xrdp
+sudo firewall-cmd --add-port=3389/tcp --permanent
+sudo firewall-cmd --reload
+```
+
+```bash
+cd /tmp
+wget  https://download.nomachine.com/download/9.0/Linux/nomachine_9.0.188_11_x86_64.rpm
+sudo dnf install nomachine_9.0.188_11_x86_64.rpm -y
+sudo systemctl status nxserver
+```
+
+
+
 
 ## Databases
 
