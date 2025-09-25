@@ -34,7 +34,7 @@
   - [NFS](#nfs)
 - [File Transfer & Remote Access](#file-transfer--remote-access)
   - [SCP & Rsync](#scp--rsync)
-  - [NOMACHINE] (#NOMACHINE)
+  - [NOMACHINE](#NOMACHINE)
 - [Databases](#databases)
   - [MariaDB / MySQL](#mariadb--mysql)
 - [Automation & Scheduling](#automation--scheduling)
@@ -2110,7 +2110,7 @@ pam_service_name=vsftpd
 ```
 
 ### NOMACHINE
-_Snippets related to **NO MACHINE**._
+_Snippets related to **NOMACHINE**._
 
 ```bash
 sudo dnf install epel-release -y
