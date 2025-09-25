@@ -2110,7 +2110,7 @@ pam_service_name=vsftpd
 ```
 
 ### NOMACHINE
-_Snippets related to **NO MACHINE**
+_Snippets related to **NO MACHINE**._
 
 ```bash
 sudo dnf install epel-release -y
