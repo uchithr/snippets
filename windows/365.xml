@@ -93,4 +93,5 @@ $user.StrongAuthenticationRequirements = @()
 Set-MsolUser -UserPrincipalName $user.UserPrincipalName -StrongAuthenticationRequirements @()
 
 
-
+## CLEAN OFFICE
+https://github.com/abbodi1406/WHD/blob/master/scripts/OfficeScrubber_14.zip

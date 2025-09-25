@@ -48,12 +48,15 @@ thorium
 https://www.google.com/intl/en/chrome/?standalone=1
 
 
-# W11 MICROSOFT SIGN BYPASS
+# W11 MICROSOFT SIGN BYPASS METHOD 1
 $ Shift + F10 
 $ ncpa.cpl > disable ethernet
 $ oobe\bypassnro
 
+
+# W11 MICROSOFT SIGN BYPASS METHOD 2
 $ start ms-cxh:localonly
+
 
 # BITLOCKER
 $  manage-bde -off C: as ADMIN 
