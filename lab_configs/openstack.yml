@@ -30,6 +30,18 @@ swap            8 GB       LVM        swap          Swap space; adjust based on 
 (Unallocated)   11 GB      LVM VG     —             Reserved for future expansion or snapshots
 
 
+
+## ENTERPRISE-READY PARTITION LAYOUT (200 GB DISK)
+Mount Point     Size       Type       File System   Notes
+------------    ---------  ---------  ------------  ---------------------------------------------
+/boot           1 GB       Standard   ext4          Required for boot; outside LVM
+swap            12 GB      LVM        swap          Swap space; adjust based on RAM
+/               30 GB      LVM        xfs           Root filesystem for OS and system files
+/home           20 GB      LVM        xfs           Optional; user data (minimal on OpenStack nodes)
+/var            60 GB      LVM        xfs           For logs, databases, and variable data
+/var/log        30 GB      LVM        xfs           Dedicated log storage to prevent full root FS
+(Unallocated)   30 GB      LVM VG     —             Reserved for future expansion or snapshots
+
 //////////////////////////////////////////////////////////////////////////
 ## WHEN TESTING ON VM FOLLOW BELOW STEPS 
 
