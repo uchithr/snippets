@@ -928,6 +928,37 @@ Number Start End Size File system Name Flags
 
 
 
+
+-------
+
+
+
+### HDD FORMAT
+Easiest (one-liner using lsblk and umount)
+sudo umount $(lsblk -ln -o NAME,MOUNTPOINT | awk '/sdb[0-9]/ {print "/dev/"$1}')
+sudo umount -l /dev/sdb*
+
+
+
+sudo wipefs -a /dev/sdb
+sudo parted /dev/sdb --script mklabel gpt
+
+
+sudo parted /dev/sdb --script mkpart primary ntfs 0% 100%
+
+sudo mkfs.ntfs -f -L MyDrive /dev/sdb1
+
+
+sudo mkdir -p /mnt/mydrive
+sudo mount -t ntfs /dev/sdb1 /mnt/mydrive
+
+
+
+sudo umount /mnt/ntfs1
+
+
+
+
 ################################################################################################################################################################################################
 #### LDAP
 ################################################################################################################################################################################################

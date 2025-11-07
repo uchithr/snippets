@@ -1,0 +1,57 @@
+
+Fixing Printer Sharing Error 0x0000011B on Windows
+
+If you've run into the frustrating error:
+
+"Windows cannot connect to the printer. Operation failed with error 0x0000011B-here's a quick fix that can help.
+
+hashtag#The_Cause
+
+This error is triggered by a Microsoft security update that enforces RPC encryption. While important for security, it can cause issues in small networks or workgroup setups.
+
+hashtag#The_Fix
+
+On the PC sharing the printer:
+
+1 Press Win + R, type regedit, and open Registry Editor.
+
+2 Navigate to:
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\ Control\Print
+
+3 Create a new DWORD (32-bit) Value RpcAuthnLevel PrivacyEnabled
+
+4 Set the value to 0.
+
+5 Close Registry Editor and restart the PC.
+
+hashtag#Results
+
+After rebooting, other PCs should be able to connect to the shared printer without issues.
+
+
+
+
+////////////
+
+
+
+Repair System Files 
+
+ $ sfc /scannow
+
+Repair Boot Records 
+
+$ bootrec /fixmbr 
+$ bootrec /fixboot 
+$ bootrec /scanos 
+$ bootrec /rebuildbcd
+
+Check Disk Errors 
+
+$ chkdsk C: /f /r
+
+Stop Auto-Restart After Crash 
+
+$ bcdedit /set {def} recoveryenabled No 
+$ bcdedit /set {def} bootstatuspolicy ignoreallfailures 

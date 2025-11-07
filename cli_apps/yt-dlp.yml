@@ -11,6 +11,10 @@ PLACE CONFIG IN  -  C:\Users\Ezio\AppData\Roaming\youtube-dl
 # VIDEO INFO
 $ -F https://www.youtube.com/watch?v=vPzON30fs_U
 
+$ yt-dlp -F "https://www.youtube.com/watch?v=EOZx7VcyfUo" | grep -E "251-8|136|247|298|302|299|303"
+$ yt-dlp -F "https://www.youtube.com/playlist?list=PLSLDsQ1AbGgzDIZeF2NpYO47Cerk2oJgG" | grep -E "140|136"
+
+
 # ONLY JPEG THUMBNAIL
 $ --write-thumbnail --skip-download https://www.youtube.com/watch?v=t5jiR1OZ9zw
 

@@ -59,3 +59,27 @@ Copy from Notepad++ back into Word
 Paste normally.
 
 Apply formatting (set font, size, and Ctrl+J to justify).
+
+
+
+
+
+
+
+## WORD 
+OR JUST CHANGED TO TEXT ONLY FOAMT
+In Word, a paragraph shows up in the Navigation Pane > Headings section if its style has an outline level set to Level 1–9 (used for headings).
+Your style general may still be set to Outline Level: Level 1, which makes it behave like a heading.
+✅ How to fix it (remove it from Navigation Pane):
+1. Open the Modify Style window (as shown in your first image).
+
+Click Modify on the "Styles" pane.
+
+2. Click Format (bottom-left corner), then select Paragraph.
+3. In the Paragraph settings window:
+
+Look for Outline Level
+
+Change it from Level 1 (or any level) to Body Text
+
+4. Click OK, then OK again to save the style.

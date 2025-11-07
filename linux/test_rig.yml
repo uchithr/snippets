@@ -22,3 +22,38 @@ chmod +x JDownloader2Setup_unix_nojre.sh
 
 
 sudo dnf install ntfs-3g -y
+
+
+## QBIT PASSWORD RESET
+sed -i '/\[WebUI\]/,/^\[/ {s/^Password=.*/Password=gamlo/}' /home/sam/.config/qBittorrent/qBittorrent.ini
+sudo systemctl restart qbittorrent-nox
+
+
+# RAR
+wget https://www.rarlab.com/rar/rarlinux-x64-621.tar.gz
+tar -xzf rarlinux-x64-621.tar.gz
+cd rar
+sudo install -v -m755 rar unrar /usr/local/bin
+unrar
+
+
+unrar x -op/run/media/sam/KINGSTON/gowr gowr.part001.rar
+
+
+
+sudo dnf install peaZip
+sudo dnf install zip unzip p7zip p7zip-plugins rar
+
+
+
+
+MAKE WGET AUTOMATICALLY HANDLE THESE LONG QUERY URLS GRACEFULLY
+
+$ nano ~/.wgetrc
+
+
+# Automatically trust the filename suggested by the server
+trust_server_names = on
+
+# Use server's suggested Content-Disposition filename if available
+content_disposition = on
