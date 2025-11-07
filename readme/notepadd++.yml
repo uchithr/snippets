@@ -20,3 +20,42 @@ TICK MATCH CASE AND REGX
 Set Search Mode (bottom of the window) to "Regular expression".
 
 Click Replace All.
+
+
+
+
+
+
+
+
+
+📌 Method: Using Notepad / Notepad++
+
+Copy your black text from Word
+(the messy one with line breaks).
+
+Paste it into Notepad or Notepad++
+
+Notepad will remove all Word formatting.
+
+In Notepad++ you’ll still see the line breaks.
+
+Fix line breaks in Notepad++
+
+Press Ctrl+H (Find & Replace).
+
+In Find what: type \r\n
+
+In Replace with: type a space (just hit the spacebar once).
+
+$$$$At the bottom, select Search Mode → Extended (\n, \r, \t, \0).
+
+Click Replace All.
+
+👉 Now your whole text becomes one clean paragraph.
+
+Copy from Notepad++ back into Word
+
+Paste normally.
+
+Apply formatting (set font, size, and Ctrl+J to justify).
