@@ -1,14 +1,18 @@
 # BOOTKEYS
 
-HP 
-F9 - Boot Menu
+
+F9 - HP
 F10 - BIOS
+
+
+F11 - ASROCK
+F12 - DELL
 
 
 # SAFEBOOT
 $  bcdedit /set {current} safeboot minimal
 $  bcdedit /set {current} safeboot network
-$ shutdown /r
+$  shutdown /r
 $  bcdedit /deletevalue {current} safeboot
 
 
