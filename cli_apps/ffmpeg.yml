@@ -78,7 +78,35 @@ $ ffmpeg -i input.mp4 -c:v libx265 -preset medium -crf 28 -pix_fmt yuv420p10le -
 
 # 10 BIT WITH GRAIN
 $ ffmpeg -y -i input.mp4 -c:v libx265 -preset medium -crf 26 -pix_fmt yuv420p10le -x265-params psy-rd=2:psy-rdoq=6:rdoq-level=1 -c:a copy output-x26510bit.mkv
-[psy-rdoq=7] [prn]
+
+
+
+
+
+crf=27                # Main quality/size control (higher = smaller file)
+aq-mode=2             # Auto-variance AQ (best for detail)
+aq-strength=1.0       # Balanced AQ level
+psy-rd=1.8            # Sharpness + texture preservation
+psy-rdoq=4            # Grain preservation without huge files  [psy-rdoq=7_prn]
+rdoq-level=1          # Better quantization detail
+qpmin=0               # Allows lossless blocks if needed
+qpmax=69              # Allows strong compression when possible
+ipratio=1.40          # Higher-quality I-frames
+pbratio=1.30          # Better P-frame quality vs B-frames
+subme=2               # Fast motion estimation (keeps encoding fast)
+limit-refs=1          # Speed optimization, small quality hit
+max-merge=3           # Balanced merge mode
+b-pyramid=1           # Better compression using B-frames as refs
+deblock=-1,-1         # Slight sharpening, keeps grain intact
+qcomp=0.65            # Balanced distribution of bits
+
+
+ffmpeg.exe -i "input.mkv" ^
+  -c:v libx265 ^
+  -preset medium ^
+  -x265-params "crf=26:aq-mode=2:aq-strength=1.0:psy-rd=1.8:psy-rdoq=4:rdoq-level=1:qpmin=0:qpmax=69:ipratio=1.40:pbratio=1.30:subme=2:limit-refs=1:max-merge=3:b-pyramid=1:deblock=-1,-1:qcomp=0.65" ^
+  -c:a copy ^
+  "output_x265.mkv"
 
 
 psy-rd=2.00, psy-rdoq=5.50, qpmin=0, qpmax=69, qcomp=0.60, ipratio=1.40, pbratio=1.30, subme=2, limit-refs=1, max-merge=3, aq-mode=2, aq-strength=1.00, b-pyramid, radl=0
