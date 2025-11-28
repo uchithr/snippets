@@ -111,6 +111,10 @@ ffmpeg.exe -i "input.mkv" ^
 
 psy-rd=2.00, psy-rdoq=5.50, qpmin=0, qpmax=69, qcomp=0.60, ipratio=1.40, pbratio=1.30, subme=2, limit-refs=1, max-merge=3, aq-mode=2, aq-strength=1.00, b-pyramid, radl=0
 
+
+
+
+
 #########################################################################
 
 # VERTICAL FLIP
