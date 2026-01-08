@@ -16,6 +16,12 @@ curl -o /dev/null http://speedtest.tele2.net/100MB.zip
 ip route show default
 
 
+# OPENED PORT LIST
+sudo ss -tunlp
+
+## SEND REQUEST TO RELOAD
+curl -X POST localhost:7001/-/reload
+
 
 ###########################
 # TOP ####################
