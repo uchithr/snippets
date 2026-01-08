@@ -11,8 +11,12 @@ sam ALL=(ALL) NOPASSWD: ALL
 sudo hostnamectl set-hostname openstack1
 
 
+////////////////////////////////////////////////////////
 
 
+# =========================
+# MEMORY & CACHE MONITORING
+# =========================
 
 # CHECK CACHE FILE USAGE IN LINUX:
 free -h
@@ -22,12 +26,18 @@ top or htop
 slabtop
 
 
+
+
+=========================
+DISK & STORAGE MANAGEMENT
+=========================
+
 fdisk -l
 lsblk -f
 watch -sh /source
 tree --du -h | grep G]
 
-# CHECK SSD OR HDD ON DISK # 1 for hdd & 0 for ssd
+# CHECK SSD OR HDD ON DISK # 1 FOR HDD & 0 FOR SSD
 cat /sys/block/sda/queue/rotational
 
 ## FIND LARGER FILES
@@ -37,16 +47,40 @@ find . -type f -size +500M -exec ls -lh {} \; | awk '{print $9, $5}'
 # LVL 1 & L5 TREE DUMP
 { tree -h -L 1; echo ""; tree -h -L 5 | tail -n +2; } > "/f/Cloud/mega_mixes_g.txt"
 
+
+
+
+
+=========================
+SSH & REMOTE ACCESS
+=========================
+
 # SSH WITH KEYFILE  
 ssh -i ssh-key-2023-02-22.key opc@158.101.196.84
 
-# VIEW LOGEED IN USERS  
+## FILE COPY FORM SVR 2 SVR
+$ rsync –av /home/student/testfile bob@desktop:/home/bob
+
+# COPY FILES FROM WINDOWS TO LINUX 
+scp .\p7zip.zip sam@1.22.3.6:/home/sam/
+
+# COPY FILES FROM LINUX MACHINE TO WINDOWS
+scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
+scp sam@cmsl-si:/var/www/remotely "C:/Users/uchithr/Downloads/D_DRIVE"
+
+
+
+
+=========================
+OS & USER INFORMATION
+=========================
+# VIEW LOGGED IN USERS  
 w
 
 # CHECK LOG tail 
 /var/log/auth.log
 
-# CALANDER WITH SPECIFIC MONTH  
+# CALENDAR WITH SPECIFIC MONTH  
 cal oct 2020
 
 ## OS DETAILS 
@@ -55,14 +89,25 @@ cat /etc/relcat /etc/os-release
 # CURRENT TIME WITH WHICH USER USING THE SYSTEM 
 uptime
 
-# CPU INFORMATION 
-lscpu
 
-# RAM INFORMATION 
-free -h
 
-# FILE SYSTEM SIZE WITH TYPE  
-df -Th
+=========================
+QUICK COMMAND INFO & FILE INFORMATION
+=========================
+
+# QUICK INFO ABOUT COMMANDS  
+whatis ls scp
+
+# FILE INFORMATION
+file rclone
+stat rclone
+
+
+
+
+=========================
+LS - LIST INFORMATION ABOUT FILES
+=========================
 
 # SORT BY FILE SIZE, WITH THE LARGEST FILES FIRST.
 ls -lhS
@@ -73,25 +118,23 @@ ls -al
 # LIST FILES WITH FILE PERMISSIONS  
 ls -l
 
-# LIST ALL FILES WITH HIDDEN FILES iN READABLE FORMAT 
+# LIST ALL FILES WITH HIDDEN FILES IN READABLE FORMAT 
 ls -lsah
 
 # LIST FILES WITH ORDER 
 ls -lX
 
-# LIST FILES WITH ACESS TIME  
+# LIST FILES WITH ACCESS TIME  
 ls -ult
 
 # VIEW PERMISSIONS  
 ls-l myfile
 
 
-# QUICK ONFO ABOUNT COMMANDS  
-whatis ls scp
 
-# FILE INFORAMTION
-file rclone
-stat rclone
+=========================
+DU - DISK USAGE
+=========================
 
 ## FILE SIZE  
 du -h /var/lib/deluge/Downloads/
@@ -105,94 +148,66 @@ du -h
 ## LIST WITH SIZE 
 du -sh * | sort -hr
 
+# FILE SYSTEM SIZE WITH TYPE  
+df -Th
+
 ## CREATE MULTIPLE FILES  
 touch myfile{1..5}
 
-# OPENED PORT LIST
-$  sudo ss -tunlp
 
-## SEND REQUEST TO RELOAD
-$ curl -X POST localhost:7001/-/reload
+=========================
+ISO / DISC / USB MANAGEMENT
+=========================
 
 ## MAKE ISO
-$ genisoimage -o output_image.iso directory_name du -sh ~/up/ - directory size
+genisoimage -o output_image.iso directory_name du -sh ~/up/ - directory size
 
 ## MOUNT ISO
-$ mkdir viewpoint
-$ sudo mount -o loop myfile.iso viewpoint
-$ sudo umount viewpoint
+mkdir viewpoint
+sudo mount -o loop myfile.iso viewpoint
+sudo umount viewpoint
 
-# COPY WITH PROGRESS
-rsync -ah --info=progress2 <source> <destination>
-rsync -ah --info=progress2 --stats <source> <destination>
-
-# TO COPY THE SOURCE DIRECTORY ITSELF (WITH THE FOLDER):
-$ rsync -ah --info=progress myfolder target_d/
-
-# TO COPY ONLY THE CONTENTS OF THE SOURCE DIRECTORY (WITHOUT THE FOLDER):
-$ rsync -ah --info=progress2 myfolder/ target_d/
-
-
-## FILE COPY FORM SVR 2 SVR scp /home/student/testfile bob@desktop:/home/bob 
-$ rsync –av /home/student/testfile bob@desktop:/home/bob
-
-# COPY FILES FORM WINDOWS TO LINUX 
-scp .\p7zip.zip sam@1.22.3.6:/home/sam/
-
-# COPY FILES FORM LINUX MACHINE TO WINDOWS
-scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
-
-
-scp sam@cmsl-si:/var/www/remotely "C:/Users/uchithr/Downloads/D_DRIVE"
 ## VERIFYING IMAGE BY SHA
-$ echo "fa95fb748b34d470a7cfa5e3c1c8fa1163e2dc340cd5a60f7ece9dc963ecdf88 \ *ubuntu-21.04-desktop-amd64.iso" | shasum -a 256 --check
+echo "fa95fb748b34d470a7cfa5e3c1c8fa1163e2dc340cd5a60f7ece9dc963ecdf88 \ *ubuntu-21.04-desktop-amd64.iso" | shasum -a 256 --check
 
 ## ISO TO USB BOOT DISC
 sudo dd status=progress if=ubuntu-20.04.1-LTS-desktop-amd64.iso of=/dev/sdb
 
 
+## MOUNT DISC
+sudo blkid
+sudo mkdir /media/dvd-r
+sudo mount /dev/sr0 /media/dvd-r
+tree --du -h | grep G]
 
-## REMOVE SPECIFIC FILE FROM MULTIPLE DIRECTRIES
-find . -name \*.flac -type f -delete
+
+=========================
+WINDOWS INTEROPERABILITY
+=========================
 
 ## ACCESS WINDOWS PATH FROM LINUX
 smbclient --user=sl/uchithr%apr@187*#  //slktweb/IT-Software
 
 
-## SUBLIME TEXT 4
-$ sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-$ sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-$ sudo dnf install sublime-text -y
 
+=========================
+ADDITIONAL TOOLS
+=========================
 
-## COCKPIT	
-
+## COCKPIT
 sudo dnf install cockpit -y
-yum install cockpit	
-sudo firewall-cmd --add-service=cockpit	
-sudo firewall-cmd --add-service=cockpit --permanent	
-systemctl enable --now cockpit.socket	
-systemctl start cockpit	
-ss -tulpn | grep :9090	
+yum install cockpit
+sudo firewall-cmd --add-service=cockpit
+sudo firewall-cmd --add-service=cockpit --permanent
+systemctl enable --now cockpit.socket
+systemctl start cockpit
+ss -tulpn | grep :9090
+firewall-cmd --zone=public --add-port=9090/tcp --permanent
+firewall-cmd  --reload
 
-firewall-cmd --zone=public --add-port=9090/tcp --permanent	
-firewall-cmd  --reload	
-
-# MIDNIGHT COMMANDER	
+# MIDNIGHT COMMANDER
 sudo dnf install mc
 
-
-
-
-
-
-
-
-## MOUNT DISC	
-sudo blkid	
-sudo mkdir /media/dvd-r	
-sudo mount /dev/sr0 /media/dvd-r	
-tree --du -h | grep G]	
 
 
 ## TERMINAL RECORD
@@ -201,9 +216,7 @@ exit
 script my_terminal_session.txt
 ~/.bash_history
 
-
 ## DISABLE BASH HISTORY
 nano ~/.bashrc
-unset HISTFILE #Add the following line at the end of the file to disable history:
-source ~/.bashrc #to apply
-
+unset HISTFILE # Add the following line at the end of the file to disable history:
+source ~/.bashrc # to apply
