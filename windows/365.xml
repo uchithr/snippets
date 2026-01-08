@@ -86,6 +86,8 @@ Get-MsolUser | Select DisplayName,UserPrincipalName,StrongAuthenticationMethods
 # DISABLE MFA FOR A SINGLE USER:
 Set-MsolUser -UserPrincipalName sam.fisher@abc.com -StrongAuthenticationRequirements @()
 
+# DISABLE WORKPLACE JOIN ON WINDOW
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin" /v BlockAADWorkplaceJoin /t REG_DWORD /d 1 /f
 
 
 $user = Get-MsolUser -UserPrincipalName sam.fisher@abc.com
