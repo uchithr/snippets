@@ -28,9 +28,9 @@ slabtop
 
 
 
-=========================
-DISK & STORAGE MANAGEMENT
-=========================
+# =========================
+# DISK & STORAGE MANAGEMENT
+# =========================
 
 fdisk -l
 lsblk -f
