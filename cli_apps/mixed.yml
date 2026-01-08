@@ -1,5 +1,129 @@
 
-#####################################################################################################
+
+#############################################################################
+ARCHIVERS \__________________________________________________________________
+
+
+###############
+## 7-ZIP #####
+###############
+
+sudo dnf install epel-release
+sudo dnf install p7zip p7zip-plugins
+
+# EXTRACT 7z.001 FILE
+sudo 7z x 'test.7z.001'
+
+
+
+
+
+###############
+## ZIP ###
+###############
+
+# ZIP SINGLE FILE	
+zip -r -s 500m myzip myfile.mkv
+
+
+# ZIP FOLDER WITH ZERO COMPRESSION WITH 500M SPLIT	 (0-9)
+zip -0 -r -s 500m output_folder/myzip source/
+
+
+# ZIP FOLDER WITH BASIC ENCRYPTION
+zip -e -0 -r output_folder/myzip source/
+
+
+
+# UZIP FILE	unzip file.zip
+cat cloud_dump.zip.* > cloud_dump.zip
+unzip cloud_dump.zip
+
+
+## LIST OR VIEW FILE INFORMATION WITHOUT EXTRACT
+unzip -l zip_file1.zip
+unrar l rar_file1.rar
+
+## TEST FILE INTEGRITY
+$ unzip -t your_file.zip
+$ unrar t your_file.rar
+
+
+
+
+
+
+###############
+## RAR ##
+###############
+
+
+# RAR FILE	
+rar a myrar.rar imput/
+
+
+# UNRAR FILE	
+unrar e 'REV.part01.rar' rev-fgr
+
+
+
+# IF RAR ARCHIVE IS PASSWORD-PROTECTED:
+unrar x -pPASSWORD file.rar
+
+
+
+
+###############
+## TAR ##
+###############
+
+## MAKE TAR FILE	
+tar cvf /home/sam/hrdata_bkp.tar /HRDATA 
+
+## UNTAR  FILE	
+tar xvf hrdata_bkp.tar
+
+
+
+####___________
+
+<>p4txz!p
+
+tar cvzf - test | split --bytes=15MB - name.tar.gz. [work]
+
+tar xz name.tar.gz.
+
+# ENCRYPT
+tar -czf - test | split --bytes=15MB | openssl enc -e -aes256 -out tarball.tar.gz.
+
+# DECRYPT
+openssl enc -d -aes256 -in tarball.tar.gz.* | tar xz -C /root/Desktop/out/
+-------------
+# TO tar + gpg + split
+$ tar -cJvpf - test | gpg --symmetric --cipher-algo aes256 | split -d -b 10MB - name.tar.xz.gpg. 
+
+# TO DECRYPT:
+$ cat outputfile.tar.xz.gpg.* | gpg -d | tar -xJvpf -
+
+cat filelist.txt | xargs -I % cp /path/to/source/folder/% /path/to/destination/folder/
+for /f "delims=" %i in (filelist.txt) do copy "C:\path\to\source\folder\%i" "C:\path\to\destination\folder\"
+
+#_#_____
+
+The best way to compress a folder in Linux server with splitting and password protection would be to use the tar command along with the gzip compression algorithm. Here's an example command that you can use:
+
+$ tar -czvf - /path/to/folder | split -b 100M -d -a 4 - file.tar.gz.part_ && openssl enc -aes-256-cbc -salt -in file.tar.gz.part_* -out archive.tar.gz.enc
+
+-c: create a new archive |*| -z: use gzip compression |*| -v: verbose while creating |*| -f: specifies the filename of the archive.
+split: split a large file into smaller ones.
+-b: size of each split file.
+-d: split to use numeric suffixes for the split files.
+-a: length of the suffixes (4)
+
+
+
+
+#############################################################################
 NOMACHINE\__________________________________________________________________
 
 sudo dnf install epel-release -y
@@ -20,9 +144,9 @@ sudo systemctl status nxserver
 
 
 
-#############################################################################################################################################################################
+#######################################################################################################
 TESSERACT\____________________________________________________________________________________________
-#############################################################################################################################################################################
+#######################################################################################################
 
 # FOR EN OCR
 $ tesseract input.jpg out.txt
@@ -87,6 +211,7 @@ $ instaloader sam_fisher
 # BACKUP 
 https://www.instagram.com/download/request
 https://accountscenter.instagram.com/info_and_permissions/ > Messages
+
 
 ####################################################################################################
 mp3tag\_____________________________________________________________________________________________
