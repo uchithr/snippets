@@ -6,6 +6,25 @@ sudo dnf install code -y
 
 
 
+## INSTALL GUI MODE TO CLI SERVER
+$ dnf groupinstall "Server with GUI"
+
+## GUI CLI SWITCH	
+systemctl get-default	
+yum install epel-release	
+yum  groupinstall -y "KDE Plasma Workspaces"	
+yum config-manager --set-enabled powertools	
+
+sudo systemctl set-default graphical.target	GUI
+sudo systemctl set-default multi-user.target	CLI
+
+sudo init 6	
+
+ls -l /etc/systemd/system/default.target	
+
+
+
+
 # GNOME TWEAKS 
 sudo dnf install gnome-tweaks -y
 
@@ -14,6 +33,12 @@ Tweaks > Windows > Toggle “Minimize” and “Maximize” buttons to ON.
 
 sudo dnf install brasero
 
+
+
+
+
+
+# JDOWNLOADER
 mkdir -p applications/jd
 sudo dnf install java-latest-openjdk
 wget <URL_to_JDownloader2Setup_unix_nojre.sh>
@@ -47,7 +72,7 @@ sudo dnf install zip unzip p7zip p7zip-plugins rar
 
 
 
-MAKE WGET AUTOMATICALLY HANDLE THESE LONG QUERY URLS GRACEFULLY
+# MAKE WGET AUTOMATICALLY HANDLE THESE LONG QUERY URLS GRACEFULLY
 
 $ nano ~/.wgetrc
 

@@ -1,21 +1,6 @@
 
-# LOG FILES LOCATION
-/root/var
-
-# VERIFY SHELL MODE
-$ echo $SHELL
-
-# Monitor Commands
-psaux
 
 
-
-
-# TEST SPEED 
-curl -o /dev/null http://speedtest.tele2.net/100MB.zip
-
-
-##
 # passwordless sudo:
 sudo visudo 
 
@@ -26,48 +11,7 @@ sam ALL=(ALL) NOPASSWD: ALL
 sudo hostnamectl set-hostname openstack1
 
 
-sudo dnf install cockpit -y
-sudo systemctl enable --now cockpit.socket
 
-
-
-htop
-pkill -KILL -U samf
-
-# TOP
-Sort by CPU usage / top -o %CPU
-Sort by Memory usage: / top -o %MEM
-Display specific users' processes: / top -u username
-ps aux --sort=-%cpu | head -n 10
-
-
-
-Find processes using more than 50% CPU
-ps aux | awk '$3 > 50 {print $0}'
-
-
-Filter processes belonging to a specific user consuming >10% memory
-ps aux | awk '$1 == "user1" && $4 > 10 {print $0}'
-
-
- List top 5 memory-consuming processes
- ps aux --sort=-%mem | head -n 6
-
-
-Sort by both CPU and memory usage
-ps aux --sort=-%cpu,-%mem
-
-Kill all processes with a specific name
-ps aux | grep myprocess | awk '{print $2}' | xargs kill -9
-
-
-Find all processes grouped by a user and sort by CPU
-ps aux | awk '$1 == "user1" {print $0}' | sort -k3 -nr
-
-
-
-# GATEWAY
-ip route show default
 
 
 # CHECK CACHE FILE USAGE IN LINUX:
@@ -222,6 +166,8 @@ $ sudo dnf install sublime-text -y
 
 
 ## COCKPIT	
+
+sudo dnf install cockpit -y
 yum install cockpit	
 sudo firewall-cmd --add-service=cockpit	
 sudo firewall-cmd --add-service=cockpit --permanent	
@@ -236,28 +182,10 @@ firewall-cmd  --reload
 sudo dnf install mc
 
 
-## INSTALL GUI MODE TO CLI SERVER
-$ dnf groupinstall "Server with GUI"
-
-## GUI CLI SWITCH	
-systemctl get-default	
-yum install epel-release	
-yum  groupinstall -y "KDE Plasma Workspaces"	
-yum config-manager --set-enabled powertools	
-
-sudo systemctl set-default graphical.target	GUI
-sudo systemctl set-default multi-user.target	CLI
-
-sudo init 6	
-
-ls -l /etc/systemd/system/default.target	
 
 
-## PIP	
-python3 -m pip show mutagen	
-sudo yum install epel-release	
-sudo yum install python-pip	
-sudo pip3 install mutagen	
+
+
 
 
 ## MOUNT DISC	
@@ -279,82 +207,3 @@ nano ~/.bashrc
 unset HISTFILE #Add the following line at the end of the file to disable history:
 source ~/.bashrc #to apply
 
-
-
-## CHK ######################################################
-
-### SYSTEM PERFORMANCE ANALYSIS ###
-#
-# SHOW TOP 10 PROCESSES USING THE MOST CPU
-ps aux --sort=-%cpu | head
-
-# RUN A STRESS TEST: 2 CPU WORKERS, 1 IO WORKER, 1 VM USING 128MB RAM FOR 10 SECONDS
-stress --cpu 2 --io 1 --vm 1 --vm-bytes 128M --timeout 10s
-
-
-### MEMORY AND DISK CACHE CLEANUP ###
-#
-# DELETE ALL PHP5 SESSION FILES (USE WITH CAUTION; PATH MAY VARY BY PHP VERSION)
-sudo rm -rf /var/lib/php5/*
-
-# -------------------------------------------------------------------------
-### SERVICE MANAGEMENT & TROUBLESHOOTING ###
-# 
-# RESTART THE APACHE2 WEB SERVER
-sudo systemctl restart apache2
-
-# CHECK RUNNING APACHE2 PROCESSES
-ps aux | grep apache2
-
-# DISPLAY STATUS OF APACHE2 SERVICE
-systemctl status apache2
-
-
-# -------------------------------------------------------------------------
-###  NETWORK MONITORING & DIAGNOSTICS ###
-#
-# DISPLAY LIVE INTERFACE BANDWIDTH USAGE
-ifstat
-
-# DISPLAY PACKET/TRAFFIC STATISTICS FOR ALL NETWORK INTERFACES
-ip -s link
-
-# GRAPHICAL REAL-TIME BANDWIDTH MONITOR PER INTERFACE
-nload
-
-# SHOW ACTIVE CONNECTIONS AND LISTENING PORTS WITH ASSOCIATED PROCESSES
-ss -tunap
-
-# PING A REMOTE SERVER TO TEST CONNECTIVITY
-ping <server-ip>
-
-# TRACE ROUTE TO A REMOTE SERVER TO IDENTIFY NETWORK PATH AND DELAYS
-traceroute <server-ip>
-
-# SEND A HEAD REQUEST TO TEST HTTP RESPONSE HEADERS
-curl -I http://your-server/
-
-# RUN APACHE BENCHMARK WITH 100 REQUESTS AND 10 CONCURRENT USERS
-ab -n 100 -c 10 http://your-server/
-
-# -------------------------------------------------------------------------
-
-###  LOGS & SYSTEM EVENTS ##
-#
-# VIEW RECENT SYSTEM LOGS WITH EXTENDED INFORMATION (ERRORS, WARNINGS, ETC.)
-journalctl -xe
-
-# VIEW KERNEL AND HARDWARE-RELATED MESSAGES (SCROLLABLE)
-dmesg | less
-
-
-# DATABASE (MYSQL) MONITORING
-# SHOW ACTIVE MYSQL PROCESSES (REQUIRES ROOT OR MYSQL ADMIN USER)
-mysqladmin processlist -u root -p
-
-# SHOW CURRENTLY RUNNING QUERIES WITH FULL DETAILS (RUN INSIDE MYSQL SHELL)
-SHOW FULL PROCESSLIST;
-
-
-# CHECK LAST REBOOT TIME
-last -x -F | grep -E "shutdown|reboot" | sort -k5,5M -k6,6n

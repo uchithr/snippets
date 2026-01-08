@@ -16,3 +16,10 @@ py -3.11 -m pip list
 py -3.11 -m pip freeze
 pip3 list
 
+
+
+## PIP	
+python3 -m pip show mutagen	
+sudo yum install epel-release	
+sudo yum install python-pip	
+sudo pip3 install mutagen	
