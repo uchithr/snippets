@@ -1,3 +1,31 @@
+#### FOOBAR WINE ####
+sudo dnf install epel-release
+sudo yum install snapd
+sudo systemctl enable --now snapd.socket
+sudo snap install foobar2000
+
+
+# dnf clean all
+# dnf check
+# dnf check-update
+# dnf update
+
+
+
+#### XFCE DESKTOP ####
+dnf --enablerepo=epel group -y install "Xfce" "base-x"
+
+
+
+
+
+
+
+
+
+
+
+
 Verify 64-bit architecture. The following command should respond with "amd64".
 
 $ dpkg --print-architecture

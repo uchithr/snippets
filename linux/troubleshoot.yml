@@ -146,3 +146,26 @@ SHOW FULL PROCESSLIST;
 
 # CHECK LAST REBOOT TIME
 last -x -F | grep -E "shutdown|reboot" | sort -k5,5M -k6,6n
+
+
+
+
+-----------------------------------------------------------------------------
+
+
+################################################################################################################################################################################################
+#### LOW LEVEL FORAMT
+################################################################################################################################################################################################
+
+# blkdiscard (non-secure, quick discard)
+sudo blkdiscard -f /dev/sdX
+
+# hdparm secure erase (will fully wipe and reset drive)
+sudo hdparm --user-master u --security-set-pass NULL /dev/sdX
+sudo hdparm --user-master u --security-erase NULL /dev/sdX
+
+
+
+Check if the process is still running
+ps aux | grep blkdiscard
+sudo iotop -o

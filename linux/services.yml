@@ -654,64 +654,6 @@ crontab -e
 crontab -l
 00 09 * * * cp /home/sam/usage_script.sh /home/sam/HRDATA/
 
-################################################################################################################################################################################################
-#### LOW LEVEL FORAMT
-################################################################################################################################################################################################
-
-# blkdiscard (non-secure, quick discard)
-sudo blkdiscard -f /dev/sdX
-
-# hdparm secure erase (will fully wipe and reset drive)
-sudo hdparm --user-master u --security-set-pass NULL /dev/sdX
-sudo hdparm --user-master u --security-erase NULL /dev/sdX
-
-
-
-Check if the process is still running
-ps aux | grep blkdiscard
-sudo iotop -o
-
-
-
-
-################################################################################################################################################################################################
-#### DRIVE EJECT
-################################################################################################################################################################################################
-
-sam@localhost:~$ wodim --devices 
-wodim: Overview of accessible drives (2 found) :
--------------------------------------------------------------------------
- 0  dev='/dev/sr0'  rwrw-- : 'PLDS' 'DVD+-RW DH-16AES'
- 1  dev='/dev/sr1'  rwrw-- : 'PIONEER' 'BD-RW   BDR-209M'
-
-
-cd /home/sam/Documents/disc_drives/
-
-gedit toggle-sr0.sh
-
-#!/bin/bash
-eject -T /dev/sr0
-
-chmod +x toggle-sr0.sh
-
----
-cat toggle-sr1.sh 
-#!/bin/bash
-eject -T /dev/sr1
-
-
-/home/sam/Documents/disc_drives/toggle-sr0.sh
-
-
-Assign Keyboard Shortcuts 
-
-
-Open System Settings → Keyboard → Keyboard Shortcuts
-Scroll to Custom Shortcuts (or click “+” to create new)
-
-NAME: BD1
-COMMAND: /home/sam/Documents/disc_drives/toggle-sr0.sh
-SHORTCUT: shift + ctrl + 2
 
 
 ################################################################################################################################################################################################
@@ -1177,70 +1119,11 @@ sudo systemctl start zoneminder
 
 
 
-#############################################################################################
-## DIAGNOSTIC
-#############################################################################################
 
-sudo dnf install openscap-scanner scap-security-guide -y
-
-
-sudo oscap xccdf eval \
-  --profile xccdf_org.ssgproject.content_profile_stig \
-  --results /tmp/scan-results.xml \
-  --report /tmp/scan-report.html \
-  /usr/share/xml/scap/ssg/content/ssg-centos-stream9-xccdf.xml
-
-
-
-## LYNIS SECURITY AUDIT
-sudo dnf install lynis -y
-sudo lynis audit system
-
-
-## CHECK LAST REBOOT TIME
-last -x -F | grep -E "shutdown|reboot" | sort -k5,5M -k6,6n
-
-
-
-
-
-################################################################################################################################################################################################
-#### ANDROID
-################################################################################################################################################################################################
-
-ARM 32 Bit  older devices armeabi-v7a
-ARM 64 Bit  most devices  arm64-v8a
-
-# CHECK THE ARM VERSION OF YOUR ANDROID PHONE @ IN A TERMINAL
-uname -m   #mine ARMv8-A
-
-# TERMIUS SD CARD PATH
-mnt/media_rw/4A21-0000
 
 
 
 ###############################################################################################################################################################################
-
-#### FOOBAR WINE ####
-sudo dnf install epel-release
-sudo yum install snapd
-sudo systemctl enable --now snapd.socket
-sudo snap install foobar2000
-
-
-# dnf clean all
-# dnf check
-# dnf check-update
-# dnf update
-
-
-
-#### XFCE DESKTOP ####
-dnf --enablerepo=epel group -y install "Xfce" "base-x"
-
-
-
-
 
 
 #### FFMPEG
