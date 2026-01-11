@@ -97,6 +97,7 @@ content_disposition = on
 #### DRIVE EJECT
 ################################################################################################################################################################################################
 
+## IDENTIFY DRIVES USING BELOW COMMAND
 sam@localhost:~$ wodim --devices 
 wodim: Overview of accessible drives (2 found) :
 -------------------------------------------------------------------------
@@ -104,29 +105,44 @@ wodim: Overview of accessible drives (2 found) :
  1  dev='/dev/sr1'  rwrw-- : 'PIONEER' 'BD-RW   BDR-209M'
 
 
+sam@lnx1:~/Documents$ lsblk -o NAME,TYPE,MODEL,VENDOR,SIZE
+NAME   TYPE MODEL                  VENDOR     SIZE
+ sr0    rom  HL-DT-ST BDDVDRW CH10L HL-DT-ST  1024M
+ sr1    rom  PIONEER BD-RW BDR-209M PIONEER   1024M
+
+
+
+
+
+# NAVIGATE TO DOCUMENTS DIRECTORY AND CREATE BELOW
 cd /home/sam/Documents/disc_drives/
 
-gedit toggle-sr0.sh
+
+$ gedit 
+
 
 #!/bin/bash
 eject -T /dev/sr0
 
-chmod +x toggle-sr0.sh
+
+$ chmod +x toggle-sr0.sh
 
 ---
-cat toggle-sr1.sh 
+
+$ cat << 'EOF' >> toggle-sr1.sh
 #!/bin/bash
 eject -T /dev/sr1
+EOF
 
 
 /home/sam/Documents/disc_drives/toggle-sr0.sh
 
 
-Assign Keyboard Shortcuts 
-
+# ASSIGN KEYBOARD SHORTCUTS 
 
 Open System Settings → Keyboard → Keyboard Shortcuts
 Scroll to Custom Shortcuts (or click “+” to create new)
+
 
 NAME: BD1
 COMMAND: /home/sam/Documents/disc_drives/toggle-sr0.sh
