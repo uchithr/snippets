@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 # LOG FILES LOCATION
 /root/var
 
@@ -21,6 +30,16 @@ sudo ss -tunlp
 
 ## SEND REQUEST TO RELOAD
 curl -X POST localhost:7001/-/reload
+
+
+###########################
+# GET ####################
+##########################
+
+
+dmesg
+iostat
+netstat
 
 
 ###########################
