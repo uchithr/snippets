@@ -204,6 +204,9 @@ $ docker build -t app1_image . # app1 image will be created
   RUN apk add procps # INSTALL PS COMMAND
   CMD ["ps", "aux"]  # CONTAINER RUNS GIVEN COMMAND WHEN STARTED
   
+
+## DOCKER INIT (AUTOMATICALLY CREATES DOCKERFILE & YAML)
+$ docker init  
  
 ## PORT EXPOSE FORM CONTAINER TO LOCAL
 $ docker run --name app1_container -d -p 80:80 app1_image <docker:outside>

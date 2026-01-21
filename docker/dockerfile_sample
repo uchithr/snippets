@@ -1,0 +1,42 @@
+ARG NODE_VERSION=20.8.0
+FROM node:${NODE_VERSION}-alpine
+ENV NODE_ENV production
+WORKDIR /usr/src/app
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev
+USER node
+COPY . .
+EXPOSE 8080
+CMD node app.js
+
+####################
+# Lines 1 and 2 
+Docker to pull the node:23.3.0-alpine image and use it as the base for the new image.
+
+# Line 
+Tell Node to run in production mode. 
+This is a Node.js optimization that increases performance while minimizing logging and other common development features.
+
+# Line 4 
+Sets the working directory for the remaining steps. 
+For example, the RUN and COPY instructions on lines 5 and 7 will run against the WORKDIR directory, 
+as will the node app.js command on line 9.
+
+
+# Line 5 
+Bind mounts the dependency files and installs them with the npm ci --omit-dev command.
+
+# Line 6 
+ensures Node.js runs the app as a non-root user.
+
+# Line 7 
+Copies the application’s source code from your build context (THE FIRST PERIOD) into the WORKDIR directory (THE SECOND PERIOD) inside the image.
+
+# Line 8 
+Documents the application’s network port.
+
+# Line 9 
+Command Docker will execute whenever it starts a container from the image.
+
