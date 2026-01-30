@@ -220,3 +220,27 @@ script my_terminal_session.txt
 nano ~/.bashrc
 unset HISTFILE # Add the following line at the end of the file to disable history:
 source ~/.bashrc # to apply
+
+
+## rsync ##
+
+
+# COPY WITH PROGRESS
+rsync -ah --info=progress2 <source> <destination>
+rsync -ah --info=progress2 --stats <source> <destination>
+
+# TO COPY THE SOURCE DIRECTORY ITSELF (WITH THE FOLDER):
+$ rsync -ah --info=progress myfolder target_d/
+
+# TO COPY ONLY THE CONTENTS OF THE SOURCE DIRECTORY (WITHOUT THE FOLDER):
+$ rsync -ah --info=progress2 myfolder/ target_d/
+
+
+## FILE COPY FORM SVR 2 SVR scp /home/student/testfile bob@desktop:/home/bob 
+$ rsync –av /home/student/testfile bob@desktop:/home/bob
+
+# COPY FILES FORM WINDOWS TO LINUX 
+scp .\p7zip.zip sam@1.22.3.6:/home/sam/
+
+# COPY FILES FORM LINUX MACHINE TO WINDOWS
+scp sam@192.168.58.119:/var/www/remotely C:\Users\uchithr\Downloads\D_DRIVE
