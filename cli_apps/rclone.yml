@@ -33,7 +33,7 @@ $ rclone lsf desmond_TD:/path
 $ rclone lsd desmond_TD:/path
 
 # VIEW ZIP STRUCTRE   ///TEST  //  zip / rar / iso
-rclone lsf :archive:desmond_TD:/path/myfile.zip
+rclone archive list sam:ddl/1/dump/vsi.zip
 
 # MAKE FOLDER
 $ rclone mkdir desmond_TD:/test
