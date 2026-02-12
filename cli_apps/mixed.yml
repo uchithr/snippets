@@ -12,7 +12,17 @@ sudo dnf install epel-release
 sudo dnf install p7zip p7zip-plugins
 
 # EXTRACT 7z.001 FILE
-sudo 7z x 'test.7z.001'
+7z x 'test.7z.001'
+
+# TEST THE ARCHIVE:
+7z t myzip.zip
+
+# LISTING:
+7z l archive.zip
+
+
+# EXTRACT MULTIPLE SPECIFIC FILES:
+7z x archive.zip "folder1/file1.txt" "folder1/file2.jpg" -odirectory1    ## WTTH NO SPACE -o
 
 
 
@@ -23,10 +33,10 @@ sudo 7z x 'test.7z.001'
 ###############
 
 # ZIP SINGLE FILE	
-zip -r -s 500m myzip myfile.mkv
+zip -0 -r -s 500m myzip myfile.mkv
 
 
-# ZIP FOLDER WITH ZERO COMPRESSION WITH 500M SPLIT	 (0-9)
+# ZIP FOLDER WITH ZERO COMPRESSION WITH 500M SPLIT (0-9)
 zip -0 -r -s 500m output_folder/myzip source/
 
 
@@ -35,7 +45,7 @@ zip -e -0 -r output_folder/myzip source/
 
 
 
-# UZIP FILE	unzip file.zip
+# UNZIP FILE
 cat cloud_dump.zip.* > cloud_dump.zip
 unzip cloud_dump.zip
 
