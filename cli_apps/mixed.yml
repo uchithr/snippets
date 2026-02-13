@@ -33,15 +33,16 @@ sudo dnf install p7zip p7zip-plugins
 ###############
 
 # ZIP SINGLE FILE	
-zip -0 -r -s 500m myzip myfile.mkv
+zip -0 -r -s 500m myzip1 myfile1.mkv
 
 
 # ZIP FOLDER WITH ZERO COMPRESSION WITH 500M SPLIT (0-9)
-zip -0 -r -s 500m output_folder/myzip source/
+zip -0 -r -s 500m myzip1 source/
+zip -0 -r -s 500m folder1/myzip1 source/
 
 
 # ZIP FOLDER WITH BASIC ENCRYPTION
-zip -e -0 -r output_folder/myzip source/
+zip -e -0 -r folder1/myzip1 source/
 
 
 
