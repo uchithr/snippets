@@ -31,6 +31,18 @@ x86_64 indicates a 64-bit x86 architecture.
 armv7l indicates a 32-bit ARM architecture.
 aarch64 indicates a 64-bit ARM architecture.
 
+
+##  TRAILING SLASH RULE (COPY)
+folder1   -> copies the whole folder
+folder1/  -> copies only inside contents
+No slash  = copy the box
+Slash     = empty the box into destination
+Source slash matters, destination slash usually doesn’t
+
+
+
+
+
 ###############################################################################################################################
 
 init 0 : Shutdown 
