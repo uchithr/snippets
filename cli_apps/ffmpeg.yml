@@ -170,3 +170,125 @@ HandBrakeCLI.exe --preset-import-file "presets.json" -Z "pf" -i input.mkv -o out
 $ makemkvcon -r info disc:9999
 
 $ makemkvcon mkv disc:2 all E:\output # CRAETE MKV  IN WI
+
+
+
+
+
+
+# ENCODE VIDEO BASED ON A FILESIZE
+
+8192 KILOBITS = 1024 KB × 8 KILOBITS
+
+
+BITRATE_KBPS = (YOUR_TARGET_MB × 8192) / DURATION_SECONDS
+
+
+# EXAMPLE:
+  TARGET SIZE = 400 MB
+  VIDEO LENGTH = 1 HOUR = 3600 SECONDS
+
+# IN CALCULATOR
+  (XXXX * 8192) / XXXX = XXXX KBPS TOTAL BITRATE
+
+
+(300*8192) / 3190
+
+
+---
+
+# PASS 1 (ANALYSIS ONLY) //PASS 1: THE ENCODER STUDIES YOUR VIDEO
+
+
+ffmpeg.exe -y -i "29.mp4" ^
+  -c:v libx265 ^
+  -preset medium ^
+  -pix_fmt yuv420p ^ 
+  -b:v 800k ^
+  -x265-params "aq-mode=2:aq-strength=1.0:psy-rd=1.5:psy-rdoq=3:rdoq-level=1:qcomp=0.65" ^
+  -pass 1 ^
+  -an ^
+  -f mp4 NUL
+
+
+
+
+# PASS 2 (REAL ENCODE + AUDIO COPY)
+
+ffmpeg.exe -i "29.mp4" ^
+  -c:v libx265 ^
+  -preset medium ^
+  -pix_fmt yuv420p ^
+  -b:v 800k ^
+  -x265-params "aq-mode=2:aq-strength=1.0:psy-rd=1.5:psy-rdoq=3:rdoq-level=1:qcomp=0.65" ^
+  -pass 2 ^
+  -c:a copy ^
+  "29_x265_SLVR.mp4"
+
+
+
+
+bitrate_calculation:
+
+  formula:
+    description: "Use this formula to calculate the TOTAL bitrate needed to hit a target file size."
+    expression: "TOTAL_BITRATE_Kbps = (TARGET_SIZE_MB * 8192) / VIDEO_DURATION_SECONDS"
+    notes:
+      - "8192 = 1024 KB × 8 bits"
+      - "Result is in kilobits per second (kbps)"
+
+  steps:
+    - step: "Convert video duration into seconds."
+      example: "1 hour = 3600 sec, 1h 30m = 5400 sec"
+    - step: "Plug duration and target size into formula."
+    - step: "If audio is re-encoded, subtract its bitrate from the total."
+    - step: "If audio is copied, video gets the full calculated bitrate."
+
+  audio_notes:
+    audio_copy: "When audio is copied, total bitrate = video bitrate."
+    audio_reencode:
+      description: "Subtract your audio bitrate from total to get video bitrate."
+      formula: "VIDEO_BITRATE = TOTAL_BITRATE - AUDIO_BITRATE"
+
+  examples:
+
+    example_1:
+      title: "1-hour video → target size 400 MB"
+      duration_seconds: 3600
+      target_size_mb: 400
+      calculation: "(400 * 8192) / 3600 = 910 kbps total"
+      audio_copy: "Use ~910 kbps for video"
+      audio_reencode:
+        audio_bitrate: 128
+        video_bitrate: "910 - 128 = 782 kbps"
+
+    example_2:
+      title: "1h 30m video → target size 550 MB"
+      duration_seconds: 5400
+      target_size_mb: 550
+      calculation: "(550 * 8192) / 5400 = 833 kbps"
+      video_bitrate_if_audio_copy: 833
+
+    example_3:
+      title: "2-hour movie → target size 800 MB"
+      duration_seconds: 7200
+      target_size_mb: 800
+      calculation: "(800 * 8192) / 7200 = 910 kbps"
+      audio_reencode:
+        audio_bitrate: 96
+        video_bitrate: "910 - 96 = 814 kbps"
+
+    example_4:
+      title: "45 minutes → target size 300 MB"
+      duration_seconds: 2700
+      target_size_mb: 300
+      calculation: "(300 * 8192) / 2700 = 910 kbps"
+      video_bitrate: 910
+
+  quick_cheat_sheet:
+    "45_minutes_target_400MB": "≈ 1200 kbps"
+    "1_hour_target_400MB": "≈ 910 kbps"
+    "1_5_hours_target_400MB": "≈ 610 kbps"
+    "2_hours_target_400MB": "≈ 460 kbps"
+
+
