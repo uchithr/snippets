@@ -101,3 +101,25 @@ e62gf...l5wt6     wrk2        Ready     Active                           27.3.1
 
 
 # manager with the asterisk after its name is the one you’re executing commands
+
+
+
+
+# Locking a Swarm
+
+$ docker swarm update --autolock=true
+Swarm updated.
+To unlock a swarm manager after it restarts, run the `docker swarm unlock` command and 
+provide the following key:
+
+   SWMKEY-1-XDeU3XC75Ku7rvGXixJ0V7evhDJGvIAvq0D8VuEAEaw
+
+Please remember to store this key in a password manager...
+
+# unlock swarm
+docker swarm unlock-
+
+
+
+#  only run user  applications on workers
+$ docker node update --availability drain mgr1
