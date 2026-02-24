@@ -1,0 +1,103 @@
+# BUILD DOCKER NODES
+$ multipass launch docker --name mgr1
+$ multipass launch docker --name mgr2
+$ multipass launch docker --name mgr3
+
+$ multipass launch docker --name wrk1
+$ multipass launch docker --name wrk2
+
+# VERIFY IP ADDRESSES # ⚠ Use the private IP (192.168.64.x) for swarm communication — not the Docker bridge IP (172.17.0.1).
+$ multipass ls
+Name           State             IPv4                Image
+mgr1           Running           192.168.64.61       Ubuntu 24.04 LTS
+                                 172.17.0.1
+mgr2           Running           192.168.64.62       Ubuntu 24.04 LTS
+                                 172.17.0.1
+mgr3           Running           192.168.64.63       Ubuntu 24.04 LTS
+                                 172.17.0.1
+wrk1           Running           192.168.64.64       Ubuntu 24.04 LTS
+                                 172.17.0.1
+wrk2           Running           192.168.64.65       Ubuntu 24.04 LTS
+                                 172.17.0.1
+
+
+
+## VERIFY DOCKER INSTALLATION
+$ multipass shell mgr1
+
+$ docker --version
+Docker version 27.3.1, build ce12230
+
+$ exit
+
+
+
+# SWITCHES SINGLE-ENGINE MODE TO  DOCKER SWARM MODE
+$ docker swarm init
+
+
+# LOG ON TO MGR1 AND INITIALIZE A NEW SWARM. BE SURE TO USE THE PRIVATE IP ADDRESS OF
+$ docker swarm init \
+  --advertise-addr 192.168.64.61:2377 \
+  --listen-addr 192.168.64.61:2377           ## MAKE SURE TO USE NODE IP ON TIHS 
+
+Swarm initialized: current node (d21lyz...c79qzkx) is now a manager.
+<Snip>
+
+
+# PRODUCTION
+docker swarm init # Initializes a new swarm and makes this node the first manager (Leader).
+--advertise-addr  # Specifies which IP address other nodes use to connect to this manager (the swarm API endpoint).
+--listen-addr     # Defines the node interface for swarm traffic; defaults to advertise-addr if unspecified.
+
+
+
+# Production Note
+#
+# If --advertise-addr is a load balancer address, you must set --listen-addr to the node’s local IP, 
+# because the node cannot bind to a load balancer IP.
+docker swarm init \
+  --advertise-addr 10.0.0.100 \
+  --listen-addr 192.168.64.61:2377
+
+
+
+
+# LIST THE NODES IN THE SWARM
+$ docker node ls
+ID            HOSTNAME   STATUS  AVAILABILITY  MANAGER STATUS
+d21...qzkx *  mgr1       Ready   Active        Leader
+
+
+
+# GET THE JOIN TOKENS (FROM THE MANAGER)
+$ docker swarm join-token worker
+To add a manager to this swarm, run the following command:
+   docker swarm join --token SWMTKN-1-0uahebax...c87tu8dx2c 192.168.64.61:2377
+
+$ docker swarm join-token manager
+To add a manager to this swarm, run the following command:
+   docker swarm join --token SWMTKN-1-0uahebax...ue4hv6ps3p 192.168.64.61:2377
+
+
+
+# JOIN OTHER MANAGERS & WORKERS
+
+SSH into mgr2 → run manager join command
+SSH into mgr3 → run manager join command
+SSH into wrk1 → run worker join command
+SSH into wrk2 → run worker join command
+
+
+
+# SEE ALL THE NODES IN YOUR SWARM
+$ docker node ls
+ID                HOSTNAME    STATUS    AVAILABILITY    MANAGER STATUS   ENGINE VERSION
+0g4rl...babl8 *   mgr2        Ready     Active          Reachable        27.3.1
+2xlti...l0nyp     mgr3        Ready     Active          Reachable        27.3.1
+d21ly...9qzkx     mgr1        Ready     Active          Leader           27.3.1
+8yv0b...wmr67     wrk1        Ready     Active                           27.3.1
+e62gf...l5wt6     wrk2        Ready     Active                           27.3.1
+
+
+# manager with the asterisk after its name is the one you’re executing commands
