@@ -105,7 +105,7 @@ e62gf...l5wt6     wrk2        Ready     Active                           27.3.1
 
 
 
-# Locking a Swarm
+# locks a swarm and requires restarted managers to present the cluster unlock code before being re-admitted to the cluster
 
 $ docker swarm update --autolock=true
 Swarm updated.
@@ -116,7 +116,7 @@ provide the following key:
 
 Please remember to store this key in a password manager...
 
-# unlock swarm
+# allows a restarted manager to present the cluster unlock code and re-join a locked swarm after a reboot
 docker swarm unlock-
 
 

@@ -167,23 +167,33 @@ $ mongodb://host.docker.internal:27017/swfavourites
 $ mongodb://192.168.58.119:27017/swfavourites
 $ mongodb://mongo:27017/swfavourites  <in a custom created network>
 
+## LIST DOCKER NETWORKS
+$ docker network ls
+$ docker network rm
+
+
 ## CREATE NETWORK
 $ docker network create custom-net1
 
 # CREATE DOCKER BRIDGE NETWORK
 $ docker network create -d bridge custom-net1
 
+## DOCKER NETWROK INSPCET
+$ sudo docker network inspect bridge
+
 # LIST DOCKER NETWORKS
 $ brctl show
 bridge name        bridge id             STP enabled	   interfaces
 br-f918f1bb0602    8000.0242372a886b     no
 
-## LIST DOCKER NETWORKS
-$ docker network ls
-$ docker network rm
 
-## DOCKER NETWROK INSPCET
-$ sudo docker network inspect bridge
+# RUN CONTAINER CALLED C1 AND ATTACH IT TO THE NEW custom-net1 BRIDGE NETWORK.
+$ docker run -d --name c1  --network localnet alpine sleep 1d
+
+
+
+
+
 
 
 ## INSPECT CONTAINERS USAGE
