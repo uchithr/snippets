@@ -75,6 +75,15 @@ $ docker run -p 3000:80  -d --rm --name apache_http ad17c88403e2
 # RUN RENAMED CONTAINER WITH SPECIFIED NAME
 $ docker run -p 3000:80 -d --rm --name goalsapp goals:latest
 
+
+# PORT MAPPING
+$ docker run -d --name web --network localnet --publish 5005:80 nginx
+
+# VERIFY PORT MAPPING
+ocker port web
+80/tcp -> 0.0.0.0:5005
+80/tcp -> [::]:5005
+
 # REMOVE DOCKER CONTAINER
 $ docker rm -f e91425f38618
 
