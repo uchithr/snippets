@@ -133,6 +133,116 @@ split: split a large file into smaller ones.
 
 
 
+#####################################################################################################
+MAGICK+ Ghostscript\_______________________________________________________________________________________________
+#####################################################################################################
+
+
+
+# PDF TO PNG (ALL PAGES, HIGHER QUALITY)
+magick -density 300 "input.pdf" "output/page-%03d.png"
+
+
+# PNG TO PDF
+magick "input.png" "output.pdf"
+
+
+# MULTIPLE PNGS INTO ONE PDF
+magick "C:\Users\Ezio\Desktop\images\*.png" "C:\Users\Ezio\Desktop\result.pdf"
+
+
+# EXPORT ONLY PAGE 1 OF A PDF TO PNG
+magick -density 300 "input.pdf[0]" "page-1.png"
+
+
+# REDUCE PDF IMAGE QUALITY AND SAVE AS A NEW PDF
+magick -density 150 -compress jpeg -quality 60 "input.pdf" "output.pdf"
+
+
+
+
+# REMOVE TRANSPARENCY FROM PDF (~72 DPI)
+$ magick convert -flatten cme02.pdf a.png
+
+# REMOVE TRANSPARENCY FROM PDF (HIGH QUALITY)
+$ magick convert -density 300 -flatten cme02.pdf a.png
+
+# BULK PDF TO PNG WITH FLATTEN
+$ magick mogrify -verbose -density 96  -flatten -format png ./*.pdf (output format first)
+
+
+
+
+## PNG JPG ##---------------------------
+
+
+
+
+# RESIZE IMAGE TO 50%
+magick "input.jpg" -resize 50% "output.jpg"
+
+# CONVERT PNG TO JPG
+magick "input.png" "output.jpg"
+
+
+#  ALL PNG FILES TO VERTICAL STRIP
+$ magick *.png -append "C:\Users\Sam\Desktop\pack\new.png"
+
+
+# PNG TO JPG (BULK, SAME FOLDER)
+mogrify -format jpg "D:\png_images\*.png"
+
+
+# BULK CONVERT WEBP TO BMP
+$ magick mogrify -format bmp "C:\Users\Ezio\Desktop\output\*.webp"
+
+
+# RECURSIVE BULK CONVERT (ALL SUBFOLDERS)
+$ for /r /d %%a in (*) do mogrify -format jpg "%%~a\*.png"
+
+
+# COMPRESS JPG MORE AGGRESSIVELY
+magick "input.jpg" -quality 50 "output.jpg"
+
+
+# CREATE A SIMPLE CONTACT SHEET FROM MULTIPLE JPG FILES
+magick montage "C:\Users\Ezio\Desktop\images\*.jpg" -tile 4x -geometry 300x300+10+10 "C:\Users\Ezio\Desktop\contact-sheet.jpg"
+
+
+
+
+# MOGRIFY WARNING  # MOGRIFY EDITS FILES IN PLACE (NO BACKUP)
+
+# FLIP (VERTICAL) (TOP BECOMES BOTTOM)
+mogrify -flip *.jpg
+
+# FLOP (HORIZONTAL) (MIRRORS )
+mogrify -flop *.jpg
+
+# ROTATE IMAGE 90 DEGREES CLOCKWISE
+magick "input.jpg" -rotate 90 "output.jpg"
+
+# ROTATE IMAGE 90 DEGREES COUNTERCLOCKWISE
+magick "input.jpg" -rotate -90 "output.jpg
+
+
+
+
+
+# REMOVE TRANSPARENT BORDER AND SAVE AS PNG REMOVE WHITE BORDER / TRIM EXTRA SPACE
+magick "input.png" -trim +repage "output.png"
+
+$ magick mogrify -path C:\Users\Ezio\Desktop\out_put -format gif -fuzz 50% -trim +repage *
+
+
+
+
+
+
+
+
+
+
 
 #############################################################################
 NOMACHINE\__________________________________________________________________
@@ -231,32 +341,8 @@ mp3tag\_________________________________________________________________________
 \s*\(2014 Remaster\)$
 
 
-#####################################################################################################
-MAGICK+ Ghostscript\_______________________________________________________________________________________________
-#####################################################################################################
-
-# VERTICAL SRTIP
-$ magick *.png -append "C:\Users\Ezio\Desktop\rol\new.png"
-
-$ magick mogrify -path C:\Users\Ezio\Desktop\out_put -format gif -fuzz 50% -trim +repage *
-
-mogrify -format jpg "D:\images\name of subfolder\*.png"
-
-# BULK CONVERT (output format first)
-$ magick mogrify -format bmp "C:\Users\Ezio\Desktop\output\*.webp"
-
-C:\Users\Ezio\Desktop\recrut\bitmap
-$ for /r /d %%a in (*) do mogrify -format jpg "%%~a\*.png"
 
 
-# REMOVE TRANSPARENT
-$ magick convert -flatten cme02.pdf a.png
-$ magick convert -density 300 -flatten cme02.pdf a.png
-$ magick mogrify -verbose -density 96  -flatten -format png ./*.pdf (output format first)
-
-# FLIP
-mogrify -flip *.jpg
-mogrify -flop *.jpg
 
 
 
