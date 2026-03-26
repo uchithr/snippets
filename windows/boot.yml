@@ -8,6 +8,21 @@ F10 - BIOS
 F11 - ASROCK
 F12 - DELL
 
++--------------------+------------------+------------------+
+| BRAND              | BOOT MENU        | BIOS / UEFI      |
++--------------------+------------------+------------------+
+| ASUS               | Esc              | F2               |
+| HP                 | Esc > F9         | Esc > F10        |
+| DELL               | F12              | F2               |
+| LENOVO             | F12              | F2 / Fn+F2       |
+| ACER               | F12              | F2               |
+| ASROCK             | F11              | F2 / Del         |
+| MSI                | F11              | Del              |
+| GIGABYTE           | F12              | Del              |
+| SAMSUNG            | F10              | F2               |
+| TOSHIBA / DYNABOOK | F12              | F2               |
+| SURFACE            | VolDown+Power    | VolUp+Power      |
++--------------------+------------------+------------------+.
 
 # SAFEBOOT
 $  bcdedit /set {current} safeboot minimal
@@ -35,7 +50,7 @@ $ net user "username" *
 
 
 
-## BOOTLAODER FIX ##
+## BOOTLAODER FIX ##//////////////////////////////////////////
 
 
 ##1
@@ -77,3 +92,52 @@ ren c:\boot\bcd bcd.old
 
 bootrec /rebuildbcd
 exit
+
+
+
+
+
+
+
+
+
+
+
+////// AI FLOW 
+
+## BOOTLOADER FIX - RECOMMENDED
+
+# 1) Boot to Windows Recovery Environment > Command Prompt
+
+diskpart
+list vol
+exit
+
+dir C:\Windows
+dir D:\Windows
+dir E:\Windows
+
+# Replace D: with the partition that contains Windows
+bcdboot D:\Windows
+
+
+## OPTIONAL - if EFI partition must be targeted manually (UEFI systems)
+
+diskpart
+list vol
+select vol <EFI FAT32 volume>
+assign letter=S
+exit
+
+bcdboot D:\Windows /s S: /f UEFI
+
+
+## OPTIONAL - if disk errors are suspected
+
+chkdsk D: /f /x /r
+
+
+## OPTIONAL - if Windows can boot into Safe Mode and system files are damaged
+
+dism /online /cleanup-image /restorehealth
+sfc /scannow
