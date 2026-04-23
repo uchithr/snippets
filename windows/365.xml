@@ -72,6 +72,16 @@ $ setup.exe /configure configuration.xml
 #######################################################################################
 #######################################################################################
 
+
+# DISABLE WORKPLACE JOIN ON WINDOW
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin" /v BlockAADWorkplaceJoin /t REG_DWORD /d 1 /f
+
+
+## CLEAN OFFICE
+https://github.com/abbodi1406/WHD/blob/master/scripts/OfficeScrubber_14.zip
+
+
+
 ## DISABLE MS AUTH##
 
 INSTALL BELOW MODULES FROM POWERSHEL ADMIN
@@ -86,8 +96,7 @@ Get-MsolUser | Select DisplayName,UserPrincipalName,StrongAuthenticationMethods
 # DISABLE MFA FOR A SINGLE USER:
 Set-MsolUser -UserPrincipalName sam.fisher@abc.com -StrongAuthenticationRequirements @()
 
-# DISABLE WORKPLACE JOIN ON WINDOW
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin" /v BlockAADWorkplaceJoin /t REG_DWORD /d 1 /f
+
 
 
 $user = Get-MsolUser -UserPrincipalName sam.fisher@abc.com
@@ -95,5 +104,71 @@ $user.StrongAuthenticationRequirements = @()
 Set-MsolUser -UserPrincipalName $user.UserPrincipalName -StrongAuthenticationRequirements @()
 
 
-## CLEAN OFFICE
-https://github.com/abbodi1406/WHD/blob/master/scripts/OfficeScrubber_14.zip
+
+## EXCHANGE
+
+# SET THE EXECUTION POLICY
+Set-ExecutionPolicy RemoteSigned -Force
+
+# FORCE IMPORT THE MODULE
+Import-Module ExchangeOnlineManagement
+
+
+# EXCHANGE ONLINE POWERSHELL V3 MODULE INSTALL
+Install-Module -Name ExchangeOnlineManagement
+
+
+# VERIFY THE INSTALLATION
+Get-Module -ListAvailable ExchangeOnlineManagement
+
+
+
+# CONNECT TO EXCHANGE ONLINE
+Connect-ExchangeOnline
+
+
+
+# CHECK CURRENT ARCHIVE STATUS  [None → Safe to enable / Active → Already enabled]
+Get-Mailbox sam@lnx.lk | Select ArchiveStatus
+
+
+
+# CONFIRM RETENTION POLICY ASSIGNED
+Get-Mailbox sam@lnx.lk | Select RetentionPolicy
+
+
+# VERIFY THE 2‑YEAR TAG EXISTS IN POLICY
+Get-RetentionPolicy "Default MRM Policy" | Select -ExpandProperty RetentionPolicyTagLinks
+Get-RetentionPolicyTag "Default 2 year move to archive"
+
+
+
+# GET CURRENT MAILBOX SIZE 
+Get-MailboxStatistics sam@lnx.lk | Select TotalItemSize
+
+
+
+# ENABLE ONLINE ARCHIVE MAILBOX
+Enable-Mailbox -Identity "sam@lnx.lk" -Archive
+
+
+# APPLY THE RETENTION POLICY 2 YEAR 
+Set-Mailbox -Identity "sam@lnx.lk" -RetentionPolicy "Default MRM Policy"
+
+
+# FORCE THE PROCESS (THE "START" COMMAND) AFTER 10 MIN 
+Start-ManagedFolderAssistant -Identity "sam@lnx.lk"
+
+
+# HOW TO VERIFY IT IS WORKING
+Get-MailboxStatistics -Identity "sam@lnx.lk" -Archive | Select DisplayName, TotalItemSize, ItemCount
+
+
+# CHECKS AUTO‑EXPANDING ARCHIVE IS ENABLED  
+Get-Mailbox sam@lnx.lk | Select AutoExpandingArchiveEnabled
+
+
+
+# ENABLE AUTO‑EXPANDING ARCHIVE
+Enable-Mailbox sam@lnx.lk -AutoExpandingArchive
+
