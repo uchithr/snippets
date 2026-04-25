@@ -147,3 +147,67 @@ Scroll to Custom Shortcuts (or click “+” to create new)
 NAME: BD1
 COMMAND: /home/sam/Documents/disc_drives/toggle-sr0.sh
 SHORTCUT: shift + ctrl + 2
+
+
+
+
+###
+SAMBA
+####
+
+
+sudo ip addr add 192.168.50.1/24 dev enp0s25
+sudo ip link set enp0s25 up
+
+
+nmcli connection modify "Wired connection 1" ipv4.method manual ipv4.addresses 192.168.50.1/24
+nmcli connection up "Wired connection 1"
+
+ip addr show enp0s25
+
+
+
+
+sudo apt install samba -y
+
+mkdir -p /media/sam/media1/1_DDL_BKP/
+
+sudo chown sam:sam /media/sam/media1/
+sudo chown sam:sam /media/sam/media2
+chmod 755 /home/$USER/shared
+sudo smbpasswd -a youruser
+
+
+
+sudo nano /etc/samba/smb.conf
+
+[shared]
+   path = /media/sam/media1/1_DDL_BKP/
+   browseable = yes
+   read only = no
+   writable = yes
+   valid users = sam
+   create mask = 0644
+   directory mask = 0755
+
+
+[golbal]
+interfaces = 192.168.50.1/24
+bind interfaces only = yes
+
+
+
+
+sudo systemctl enable smbd
+sudo systemctl restart smbd
+sudo ufw allow samba
+systemctl status smbd
+
+
+
+Get-NetFirewallRule -Name FPS-ICMP4-ERQ-In | Select DisplayName, Enabled
+
+
+pay attension to file share pirotiy +----   enp0s25   = 0   om both paltforms
+
+wired con 1 -999
