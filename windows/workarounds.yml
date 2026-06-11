@@ -1,36 +1,23 @@
+## REPAIR SYSTEM FILES 
 
-### PRINTERS #############################################################################################################################################################
+ $ sfc /scannow
 
-## CLASSIC UI
-shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}
+Repair Boot Records 
 
+$ bootrec /fixmbr 
+$ bootrec /fixboot 
+$ bootrec /scanos 
+$ bootrec /rebuildbcd
 
-## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
-$ run > printmanagement.msc > All Printers
+Check Disk Errors 
 
+$ chkdsk C: /f /r
 
-## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
-$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
-DRIVERS TAB
+Stop Auto-Restart After Crash 
 
+$ bcdedit /set {def} recoveryenabled No 
+$ bcdedit /set {def} bootstatuspolicy ignoreallfailures 
 
-## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
-$ Create a System Restore point.
-$ regedit 
- > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
- > HKEY_CURRENT_USER\Printers\Connections
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
-
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
- > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
-
-
- ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
-$ C:\Windows\System32\DriverStore\FileRepository 
-
-#############################################################################################################################################################
-#############################################################################################################################################################
 
 
 

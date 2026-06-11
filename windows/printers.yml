@@ -1,15 +1,59 @@
 
-Fixing Printer Sharing Error 0x0000011B on Windows
+### PRINTERS #############################################################################################################################################################
 
+## CLASSIC UI
+shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}
+
+
+## REMOVE OLD PRINTERS VIA PRINT MANAGEMENT
+$ run > printmanagement.msc > All Printers
+
+
+## DELETE OLD PRINTER DRIVERS VIA PRINT SERVER PROPERTIES
+$ run > rundll32.exe printui.dll,PrintUIEntryDPIAware /s or printui /s /t2 command
+DRIVERS TAB
+
+
+## DELETE OLD PRINTERS USING THE REGISTRY EDITOR
+$ Create a System Restore point.
+$ regedit 
+ > HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Printers\Roamed
+ > HKEY_CURRENT_USER\Printers\Connections
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers
+
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows NT x86\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-3
+ > HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments\Windows x64\Drivers\Version-4 
+
+
+ ## DELETE DRIVER PACKAGES FROM THE DRIVER STORE [https://github.com/lostindark/DriverStoreExplorer]
+$ C:\Windows\System32\DriverStore\FileRepository 
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fixing Printer Sharing Error 0x0000011B on Windows
 If you've run into the frustrating error:
 
-"Windows cannot connect to the printer. Operation failed with error 0x0000011B-here's a quick fix that can help.
-
-hashtag#The_Cause
-
+"Windows cannot connect to the printer. Operation failed with error 0x0000011B-here's a quick fix that can help
 This error is triggered by a Microsoft security update that enforces RPC encryption. While important for security, it can cause issues in small networks or workgroup setups.
 
-hashtag#The_Fix
 
 On the PC sharing the printer:
 
