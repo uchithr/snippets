@@ -75,27 +75,3 @@ After rebooting, other PCs should be able to connect to the shared printer witho
 
 
 
-
-////////////
-
-
-
-Repair System Files 
-
- $ sfc /scannow
-
-Repair Boot Records 
-
-$ bootrec /fixmbr 
-$ bootrec /fixboot 
-$ bootrec /scanos 
-$ bootrec /rebuildbcd
-
-Check Disk Errors 
-
-$ chkdsk C: /f /r
-
-Stop Auto-Restart After Crash 
-
-$ bcdedit /set {def} recoveryenabled No 
-$ bcdedit /set {def} bootstatuspolicy ignoreallfailures 
